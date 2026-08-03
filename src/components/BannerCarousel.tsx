@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  FlatList,
-  Image,
-  StyleSheet,
-  View,
   Dimensions,
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleSheet,
   Text,
+  View,
 } from 'react-native';
 
+import BannerCard from './banners/BannerCard';
+import Colors from '../constants/colors';
+
 const { width } = Dimensions.get('window');
+
+const CARD_WIDTH = width - 48;
+const SPACING = 16;
 
 const banners = [
   {
@@ -25,69 +32,93 @@ const banners = [
   },
 ];
 
-function BannerCarousel() {
+export default function BannerCarousel() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const onMomentumScrollEnd = (
+    event: NativeSyntheticEvent<NativeScrollEvent>,
+  ) => {
+    const index = Math.round(
+      event.nativeEvent.contentOffset.x /
+        (CARD_WIDTH + SPACING),
+    );
+
+    setActiveIndex(index);
+  };
+
   return (
     <View style={styles.container}>
-
-      <Text style={styles.heading}>FEATURED</Text>
+      <Text style={styles.heading}>
+        BANNERS
+      </Text>
 
       <FlatList
-        data={banners}
         horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
+        data={banners}
         keyExtractor={(item) => item.id}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={CARD_WIDTH + SPACING}
+        decelerationRate="fast"
+        disableIntervalMomentum
+        pagingEnabled={false}
+        onMomentumScrollEnd={onMomentumScrollEnd}
+        contentContainerStyle={styles.content}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Image
-              source={item.image}
-              style={styles.banner}
-              resizeMode="cover"
-            />
+            <BannerCard image={item.image} />
           </View>
         )}
       />
 
       <View style={styles.indicators}>
-        <View style={[styles.dot, styles.activeDot]} />
-        <View style={styles.dot} />
-        <View style={styles.dot} />
+        {banners.map((item, index) => (
+          <View
+            key={item.id}
+            style={[
+              styles.dot,
+              activeIndex === index &&
+                styles.activeDot,
+            ]}
+          />
+        ))}
       </View>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: 20,
   },
 
   heading: {
-    textAlign: 'center',
-    fontSize: 13,
+    paddingHorizontal: 24,
+    marginBottom: 12,
+
+    fontSize: 15,
     fontWeight: '700',
-    color: '#666',
-    letterSpacing: 1,
-    marginBottom: 20,
+    color: Colors.text,
+    letterSpacing: 0.5,
+  },
+
+  content: {
+    paddingLeft: 24,
+    paddingRight: 8,
   },
 
   card: {
-    width: width,
-    alignItems: 'center',
-  },
-
-  banner: {
-    width: width - 40,
-    height: 180,
-    borderRadius: 20,
+    width: CARD_WIDTH,
+    height: 200,
+    marginRight: SPACING,
+    borderRadius: 22,
+    overflow: 'hidden',
   },
 
   indicators: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 16,
+    marginTop: 8,
+    marginBottom: 6,
   },
 
   dot: {
@@ -99,8 +130,7 @@ const styles = StyleSheet.create({
   },
 
   activeDot: {
-    backgroundColor: '#111111',
+    width: 22,
+    backgroundColor: Colors.gold,
   },
 });
-
-export default BannerCarousel;

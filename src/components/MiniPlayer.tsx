@@ -1,18 +1,38 @@
 import React from 'react';
 import {
   Image,
+  ImageSourcePropType,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 
-function MiniPlayer() {
+import Colors from '../constants/colors';
+
+type MiniPlayerProps = {
+  title: string;
+  artist: string;
+  picture?: string | null;
+  isPlaying?: boolean;
+  onPress?: () => void;
+};
+
+function MiniPlayer({
+  title,
+  artist,
+  picture,
+  isPlaying = false,
+  onPress,
+}: MiniPlayerProps) {
+  const artwork: ImageSourcePropType = picture
+    ? { uri: picture }
+    : require('../../assets/images/default_artwork.png');
+
   return (
     <View style={styles.container}>
-
       <Image
-        source={require('../../assets/images/logo.png')}
+        source={artwork}
         style={styles.artwork}
         resizeMode="cover"
       />
@@ -22,14 +42,14 @@ function MiniPlayer() {
           style={styles.song}
           numberOfLines={1}
         >
-          Bless Me
+          {title}
         </Text>
 
         <Text
           style={styles.artist}
           numberOfLines={1}
         >
-          Chinko Ekun
+          {artist}
         </Text>
 
         <Text style={styles.live}>
@@ -37,10 +57,14 @@ function MiniPlayer() {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.playButton}>
-        <Text style={styles.playIcon}>▶</Text>
+      <TouchableOpacity
+        style={styles.playButton}
+        onPress={onPress}
+      >
+        <Text style={styles.playIcon}>
+          {isPlaying ? '❚❚' : '▶'}
+        </Text>
       </TouchableOpacity>
-
     </View>
   );
 }
@@ -49,17 +73,18 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.white,
     borderTopWidth: 1,
-    borderTopColor: '#EAEAEA',
+    borderTopColor: Colors.border,
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
 
   artwork: {
-    width: 56,
-    height: 56,
+    width: 58,
+    height: 58,
     borderRadius: 10,
+    backgroundColor: '#F5F5F5',
   },
 
   info: {
@@ -68,36 +93,37 @@ const styles = StyleSheet.create({
   },
 
   song: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
-    color: '#111111',
+    color: Colors.text,
   },
 
   artist: {
     marginTop: 2,
-    fontSize: 14,
-    color: '#666666',
+    fontSize: 13,
+    color: Colors.textSecondary,
   },
 
   live: {
-    marginTop: 6,
-    color: '#D32F2F',
-    fontSize: 12,
+    marginTop: 5,
+    fontSize: 11,
     fontWeight: '700',
+    color: Colors.live,
   },
 
   playButton: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#111111',
+    backgroundColor: Colors.gold,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   playIcon: {
-    color: '#FFFFFF',
+    color: Colors.buttonText,
     fontSize: 18,
+    fontWeight: '700',
     marginLeft: 2,
   },
 });

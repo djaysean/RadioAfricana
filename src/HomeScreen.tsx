@@ -1,75 +1,95 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
   View,
   Image,
 } from 'react-native';
 
+import Colors from './constants/colors';
+
+import LiveHero from './components/LiveHero';
 import BannerCarousel from './components/BannerCarousel';
+import MiniPlayer from './components/MiniPlayer';
+
+import {
+  fetchNowPlaying,
+  NowPlaying,
+} from './services/nowPlaying';
 
 function HomeScreen() {
+  const [nowPlaying, setNowPlaying] = useState<NowPlaying>({
+    artist: '',
+    title: 'Loading...',
+    picture: null,
+  });
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadNowPlaying = async () => {
+      try {
+        const data = await fetchNowPlaying();
+
+        if (mounted) {
+          setNowPlaying(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadNowPlaying();
+
+    const interval = setInterval(loadNowPlaying, 5000);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <>
       <StatusBar
+        backgroundColor={Colors.white}
         barStyle="dark-content"
-        backgroundColor="#FFFFFF"
       />
 
       <SafeAreaView style={styles.container}>
-
-        {/* Header */}
-        <View style={styles.header}>
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
-
-        {/* Now Playing */}
-        <View style={styles.content}>
-
-          <Text style={styles.sectionTitle}>
-            NOW PLAYING
-          </Text>
-
-          <Image
-            source={require('../assets/images/logo.png')}
-            style={styles.artwork}
-            resizeMode="cover"
-          />
-
-          <Text style={styles.trackTitle}>
-            Bless Me
-          </Text>
-
-          <Text style={styles.artist}>
-            Chinko Ekun
-          </Text>
-
-          <View style={styles.liveBadge}>
-            <Text style={styles.liveBadgeText}>
-              ● LIVE
-            </Text>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            <Image
+              source={require('../assets/images/logo.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
 
-        </View>
+          <LiveHero
+            title={nowPlaying.title}
+            artist={nowPlaying.artist}
+            picture={nowPlaying.picture}
+          />
 
-        <BannerCarousel />
+          <BannerCarousel />
 
-        {/* Persistent Player */}
-        <View style={styles.player}>
-          <View>
-            <Text style={styles.live}>● LIVE NOW</Text>
-            <Text style={styles.station}>Radio Africana</Text>
-          </View>
+          {/*
+            FeaturedStories
+            comes here in Release 0.5
+          */}
+        </ScrollView>
 
-          <Text style={styles.play}>▶</Text>
-        </View>
-
+        <MiniPlayer
+          title={nowPlaying.title}
+          artist={nowPlaying.artist}
+          picture={nowPlaying.picture}
+        />
       </SafeAreaView>
     </>
   );
@@ -78,97 +98,25 @@ function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-
-  header: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EFEFEF',
-  },
-
-  logo: {
-    width: 220,
-    height: 80,
+    backgroundColor: Colors.background,
   },
 
   content: {
+    paddingBottom: 40,
+  },
+
+  header: {
+    backgroundColor: Colors.white,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 30,
-    paddingTop: 20,
+
+    paddingTop: 18,
+    paddingBottom: 18,
   },
 
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#666',
-    letterSpacing: 1,
-    marginBottom: 20,
-  },
-
-  artwork: {
-    width: 220,
-    height: 220,
-    borderRadius: 12,
-  },
-
-  trackTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#111',
-    marginTop: 24,
-  },
-
-  artist: {
-    fontSize: 18,
-    color: '#666',
-    marginTop: 6,
-  },
-
-  liveBadge: {
-    marginTop: 24,
-    backgroundColor: '#D32F2F',
-    paddingHorizontal: 18,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-
-  liveBadgeText: {
-    color: '#FFFFFF',
-    fontWeight: '700',
-    fontSize: 13,
-  },
-
-  player: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E5E5',
-    backgroundColor: '#FFFFFF',
-  },
-
-  live: {
-    color: '#D32F2F',
-    fontWeight: '700',
-    fontSize: 12,
-  },
-
-  station: {
-    color: '#111',
-    fontWeight: '600',
-    fontSize: 16,
-    marginTop: 2,
-  },
-
-  play: {
-    fontSize: 28,
-    color: '#111',
+  logo: {
+    width: 190,
+    height: 65,
   },
 });
 
