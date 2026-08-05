@@ -11,7 +11,7 @@ import {
 
 import Colors from '../../constants/colors';
 
-export type FeaturedStory = {
+export type StoryCardData = {
   id: string;
   title: string;
   excerpt: string;
@@ -21,10 +21,10 @@ export type FeaturedStory = {
 };
 
 type Props = {
-  story: FeaturedStory;
+  story: StoryCardData;
 };
 
-export default function FeaturedStoryCard({
+export default function StoryCard({
   story,
 }: Props) {
   const imageSource: ImageSourcePropType =

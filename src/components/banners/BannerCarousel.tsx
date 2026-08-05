@@ -12,13 +12,13 @@ import {
   View,
 } from 'react-native';
 
-import BannerCard from './banners/BannerCard';
-import Colors from '../constants/colors';
+import BannerCard from './BannerCard';
+import Colors from '../../constants/colors';
 
 import {
   Banner,
   fetchBanners,
-} from '../services/banners';
+} from '../../services/banners';
 
 const { width } = Dimensions.get('window');
 

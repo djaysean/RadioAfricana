@@ -1,33 +1,14 @@
-/**
- * Radio Africana Mobile
- * Release 0.6
- *
- * Bottom Tab Navigation
- */
-
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import HomeScreen from '../HomeScreen';
-import FeaturedStories from '../components/stories/FeaturedStories';
+import HomeScreen from '../screens/Home/HomeScreen';
+import StoriesScreen from '../screens/Stories/StoriesScreen';
+import MoreScreen from '../screens/More/MoreScreen';
 
 import { Routes } from './routes';
 
 const Tab = createBottomTabNavigator();
-
-function MoreScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>More</Text>
-    </View>
-  );
-}
 
 export default function BottomTabs() {
   return (
@@ -43,7 +24,7 @@ export default function BottomTabs() {
 
       <Tab.Screen
         name={Routes.STORIES}
-        component={FeaturedStories}
+        component={StoriesScreen}
       />
 
       <Tab.Screen
@@ -53,11 +34,3 @@ export default function BottomTabs() {
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

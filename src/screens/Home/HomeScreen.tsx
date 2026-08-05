@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Image,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   View,
-  Image,
 } from 'react-native';
 
-import Colors from './constants/colors';
+import BannerCarousel from '../../components/banners/BannerCarousel';
+import LiveHero from '../../components/LiveHero';
+import MiniPlayer from '../../components/MiniPlayer';
+import FeaturedStories from '../../components/stories/LatestStories';
 
-import LiveHero from './components/LiveHero';
-import BannerCarousel from './components/BannerCarousel';
-import FeaturedStories from './components/stories/FeaturedStories';
-import MiniPlayer from './components/MiniPlayer';
+import Colors from '../../constants/colors';
 
 import {
   fetchNowPlaying,
   NowPlaying,
-} from './services/nowPlaying';
+} from '../../services/nowPlaying';
 
-function HomeScreen() {
+export default function HomeScreen() {
   const [nowPlaying, setNowPlaying] = useState<NowPlaying>({
     artist: '',
     title: 'Loading...',
@@ -66,7 +66,7 @@ function HomeScreen() {
         >
           <View style={styles.header}>
             <Image
-              source={require('../assets/images/logo.png')}
+              source={require('../../../assets/images/logo.png')}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -116,5 +116,3 @@ const styles = StyleSheet.create({
     height: 65,
   },
 });
-
-export default HomeScreen;

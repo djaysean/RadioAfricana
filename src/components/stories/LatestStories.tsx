@@ -6,16 +6,17 @@ import {
 } from 'react-native';
 
 import Colors from '../../constants/colors';
-import FeaturedStoryCard, {
-  FeaturedStory,
-} from './FeaturedStoryCard';
+
+import StoryCard, {
+  StoryCardData,
+} from './StoryCard';
 
 import {
   fetchFeaturedStory,
   Story,
 } from '../../services/stories';
 
-export default function FeaturedStories() {
+export default function LatestStories() {
   const [story, setStory] = useState<Story>({
     id: '',
     title: '',
@@ -28,8 +29,8 @@ export default function FeaturedStories() {
   useEffect(() => {
     const loadStory = async () => {
       try {
-        const featuredStory = await fetchFeaturedStory();
-        setStory(featuredStory);
+        const latestStory = await fetchFeaturedStory();
+        setStory(latestStory);
       } catch (error) {
         console.error(error);
       }
@@ -38,7 +39,7 @@ export default function FeaturedStories() {
     loadStory();
   }, []);
 
-  const cardStory: FeaturedStory = {
+  const storyCard: StoryCardData = {
     id: story.id,
     title: story.title,
     excerpt: story.excerpt,
@@ -52,10 +53,10 @@ export default function FeaturedStories() {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>
-        FEATURED STORIES
+        LATEST STORIES
       </Text>
 
-      <FeaturedStoryCard story={cardStory} />
+      <StoryCard story={storyCard} />
     </View>
   );
 }
