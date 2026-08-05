@@ -1,4 +1,4 @@
-const BASE_URL = 'https://radioafricana.com/wp-json/wp/v2';
+const BASE_URL = 'https://radioafricana.com/wp-json';
 
 async function request<T>(endpoint: string): Promise<T> {
   const response = await fetch(`${BASE_URL}${endpoint}`);

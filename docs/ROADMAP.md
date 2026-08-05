@@ -20,6 +20,23 @@
 - Stories screen
 - More screen
 
+# Release 0.5
+
+## ✅ Completed
+
+- Shared API service
+- Live Featured Story integration
+- Featured Story component architecture
+- WordPress REST API integration
+
+## 🔄 Next
+
+- Live Banner service
+- Banner carousel integration
+- Stories listing screen
+- Story detail screen
+- Categories service
+
 ---
 
 ## Release 0.6

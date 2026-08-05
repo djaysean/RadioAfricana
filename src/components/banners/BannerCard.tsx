@@ -1,12 +1,14 @@
 import React from 'react';
 import {
   Image,
+  ImageSourcePropType,
+  ImageURISource,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 
 type BannerCardProps = {
-  image: any;
+  image: ImageSourcePropType | string;
   onPress?: () => void;
 };
 
@@ -14,6 +16,11 @@ function BannerCard({
   image,
   onPress,
 }: BannerCardProps) {
+  const imageSource: ImageSourcePropType =
+    typeof image === 'string'
+      ? ({ uri: image } as ImageURISource)
+      : image;
+
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -21,7 +28,7 @@ function BannerCard({
       style={styles.container}
     >
       <Image
-        source={image}
+        source={imageSource}
         style={styles.image}
         resizeMode="cover"
       />
@@ -34,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 22,
     overflow: 'hidden',
-},
+  },
 
   image: {
     width: '100%',

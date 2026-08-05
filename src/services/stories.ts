@@ -40,7 +40,7 @@ function stripHtml(html: string) {
 
 export async function fetchFeaturedStory(): Promise<Story> {
   const posts = await api.get<WPPost[]>(
-    '/posts?_embed&per_page=1'
+    '/wp/v2/posts?_embed&per_page=1'
   );
 
   const post = posts[0];

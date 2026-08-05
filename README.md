@@ -21,6 +21,24 @@ Project Status
 
 🟢 Active Development
 
+## Current Status
+
+Release 0.5 is currently under development.
+
+Completed:
+
+- Live Now Playing
+- Premium Home UI
+- Live Featured Story (WordPress REST API)
+- Shared API layer
+
+Upcoming:
+
+- Live banners
+- Stories listing
+- Story detail pages
+- Categories
+
 ---
 
 ## Features

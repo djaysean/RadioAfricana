@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 import {
   Dimensions,
   FlatList,
@@ -12,28 +15,32 @@ import {
 import BannerCard from './banners/BannerCard';
 import Colors from '../constants/colors';
 
+import {
+  Banner,
+  fetchBanners,
+} from '../services/banners';
+
 const { width } = Dimensions.get('window');
 
 const CARD_WIDTH = width - 48;
 const SPACING = 16;
 
-const banners = [
-  {
-    id: '1',
-    image: require('../../assets/images/logo.png'),
-  },
-  {
-    id: '2',
-    image: require('../../assets/images/logo.png'),
-  },
-  {
-    id: '3',
-    image: require('../../assets/images/logo.png'),
-  },
-];
-
 export default function BannerCarousel() {
+  const [banners, setBanners] = useState<Banner[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const loadBanners = async () => {
+      try {
+        const data = await fetchBanners();
+        setBanners(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadBanners();
+  }, []);
 
   const onMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>,
@@ -55,7 +62,7 @@ export default function BannerCarousel() {
       <FlatList
         horizontal
         data={banners}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         showsHorizontalScrollIndicator={false}
         snapToInterval={CARD_WIDTH + SPACING}
         decelerationRate="fast"
@@ -65,7 +72,14 @@ export default function BannerCarousel() {
         contentContainerStyle={styles.content}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <BannerCard image={item.image} />
+            <BannerCard
+              image={item.image}
+              onPress={() => {
+                if (item.hasLink) {
+                  console.log(item.link);
+                }
+              }}
+            />
           </View>
         )}
       />
