@@ -12,6 +12,7 @@ import Colors from './constants/colors';
 
 import LiveHero from './components/LiveHero';
 import BannerCarousel from './components/BannerCarousel';
+import FeaturedStories from './components/stories/FeaturedStories';
 import MiniPlayer from './components/MiniPlayer';
 
 import {
@@ -79,10 +80,7 @@ function HomeScreen() {
 
           <BannerCarousel />
 
-          {/*
-            FeaturedStories
-            comes here in Release 0.5
-          */}
+          <FeaturedStories />
         </ScrollView>
 
         <MiniPlayer
@@ -109,7 +107,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
-
     paddingTop: 18,
     paddingBottom: 18,
   },
