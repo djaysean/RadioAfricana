@@ -2,38 +2,66 @@
 
 ## Overview
 
-Radio Africana Mobile is the official Android application for Radio Africana, designed to provide listeners with a premium live radio experience while connecting them with the station's editorial content, community, and promotional campaigns.
+Radio Africana Mobile is the official Android application for Radio Africana, designed to deliver a premium African radio experience by combining live streaming, editorial storytelling, community engagement, and promotional content within a modern native mobile application.
 
-Unlike the website, which focuses on content publishing, the mobile app is designed primarily as a listening platform with a modern native experience.
+Unlike the website, which serves as the station's Content Management System (CMS), the mobile application is designed as a listening-first platform powered by live data.
 
 ---
 
 ## Current Status
 
-Current Version:
-Release 0.4
+Current Release:
+
+**Release 0.5**
 
 Platform:
-React Native
 
-Target Platform:
-Android (iOS planned)
+- React Native
+
+Primary Target:
+
+- Android
+
+Future Platform:
+
+- iOS
+
+Status:
+
+**Active Development**
 
 ---
 
 ## Current Features
 
-- Live Now Playing information
+### Live Radio
+
+- Live Now Playing
 - Dynamic album artwork
-- Premium Home screen
-- Banner carousel
 - Persistent Mini Player
-- Modular component architecture
-- Shared Now Playing service
+
+### Home Screen
+
+- Premium Hero
+- Live Banner Carousel
+- Live Featured Story
+
+### Content
+
+- WordPress Featured Story integration
+- Elementor Banner integration
+- Shared API layer
+
+### Architecture
+
+- Modular component structure
+- Shared services layer
+- Shared constants layer
+- Backend REST API integration
 
 ---
 
-## Architecture
+## Project Structure
 
 ```
 src/
@@ -45,26 +73,71 @@ components/
 services/
 
 constants/
+
+wordpress/
 ```
+
+---
+
+## Backend Architecture
+
+The mobile application consumes content from two API namespaces:
+
+### WordPress Core
+
+```
+/wp-json/wp/v2/
+```
+
+Used for:
+
+- Posts
+- Featured Stories
+- Categories
+- Future editorial content
+
+### Radio Africana Custom API
+
+```
+/wp-json/radioafricana/v1/
+```
+
+Currently provides:
+
+- Banner Carousel
+
+Future endpoints:
+
+- Podcasts
+- Events
+- Presenters
+- Programme Schedule
 
 ---
 
 ## Design Philosophy
 
-The website is the content platform.
+The website is the Content Management System.
 
-The mobile app is the listening platform.
+The mobile application is the listening platform.
 
-The application follows a premium streaming-first design inspired by modern music platforms while maintaining the Radio Africana visual identity.
+Editorial teams should be able to update stories, promotional banners and future content without requiring an application update.
 
 ---
 
-## Next Major Goal
+## Development Principles
 
-Release 0.5
+- Component-first architecture
+- Service-first data layer
+- Upgrade-safe WordPress integrations
+- No direct modification of Pro.Radio plugins
+- Complete file replacements during development
+- Git milestone commits after every stable feature
 
-- Featured Stories
-- WordPress integration
-- Elementor Banner service
-- Audio streaming
-- Bottom navigation
+---
+
+## Current Milestone
+
+Release 0.5 successfully established the application's live content architecture by integrating both the WordPress REST API and a custom Radio Africana API.
+
+The Home screen is now primarily powered by live CMS content.

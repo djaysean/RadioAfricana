@@ -3,99 +3,128 @@
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![React Native](https://img.shields.io/badge/React%20Native-0.82-blue)
 ![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
-![Release](https://img.shields.io/badge/Release-0.4-gold)
+![Release](https://img.shields.io/badge/Release-0.5-gold)
 
 The official Android application for Radio Africana.
 
-Radio Africana Mobile delivers a premium listening experience with live streaming, real-time track information, featured stories, promotional banners and community updates, all designed around a modern native mobile interface.
+Radio Africana Mobile delivers a premium African radio experience by combining live streaming, real-time playback information, editorial storytelling, promotional campaigns and community content within a modern native mobile application.
 
 ---
 
-## Status
+# Current Status
 
-Current Release
+## Release
 
-**0.4 – Premium Home Experience**
+**Release 0.5 — Live Content Platform**
 
-Project Status
+## Project Status
 
 🟢 Active Development
 
-## Current Status
+Release 0.5 established the application's live content architecture by integrating both WordPress and custom backend services.
 
-Release 0.5 is currently under development.
+---
 
-Completed:
+# Current Features
+
+## Live Radio
 
 - Live Now Playing
-- Premium Home UI
-- Live Featured Story (WordPress REST API)
-- Shared API layer
-
-Upcoming:
-
-- Live banners
-- Stories listing
-- Story detail pages
-- Categories
-
----
-
-## Features
-
-### Available
-
-- Live Now Playing information
 - Dynamic album artwork
-- Premium Home screen
-- Banner carousel
 - Persistent Mini Player
-- Shared playback service
-- Modern React Native architecture
 
-### Coming Soon
+## Home Screen
 
-- Live audio streaming
-- Featured Stories
-- WordPress integration
-- Elementor banner service
-- Bottom navigation
-- Notifications
-- Share functionality
+- Premium Hero
+- Live Banner Carousel
+- Live Featured Story
+
+## Content Platform
+
+- WordPress Featured Stories
+- Elementor Banner Integration
+- Shared API layer
+- CMS-driven Home screen
+
+## Architecture
+
+- Modular React Native components
+- Shared services layer
+- Shared constants layer
+- Custom WordPress backend
+- Upgrade-safe REST API integration
 
 ---
 
-## Tech Stack
+# Technology Stack
+
+## Mobile
 
 - React Native
 - TypeScript
-- Android
-- WordPress API (planned)
-- Elementor (planned)
+
+## Backend
+
+- WordPress REST API
+- Custom Radio Africana REST API
+- Elementor
+- Pro.Radio Theme
 
 ---
 
-## Project Structure
+# API Architecture
+
+The application consumes content from two API namespaces.
+
+## WordPress Core
+
+```text
+/wp-json/wp/v2/
+```
+
+Used for:
+
+- Stories
+- Categories
+- Future editorial content
+
+## Radio Africana
+
+```text
+/wp-json/radioafricana/v1/
+```
+
+Current endpoints:
+
+- Banner Carousel
+
+Future endpoints:
+
+- Podcasts
+- Events
+- Presenters
+- Programme Schedule
+
+---
+
+# Project Structure
 
 ```text
 src/
+├── components/
+├── constants/
+├── services/
 
-components/
-services/
-constants/
+docs/
 
-assets/
+wordpress/
+├── child-theme/
+└── endpoints/
 ```
 
 ---
 
-## Screenshots
-
-Coming soon.
-
----
-
-## Development
+# Development
 
 Clone the repository
 
@@ -121,33 +150,59 @@ Run Android
 npm run android
 ```
 
+Reset Metro cache (recommended after major architecture changes)
+
+```bash
+npx react-native start --reset-cache
+```
+
 ---
 
-## Release History
+# Release History
 
-| Version | Status |
-|---------|--------|
-| 0.1 | Initial Setup |
-| 0.2 | Project Foundation |
-| 0.3 | Live Metadata |
+| Release | Status |
+|----------|--------|
+| 0.1 | Foundation |
+| 0.2 | Project Architecture |
+| 0.3 | Live Radio Foundation |
 | 0.4 | Premium Home Experience |
+| 0.5 | Live Content Platform |
 
 ---
 
-## Roadmap
+# Documentation
 
-The next release includes:
+Project documentation is maintained in:
 
-- Featured Stories
-- WordPress integration
-- Live streaming
-- Bottom navigation
+```text
+docs/
+```
 
-See `ROADMAP.md` for the complete development roadmap.
+Backend documentation is maintained in:
+
+```text
+wordpress/
+```
 
 ---
 
-## License
+# Roadmap
+
+Current development is focused on **Release 0.6**.
+
+Upcoming work includes:
+
+- Stories listing
+- Story Detail screen
+- Banner deep linking
+- Bottom Navigation
+- Live streaming improvements
+
+See **ROADMAP.md** for the complete development roadmap.
+
+---
+
+# License
 
 Copyright © Radio Africana.
 

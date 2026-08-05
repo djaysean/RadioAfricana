@@ -1,25 +1,40 @@
 # Changelog
 
-# Changelog
+---
 
-## Release 0.5 (In Progress)
+## Release 0.5 (Completed)
 
 ### Added
-- Shared API layer (`src/services/api.ts`) for all future network requests.
-- Live WordPress integration for Featured Stories.
-- Featured Story now loads dynamically from the Radio Africana WordPress REST API.
-- FeaturedStoryCard now supports both local assets and remote image URLs.
-- Story service now maps live WordPress data into a clean application model.
 
-### Improved
-- Refactored story architecture to separate UI from data services.
-- Established reusable service pattern for future modules (Banners, Categories, Search).
+- Shared API layer (`src/services/api.ts`) supporting both WordPress core and custom namespaces.
+- Live Featured Story service powered by the WordPress REST API.
+- Live Banner service powered by a custom WordPress REST API endpoint.
+- Banner API endpoint (`/wp-json/radioafricana/v1/banners`) exposed through the Pro.Radio child theme.
+- Backend documentation and WordPress project structure.
+- BannerCard support for both local assets and remote image URLs.
+- FeaturedStoryCard support for both local assets and remote image URLs.
 
-### Notes
-This marks the first live backend integration in the Radio Africana mobile application.
+### Changed
 
+- Refactored API architecture to use the `/wp-json` root endpoint.
+- Refactored Story service to consume the shared API layer.
+- Refactored Banner Carousel to consume live CMS data instead of local assets.
+- Replaced hardcoded banner content with live Elementor-managed content.
+- Improved separation between presentation components and data services.
 
+### Technical
 
+- Introduced reusable service pattern for all CMS-driven modules.
+- Introduced custom WordPress REST namespace (`radioafricana/v1`).
+- Backend customizations documented and version-controlled.
+- Elementor Custom Slideshow integrated with the mobile application.
+- Established backend documentation structure under `/wordpress`.
+
+### Status
+
+✅ Stable
+
+---
 
 ## Release 0.4
 
@@ -49,3 +64,7 @@ This marks the first live backend integration in the Radio Africana mobile appli
 - Introduced services layer
 - Introduced constants layer
 - Prepared Stories architecture
+
+### Status
+
+✅ Stable

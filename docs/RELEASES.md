@@ -2,43 +2,70 @@
 
 ---
 
-## Release 0.1
+# Release 0.1
 
-### Foundation
+## Foundation
+
+Established the React Native project and development environment.
+
+### Highlights
 
 - React Native project created
-- Android environment configured
+- Android development environment configured
+- Initial project bootstrapped
+
+### Status
+
+✅ Complete
 
 ---
 
-## Release 0.2
+# Release 0.2
 
-### Project Structure
+## Project Architecture
 
-- Initial folder architecture
-- Theme setup
+Established the application's internal structure and development foundation.
+
+### Highlights
+
+- Folder architecture
 - Base components
+- Theme preparation
+- Initial services structure
+
+### Status
+
+✅ Complete
 
 ---
 
-## Release 0.3
+# Release 0.3
 
-### Live Data
+## Live Radio Foundation
 
-- Banner carousel
-- Mini Player
-- Now Playing service
-- Dynamic artwork
+Introduced the application's first live radio functionality.
+
+### Highlights
+
+- Live Now Playing
+- Dynamic album artwork
+- Shared playback service
+- Initial Home screen
+- Banner carousel foundation
+
+### Status
+
+✅ Complete
 
 ---
 
-## Release 0.4
+# Release 0.4
 
-### Premium Home Experience
+## Premium Home Experience
 
-A complete redesign of the Home screen to establish the application's visual identity.
+Completely redesigned the Home screen into a premium streaming experience inspired by modern music platforms.
 
-Highlights:
+### Highlights
 
 - Premium Hero
 - Premium Banner Carousel
@@ -46,15 +73,105 @@ Highlights:
 - Shared playback service
 - Dynamic Now Playing
 - BannerCard component
-- Modular architecture
-- Improved typography
-- Improved spacing
-- Streaming-first mobile experience
+- Premium spacing
+- Premium typography
+- Persistent Mini Player
+- Stories architecture prepared
 
-Status:
+### Status
 
-✅ Stable
+✅ Complete
 
-Git Tag:
+Git Milestone
 
 Release 0.4
+
+---
+
+# Release 0.5
+
+## Live Content Platform
+
+Transformed the Home screen from static content into a live CMS-driven experience.
+
+### Highlights
+
+### Mobile Application
+
+- Shared API layer
+- Live Featured Stories
+- Live Banner Carousel
+- Featured Story service
+- Banner service
+- Remote image support
+- API namespace architecture
+
+### WordPress Backend
+
+- Custom REST API namespace
+- Banner endpoint
+- Elementor integration
+- Backend documentation
+- Child theme customization
+- Upgrade-safe implementation
+
+### Architecture
+
+```
+WordPress
+        │
+        ├── /wp/v2/posts
+        │
+        └── /radioafricana/v1/banners
+                    │
+                    ▼
+                Shared API Layer
+                    │
+                    ▼
+             React Native Components
+```
+
+### Status
+
+✅ Complete
+
+Git Milestone
+
+Release 0.5
+
+---
+
+# Release 0.6
+
+## Planned
+
+- Story Detail screen
+- Stories listing
+- Category browsing
+- Banner deep linking
+- Bottom Navigation
+
+---
+
+# Release 0.7
+
+## Planned
+
+- Search
+- Bookmarks
+- Recently Played
+- Sleep Timer
+- Notifications
+
+---
+
+# Future
+
+- Podcasts
+- Programme Schedule
+- Presenter Profiles
+- Events
+- Chromecast
+- Android Auto
+- CarPlay
+- Offline Reading
