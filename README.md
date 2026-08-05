@@ -158,6 +158,52 @@ npx react-native start --reset-cache
 
 ---
 
+# Development Environment
+
+## Primary Development Device
+
+The Radio Africana application is developed primarily on a physical Android device.
+
+Current development device:
+
+- Samsung Galaxy A14 5G
+
+A physical device provides a more reliable development experience for:
+
+- Live radio streaming
+- Audio playback
+- Media controls
+- Firebase integration
+- Push notifications
+- Video playback
+- Performance testing
+
+## Daily Startup Workflow
+
+1. Connect the Android device via USB.
+2. Ensure USB Debugging is enabled.
+3. Verify the device is detected:
+
+```bash
+adb devices
+```
+
+4. Start Metro:
+
+```bash
+npx react-native start --reset-cache
+```
+
+5. In a second terminal, install/run the application:
+
+```bash
+npx react-native run-android
+```
+
+The Android Emulator is optional and is used only for secondary testing.
+
+---
+
 # Release History
 
 | Release | Status |
