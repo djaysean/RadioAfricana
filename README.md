@@ -3,11 +3,22 @@
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![React Native](https://img.shields.io/badge/React%20Native-0.82-blue)
 ![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
-![Release](https://img.shields.io/badge/Release-0.5-gold)
+![Release](https://img.shields.io/badge/Release-0.7-gold)
 
-The official Android application for Radio Africana.
+The official mobile application for Radio Africana.
 
-Radio Africana Mobile delivers a premium African radio experience by combining live streaming, real-time playback information, editorial storytelling, promotional campaigns and community content within a modern native mobile application.
+Built with React Native and powered by WordPress, Radio Africana Mobile delivers a premium listening and editorial experience by combining live radio streaming, dynamic content and modern storytelling within a single native application.
+
+---
+
+# Overview
+
+Radio Africana Mobile is designed around two core experiences:
+
+- **Listen** — A premium live radio experience with dynamic playback information.
+- **Read** — An editorial platform powered entirely by the Radio Africana website.
+
+Unlike the website, which serves as the Content Management System (CMS), the mobile application is designed to be the primary experience for listeners and readers.
 
 ---
 
@@ -15,44 +26,46 @@ Radio Africana Mobile delivers a premium African radio experience by combining l
 
 ## Release
 
-**Release 0.5 — Live Content Platform**
+**Release 0.7 — Reader Experience & Design System**
 
-## Project Status
+## Status
 
 🟢 Active Development
 
-Release 0.5 established the application's live content architecture by integrating both WordPress and custom backend services.
+### Current Focus
+
+- Premium Story Reader
+- Shared Design System
+- Performance optimisation
+- API caching
+- Reader experience refinement
 
 ---
 
-# Current Features
+# Features
 
 ## Live Radio
 
-- Live Now Playing
+- Live streaming
+- Dynamic Now Playing
 - Dynamic album artwork
 - Persistent Mini Player
 
-## Home Screen
+## Editorial
 
-- Premium Hero
-- Live Banner Carousel
-- Live Featured Story
+- Featured Story
+- Stories listing
+- Infinite scrolling
+- Story Detail screen
+- HTML article rendering
+- Responsive article layouts
 
 ## Content Platform
 
-- WordPress Featured Stories
-- Elementor Banner Integration
+- WordPress REST API integration
+- Custom Radio Africana REST API
+- Elementor Banner integration
 - Shared API layer
-- CMS-driven Home screen
-
-## Architecture
-
-- Modular React Native components
-- Shared services layer
-- Shared constants layer
-- Custom WordPress backend
-- Upgrade-safe REST API integration
 
 ---
 
@@ -62,6 +75,7 @@ Release 0.5 established the application's live content architecture by integrati
 
 - React Native
 - TypeScript
+- React Navigation
 
 ## Backend
 
@@ -69,41 +83,7 @@ Release 0.5 established the application's live content architecture by integrati
 - Custom Radio Africana REST API
 - Elementor
 - Pro.Radio Theme
-
----
-
-# API Architecture
-
-The application consumes content from two API namespaces.
-
-## WordPress Core
-
-```text
-/wp-json/wp/v2/
-```
-
-Used for:
-
-- Stories
-- Categories
-- Future editorial content
-
-## Radio Africana
-
-```text
-/wp-json/radioafricana/v1/
-```
-
-Current endpoints:
-
-- Banner Carousel
-
-Future endpoints:
-
-- Podcasts
-- Events
-- Presenters
-- Programme Schedule
+- Pro.Radio Child Theme
 
 ---
 
@@ -112,19 +92,24 @@ Future endpoints:
 ```text
 src/
 ├── components/
-├── constants/
+├── screens/
+├── navigation/
 ├── services/
+├── constants/
+├── hooks/
+├── types/
+
+assets/
+├── fonts/
 
 docs/
 
 wordpress/
-├── child-theme/
-└── endpoints/
 ```
 
 ---
 
-# Development
+# Quick Start
 
 Clone the repository
 
@@ -141,110 +126,93 @@ npm install
 Start Metro
 
 ```bash
-npm start
+npx react-native start
 ```
 
 Run Android
 
 ```bash
-npm run android
-```
-
-Reset Metro cache (recommended after major architecture changes)
-
-```bash
-npx react-native start --reset-cache
-```
-
----
-
-# Development Environment
-
-## Primary Development Device
-
-The Radio Africana application is developed primarily on a physical Android device.
-
-Current development device:
-
-- Samsung Galaxy A14 5G
-
-A physical device provides a more reliable development experience for:
-
-- Live radio streaming
-- Audio playback
-- Media controls
-- Firebase integration
-- Push notifications
-- Video playback
-- Performance testing
-
-## Daily Startup Workflow
-
-1. Connect the Android device via USB.
-2. Ensure USB Debugging is enabled.
-3. Verify the device is detected:
-
-```bash
-adb devices
-```
-
-4. Start Metro:
-
-```bash
-npx react-native start --reset-cache
-```
-
-5. In a second terminal, install/run the application:
-
-```bash
 npx react-native run-android
 ```
 
-The Android Emulator is optional and is used only for secondary testing.
+Clear Metro cache (recommended after major changes)
 
----
-
-# Release History
-
-| Release | Status |
-|----------|--------|
-| 0.1 | Foundation |
-| 0.2 | Project Architecture |
-| 0.3 | Live Radio Foundation |
-| 0.4 | Premium Home Experience |
-| 0.5 | Live Content Platform |
+```bash
+npx react-native start --reset-cache
+```
 
 ---
 
 # Documentation
 
-Project documentation is maintained in:
+Detailed project documentation is available in the `docs` directory.
 
-```text
-docs/
-```
+| Document | Description |
+|----------|-------------|
+| Project.md | Product overview and project vision |
+| Roadmap.md | Development roadmap and future direction |
+| Releases.md | Release history and completed milestones |
+| Changelog.md | Detailed development changes |
+| Design System.md | Visual language and UI standards |
 
-Backend documentation is maintained in:
+---
 
-```text
-wordpress/
-```
+# Development Principles
+
+The project follows several core principles throughout development.
+
+- Component-first architecture.
+- Service-first data layer.
+- Shared Design System.
+- WordPress-driven content.
+- Upgrade-safe backend customisations.
+- Complete file replacements during development.
+- Small, testable milestones.
+- Git commits after every stable implementation.
+
+---
+
+# Current Milestone
+
+Release 0.7 is focused on transforming the application into a premium editorial product.
+
+Current work includes:
+
+- Reader experience
+- Shared typography
+- Design System adoption
+- Native sharing
+- Performance optimisation
+- API request caching
 
 ---
 
 # Roadmap
 
-Current development is focused on **Release 0.6**.
+Upcoming milestones include:
 
-Upcoming work includes:
+## Release 0.8
 
-- Stories listing
-- Story Detail screen
-- Banner deep linking
-- Bottom Navigation
-- Live streaming improvements
+- Search
+- Bookmarks
+- Recently Viewed
+- Notifications
+- Sleep Timer
 
-See **ROADMAP.md** for the complete development roadmap.
+## Version 1.0
+
+- Android production release
+- Google Play Store launch
+- Podcasts
+- Programme Schedule
+- Events
+- Presenter Profiles
+
+For complete planning information, see:
+
+```
+docs/Roadmap.md
+```
 
 ---
 

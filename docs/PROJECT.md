@@ -1,143 +1,235 @@
-# Radio Africana Mobile App
+# Radio Africana Mobile
 
 ## Overview
 
-Radio Africana Mobile is the official Android application for Radio Africana, designed to deliver a premium African radio experience by combining live streaming, editorial storytelling, community engagement, and promotional content within a modern native mobile application.
+Radio Africana Mobile is the official mobile application for Radio Africana, built to deliver a premium African radio and editorial experience.
 
-Unlike the website, which serves as the station's Content Management System (CMS), the mobile application is designed as a listening-first platform powered by live data.
+The application combines live radio streaming, editorial storytelling, promotional content and future community features within a modern React Native application powered by the Radio Africana website.
+
+Unlike the website, which serves primarily as the Content Management System (CMS), the mobile application is designed as the primary listening and reading experience for users.
 
 ---
 
-## Current Status
+# Vision
 
-Current Release:
+To become the primary digital platform for Radio Africana listeners by combining live radio, high-quality editorial content and community engagement within a single premium mobile experience.
 
-**Release 0.5**
+The application should feel less like a traditional radio app and more like a modern digital publication with integrated live audio.
 
-Platform:
+---
+
+# Objectives
+
+The project is guided by the following objectives.
+
+- Deliver a fast, stable native application.
+- Maintain a premium editorial reading experience.
+- Allow all content to be managed through WordPress.
+- Minimise application updates by relying on live CMS content.
+- Build a scalable architecture suitable for future expansion.
+
+---
+
+# Technology Stack
+
+## Mobile
 
 - React Native
+- TypeScript
+- React Navigation
 
-Primary Target:
+## Backend
 
-- Android
+- WordPress REST API
+- Custom Radio Africana REST API
 
-Future Platform:
+## Content Management
 
-- iOS
-
-Status:
-
-**Active Development**
+- WordPress
+- Elementor
+- Pro.Radio Theme
+- Pro.Radio Child Theme
 
 ---
 
-## Current Features
+# Application Architecture
 
-### Live Radio
+The application follows a modular architecture built around reusable components and shared services.
 
-- Live Now Playing
-- Dynamic album artwork
+```
+WordPress CMS
+        │
+        ▼
+ REST API Services
+        │
+        ▼
+ Shared Service Layer
+        │
+        ▼
+ Screens
+        │
+        ▼
+ Components
+```
+
+This separation keeps presentation independent from data retrieval while allowing the backend to evolve without major application changes.
+
+---
+
+# Design Philosophy
+
+The Radio Africana mobile application follows an editorial-first design philosophy.
+
+Key principles include:
+
+- Readability over decoration.
+- Consistent typography.
+- Clean visual hierarchy.
+- Modular components.
+- Centralised design tokens.
+- Semantic styling.
+- Responsive layouts.
+
+The mobile application should feel like a premium publication rather than a traditional radio application.
+
+---
+
+# Current Features
+
+## Live Radio
+
+- Live audio streaming
 - Persistent Mini Player
+- Dynamic Now Playing information
+- Dynamic album artwork
 
-### Home Screen
+## Editorial
 
-- Premium Hero
-- Live Banner Carousel
-- Live Featured Story
+- Home Featured Story
+- Stories listing
+- Story Detail screen
+- HTML article rendering
+- Infinite scrolling
+- Category support
 
-### Content
+## Content Delivery
 
-- WordPress Featured Story integration
+- WordPress REST API integration
+- Custom Radio Africana API
 - Elementor Banner integration
 - Shared API layer
-
-### Architecture
-
-- Modular component structure
-- Shared services layer
-- Shared constants layer
-- Backend REST API integration
+- Shared services architecture
 
 ---
 
-## Project Structure
+# Design System
+
+The application uses a shared design system consisting of:
+
+- Colours
+- Typography
+- Spacing
+- Radius
+- Shadows
+
+These are maintained centrally within:
+
+```
+src/constants/
+```
+
+Every screen should reference the design system rather than introducing new visual values.
+
+---
+
+# Repository Structure
 
 ```
 src/
 
 components/
-    banners/
-    stories/
-
+screens/
+navigation/
 services/
-
 constants/
+hooks/
+types/
+
+assets/
+
+docs/
 
 wordpress/
 ```
 
+The repository is organised around feature separation, shared services and reusable UI components.
+
 ---
 
-## Backend Architecture
+# Development Principles
 
-The mobile application consumes content from two API namespaces:
+The project follows several core engineering principles.
 
-### WordPress Core
+- Component-first architecture.
+- Service-first data layer.
+- Upgrade-safe WordPress customisations.
+- Centralised design system.
+- Complete file replacements during development.
+- Small, testable feature milestones.
+- Git commits after every stable implementation.
 
-```
-/wp-json/wp/v2/
-```
+---
 
-Used for:
+# Current Status
 
-- Posts
-- Featured Stories
-- Categories
-- Future editorial content
+Current Release:
 
-### Radio Africana Custom API
+**Release 0.7**
 
-```
-/wp-json/radioafricana/v1/
-```
+Status:
 
-Currently provides:
+**Active Development**
 
-- Banner Carousel
+Current focus:
 
-Future endpoints:
+- Premium reader experience.
+- Design system adoption.
+- Shared typography.
+- UI refinement.
+- Performance optimisation.
+- API caching.
+
+---
+
+# Long-Term Goals
+
+Future development includes:
 
 - Podcasts
-- Events
-- Presenters
 - Programme Schedule
+- Presenter Profiles
+- Events
+- Search
+- Bookmarks
+- Notifications
+- Chromecast
+- Android Auto
+- Apple CarPlay
+- Offline reading
+- iOS support
 
 ---
 
-## Design Philosophy
+# Documentation
 
-The website is the Content Management System.
+Project documentation is maintained within the `/docs` directory.
 
-The mobile application is the listening platform.
+Key documents include:
 
-Editorial teams should be able to update stories, promotional banners and future content without requiring an application update.
+- Project
+- Roadmap
+- Releases
+- Changelog
+- Design System
 
----
-
-## Development Principles
-
-- Component-first architecture
-- Service-first data layer
-- Upgrade-safe WordPress integrations
-- No direct modification of Pro.Radio plugins
-- Complete file replacements during development
-- Git milestone commits after every stable feature
-
----
-
-## Current Milestone
-
-Release 0.5 successfully established the application's live content architecture by integrating both the WordPress REST API and a custom Radio Africana API.
-
-The Home screen is now primarily powered by live CMS content.
+These documents evolve alongside the application and should always reflect the current state of the project.

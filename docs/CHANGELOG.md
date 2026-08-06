@@ -1,34 +1,216 @@
 # Changelog
 
+All notable changes to the Radio Africana Mobile application are documented in this file.
+
+The format follows a simplified "Added / Changed / Fixed / Technical" structure.
+
 ---
 
-## Release 0.5 (Completed)
+# Release 0.7 (In Progress)
 
-### Added
+## Added
 
-- Shared API layer (`src/services/api.ts`) supporting both WordPress core and custom namespaces.
-- Live Featured Story service powered by the WordPress REST API.
-- Live Banner service powered by a custom WordPress REST API endpoint.
-- Banner API endpoint (`/wp-json/radioafricana/v1/banners`) exposed through the Pro.Radio child theme.
-- Backend documentation and WordPress project structure.
-- BannerCard support for both local assets and remote image URLs.
-- FeaturedStoryCard support for both local assets and remote image URLs.
+### Design System
 
-### Changed
+- Introduced shared typography system.
+- Introduced shared spacing system.
+- Introduced shared radius system.
+- Introduced shared shadow system.
+- Added central constants export (`index.ts`).
+- Added custom Inter font integration.
+- Added custom Lora font integration.
 
-- Refactored API architecture to use the `/wp-json` root endpoint.
-- Refactored Story service to consume the shared API layer.
-- Refactored Banner Carousel to consume live CMS data instead of local assets.
-- Replaced hardcoded banner content with live Elementor-managed content.
-- Improved separation between presentation components and data services.
+### Reader
 
-### Technical
+- Story Hero component.
+- Story Body component.
+- Premium article typography.
+- HTML rendering improvements.
+- Better editorial hierarchy.
 
-- Introduced reusable service pattern for all CMS-driven modules.
-- Introduced custom WordPress REST namespace (`radioafricana/v1`).
-- Backend customizations documented and version-controlled.
-- Elementor Custom Slideshow integrated with the mobile application.
-- Established backend documentation structure under `/wordpress`.
+### Documentation
+
+- Project documentation rewritten.
+- Roadmap documentation rewritten.
+- Releases documentation rewritten.
+- Design System documentation added.
+- Changelog restructured.
+
+---
+
+## Changed
+
+- Migrated article titles to Lora.
+- Migrated metadata to Inter.
+- Improved typography consistency.
+- Improved Story component structure.
+- Improved documentation standards.
+
+---
+
+## Fixed
+
+- HTML entity decoding.
+- Apostrophe rendering.
+- Font loading configuration.
+- Reader typography consistency.
+
+---
+
+## Technical
+
+- Added `react-native.config.js`.
+- Linked custom font assets.
+- Introduced design token architecture.
+- Introduced central design constants.
+- Improved project documentation structure.
+
+---
+
+## Status
+
+🟡 Active Development
+
+---
+
+# Release 0.6
+
+## Added
+
+### Stories
+
+- Stories listing screen.
+- Story Detail screen.
+- Infinite scrolling.
+- Story slug navigation.
+- Story services.
+- HTML article rendering.
+
+### Components
+
+- StoryHero.
+- StoryBody.
+- StoriesFeed.
+
+---
+
+## Changed
+
+- Introduced modular Story architecture.
+- Improved navigation flow.
+- Improved WordPress content rendering.
+
+---
+
+## Fixed
+
+- Story loading issues.
+- HTML decoding issues.
+- Pagination improvements.
+
+---
+
+## Technical
+
+- Shared Story service architecture.
+- Better separation between presentation and data.
+- Improved API consumption.
+
+---
+
+## Status
+
+✅ Stable
+
+---
+
+# Release 0.5
+
+## Added
+
+### API
+
+- Shared API layer (`src/services/api.ts`).
+- WordPress Featured Story service.
+- Banner service.
+- Banner endpoint (`/wp-json/radioafricana/v1/banners`).
+
+### Backend
+
+- Elementor integration.
+- Child Theme REST endpoint.
+- Backend documentation.
+
+---
+
+## Changed
+
+- Refactored API architecture.
+- Refactored Banner Carousel.
+- Replaced local banner content with CMS content.
+- Improved service separation.
+
+---
+
+## Technical
+
+- Introduced reusable CMS service pattern.
+- Introduced custom REST namespace.
+- Backend documentation structure.
+
+---
+
+## Status
+
+✅ Stable
+
+---
+
+# Release 0.4
+
+## Added
+
+- Premium Hero.
+- BannerCard.
+- LiveHero.
+- Shared playback service.
+- Persistent Mini Player.
+- Dynamic album artwork.
+
+---
+
+## Changed
+
+- Redesigned Home screen.
+- Redesigned Hero section.
+- Redesigned Banner Carousel.
+- Improved spacing.
+- Improved typography.
+
+---
+
+## Technical
+
+- Introduced constants layer.
+- Introduced services layer.
+- Prepared Stories architecture.
+
+---
+
+## Status
+
+✅ Stable
+
+---
+
+# Release 0.3
+
+## Added
+
+- Live Now Playing.
+- Shared playback.
+- Initial Home screen.
+- Album artwork support.
 
 ### Status
 
@@ -36,34 +218,28 @@
 
 ---
 
-## Release 0.4
+# Release 0.2
 
-### Added
+## Added
 
-- LiveHero component
-- BannerCard component
-- Now Playing service
-- Dynamic album artwork
-- Premium Home layout
-- Banner carousel
-- Shared playback state
-- Default artwork fallback
+- Initial project architecture.
+- Folder structure.
+- Theme preparation.
+- Initial services.
 
-### Changed
+### Status
 
-- Redesigned Home screen
-- Redesigned Banner carousel
-- Redesigned Hero section
-- Improved spacing
-- Improved typography
-- Improved Mini Player integration
+✅ Stable
 
-### Technical
+---
 
-- Improved project architecture
-- Introduced services layer
-- Introduced constants layer
-- Prepared Stories architecture
+# Release 0.1
+
+## Added
+
+- React Native project.
+- Android development environment.
+- Initial repository.
 
 ### Status
 

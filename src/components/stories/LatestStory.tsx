@@ -5,6 +5,9 @@ import {
   View,
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
 import Colors from '../../constants/colors';
 
 import StoryCard, {
@@ -16,7 +19,15 @@ import {
   Story,
 } from '../../services/stories';
 
+import { Routes } from '../../navigation/routes';
+import { RootStackParamList } from '../../navigation/types';
+
+type NavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
+
 export default function LatestStory() {
+  const navigation = useNavigation<NavigationProp>();
+
   const [story, setStory] = useState<Story>({
     id: '',
     title: '',
@@ -46,7 +57,12 @@ export default function LatestStory() {
     category: story.category,
     image: story.image,
     onPress: () => {
-      console.log(story.slug);
+      navigation.navigate(
+        Routes.STORY_DETAIL,
+        {
+          slug: story.slug,
+        },
+      );
     },
   };
 

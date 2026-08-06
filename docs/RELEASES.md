@@ -1,4 +1,12 @@
-# Releases
+# Radio Africana Mobile Releases
+
+## Overview
+
+This document records the evolution of the Radio Africana Mobile application.
+
+Each release represents a stable development milestone and documents the features, architectural improvements and design changes introduced during that phase of the project.
+
+Future work belongs in the Roadmap document. Once completed, it is documented here.
 
 ---
 
@@ -10,32 +18,34 @@ Established the React Native project and development environment.
 
 ### Highlights
 
-- React Native project created
-- Android development environment configured
-- Initial project bootstrapped
+- React Native project created.
+- Android development environment configured.
+- Initial application bootstrapped.
+- Repository created.
 
 ### Status
 
-✅ Complete
+✅ Completed
 
 ---
 
 # Release 0.2
 
-## Project Architecture
+## Application Architecture
 
-Established the application's internal structure and development foundation.
+Built the initial application structure that would support future development.
 
 ### Highlights
 
-- Folder architecture
-- Base components
-- Theme preparation
-- Initial services structure
+- Project folder architecture.
+- Base component structure.
+- Theme preparation.
+- Initial constants layer.
+- Initial services layer.
 
 ### Status
 
-✅ Complete
+✅ Completed
 
 ---
 
@@ -43,19 +53,20 @@ Established the application's internal structure and development foundation.
 
 ## Live Radio Foundation
 
-Introduced the application's first live radio functionality.
+Introduced the application's first live radio experience.
 
 ### Highlights
 
-- Live Now Playing
-- Dynamic album artwork
-- Shared playback service
-- Initial Home screen
-- Banner carousel foundation
+- Live Now Playing.
+- Dynamic album artwork.
+- Shared playback service.
+- Initial Home screen.
+- Banner carousel foundation.
+- Persistent playback architecture.
 
 ### Status
 
-✅ Complete
+✅ Completed
 
 ---
 
@@ -63,28 +74,41 @@ Introduced the application's first live radio functionality.
 
 ## Premium Home Experience
 
-Completely redesigned the Home screen into a premium streaming experience inspired by modern music platforms.
+Completely redesigned the Home screen into a premium streaming experience inspired by modern media applications.
 
 ### Highlights
 
-- Premium Hero
-- Premium Banner Carousel
-- Live album artwork
-- Shared playback service
-- Dynamic Now Playing
-- BannerCard component
-- Premium spacing
-- Premium typography
-- Persistent Mini Player
-- Stories architecture prepared
+#### User Experience
+
+- Premium Hero section.
+- Premium Banner Carousel.
+- Dynamic Now Playing.
+- Persistent Mini Player.
+- Improved visual hierarchy.
+- Premium spacing.
+- Premium typography.
+
+#### Components
+
+- LiveHero.
+- BannerCard.
+- MiniPlayer improvements.
+- Stories architecture preparation.
+
+#### Architecture
+
+- Improved services layer.
+- Shared playback state.
+- Shared constants.
+- Better component separation.
+
+### Git Milestone
+
+Release 0.4
 
 ### Status
 
-✅ Complete
-
-Git Milestone
-
-Release 0.4
+✅ Completed
 
 ---
 
@@ -92,86 +116,186 @@ Release 0.4
 
 ## Live Content Platform
 
-Transformed the Home screen from static content into a live CMS-driven experience.
+Transitioned the application from static content to a fully CMS-driven experience.
 
 ### Highlights
 
-### Mobile Application
+#### Mobile Application
 
-- Shared API layer
-- Live Featured Stories
-- Live Banner Carousel
-- Featured Story service
-- Banner service
-- Remote image support
-- API namespace architecture
+- Shared API layer.
+- Featured Story service.
+- Banner service.
+- Live Featured Story.
+- Live Banner Carousel.
+- Remote image support.
+- Shared API architecture.
 
-### WordPress Backend
+#### WordPress Backend
 
-- Custom REST API namespace
-- Banner endpoint
-- Elementor integration
-- Backend documentation
-- Child theme customization
-- Upgrade-safe implementation
+- Custom REST API namespace.
+- Elementor Banner endpoint.
+- Backend documentation.
+- Child Theme customisations.
+- Upgrade-safe implementation.
 
-### Architecture
+#### Architecture
 
 ```
-WordPress
+WordPress CMS
         │
-        ├── /wp/v2/posts
+        ▼
+REST APIs
         │
-        └── /radioafricana/v1/banners
-                    │
-                    ▼
-                Shared API Layer
-                    │
-                    ▼
-             React Native Components
+        ▼
+Shared Services
+        │
+        ▼
+React Native Components
 ```
+
+### Git Milestone
+
+Release 0.5
 
 ### Status
 
-✅ Complete
-
-Git Milestone
-
-Release 0.5
+✅ Completed
 
 ---
 
 # Release 0.6
 
-## Planned
+## Editorial Platform
 
-- Story Detail screen
-- Stories listing
-- Category browsing
-- Banner deep linking
-- Bottom Navigation
+Expanded the application beyond the Home screen by introducing the editorial experience.
+
+### Highlights
+
+#### Stories
+
+- Stories listing screen.
+- Infinite scrolling.
+- Story Detail screen.
+- Slug-based navigation.
+- HTML article rendering.
+- Featured Story improvements.
+
+#### Reader
+
+- Story Hero.
+- Story metadata.
+- Article body rendering.
+- HTML decoding.
+- Better typography support.
+
+#### Navigation
+
+- Story navigation flow.
+- Screen architecture improvements.
+
+#### Performance
+
+- Shared Story services.
+- Improved API usage.
+- Better component separation.
+
+### Git Milestone
+
+Release 0.6
+
+### Status
+
+✅ Completed
 
 ---
 
 # Release 0.7
 
-## Planned
+## Design System & Reader Experience
 
-- Search
-- Bookmarks
-- Recently Played
-- Sleep Timer
-- Notifications
+Focused on transforming the application into a premium editorial product.
+
+### Completed
+
+#### Design System
+
+- Shared typography system.
+- Shared spacing system.
+- Shared radius system.
+- Shared shadow system.
+- Central constants exports.
+- Custom font integration.
+- Inter font family.
+- Lora font family.
+
+#### Reader Experience
+
+- Premium editorial typography.
+- Improved article hierarchy.
+- HTML rendering improvements.
+- Reader layout refinements.
+
+#### Documentation
+
+- Project documentation.
+- Design System documentation.
+- Roadmap updates.
+- Release documentation.
+- Changelog improvements.
+
+### In Progress
+
+- Native sharing.
+- Continue Reading section.
+- Reader polish.
+- API caching.
+- Performance optimisation.
+
+### Status
+
+🟡 Active Development
 
 ---
 
-# Future
+# Version 1.0
 
-- Podcasts
-- Programme Schedule
-- Presenter Profiles
-- Events
-- Chromecast
-- Android Auto
-- CarPlay
-- Offline Reading
+## Planned Public Release
+
+The first production release will include:
+
+### Core Features
+
+- Live Radio.
+- Stories.
+- Premium Reader.
+- Search.
+- Bookmarks.
+- Podcasts.
+- Events.
+- Programme Schedule.
+
+### Platform
+
+- Android production build.
+- Google Play Store release.
+
+### Quality
+
+- Complete documentation.
+- Production optimisation.
+- Accessibility review.
+- Final UI polish.
+
+---
+
+# Release Philosophy
+
+Each release should satisfy the following principles:
+
+- Deliver a stable milestone.
+- Improve architecture before adding complexity.
+- Maintain backward compatibility whenever possible.
+- Keep commits small and testable.
+- Document all completed work.
+
+Every completed release becomes part of this document, providing a complete history of the project's evolution.

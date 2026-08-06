@@ -1,16 +1,11 @@
-/**
- * Radio Africana Mobile
- * Release 0.6
- *
- * Root Navigation
- */
-
 import React from 'react';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import BottomTabs from './BottomTabs';
+
+import StoryScreen from '../screens/Story/StoryScreen';
 
 import { Routes } from './routes';
 import { RootStackParamList } from './types';
@@ -30,6 +25,11 @@ export default function AppNavigator() {
         <Stack.Screen
           name={Routes.HOME}
           component={BottomTabs}
+        />
+
+        <Stack.Screen
+          name={Routes.STORY_DETAIL}
+          component={StoryScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

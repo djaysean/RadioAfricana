@@ -11,6 +11,14 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import {
+  useNavigation,
+} from '@react-navigation/native';
+
+import {
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
+
 import Colors from '../../constants/colors';
 
 import StoryCard, {
@@ -22,9 +30,17 @@ import {
   Story,
 } from '../../services/stories';
 
+import { Routes } from '../../navigation/routes';
+import { RootStackParamList } from '../../navigation/types';
+
 const STORIES_PER_PAGE = 10;
 
+type NavigationProp =
+  NativeStackNavigationProp<RootStackParamList>;
+
 export default function StoriesFeed() {
+  const navigation = useNavigation<NavigationProp>();
+
   const [stories, setStories] = useState<Story[]>([]);
   const [page, setPage] = useState(1);
 
@@ -57,7 +73,9 @@ export default function StoriesFeed() {
           ]);
         }
 
-        if (newStories.length < STORIES_PER_PAGE) {
+        if (
+          newStories.length < STORIES_PER_PAGE
+        ) {
           setHasMore(false);
         }
       } catch (error) {
@@ -115,11 +133,18 @@ export default function StoriesFeed() {
       category: item.category,
       image: item.image,
       onPress: () => {
-        console.log(item.slug);
+        navigation.navigate(
+          Routes.STORY_DETAIL,
+          {
+            slug: item.slug,
+          },
+        );
       },
     };
 
-    return <StoryCard story={storyCard} />;
+    return (
+      <StoryCard story={storyCard} />
+    );
   };
 
   return (
