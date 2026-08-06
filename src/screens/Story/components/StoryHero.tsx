@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Image,
   Pressable,
+  Share,
   StyleSheet,
   Text,
   View,
@@ -19,6 +20,7 @@ type Props = {
   category: string;
   title: string;
   publishedAt: string;
+  url: string;
 };
 
 export default function StoryHero({
@@ -26,15 +28,32 @@ export default function StoryHero({
   category,
   title,
   publishedAt,
+  url,
 }: Props) {
   const navigation = useNavigation();
+
+  async function handleShare() {
+    try {
+      await Share.share({
+        title,
+        message: `I'm reading "${title}" on Radio Africana.\n\n${url}\n\nDiscover more stories on Radio Africana.`,
+      });
+    } catch (error) {
+      console.warn(
+        'Share failed',
+        error,
+      );
+    }
+  }
 
   return (
     <>
       <View style={styles.header}>
         <Pressable
           style={styles.iconButton}
-          onPress={() => navigation.goBack()}
+          onPress={() =>
+            navigation.goBack()
+          }
         >
           <Text style={styles.icon}>
             ←
@@ -47,6 +66,7 @@ export default function StoryHero({
 
         <Pressable
           style={styles.iconButton}
+          onPress={handleShare}
         >
           <Text style={styles.icon}>
             ⤴
@@ -72,7 +92,7 @@ export default function StoryHero({
         </Text>
 
         <Text style={styles.date}>
-          Published{' '}
+          Published •{' '}
           {new Date(
             publishedAt,
           ).toLocaleDateString(
@@ -95,8 +115,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.white,
+    justifyContent:
+      'space-between',
+    backgroundColor:
+      Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: '#F1F1F1',
   },
@@ -115,7 +137,8 @@ const styles = StyleSheet.create({
 
   brand: {
     color: Colors.text,
-    fontFamily: 'Inter-SemiBold',
+    fontFamily:
+      'Inter-SemiBold',
     fontSize: 13,
     letterSpacing: 1.6,
   },
@@ -126,13 +149,14 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 28,
     paddingTop: 28,
   },
 
   category: {
     color: Colors.gold,
-    fontFamily: 'Inter-SemiBold',
+    fontFamily:
+      'Inter-SemiBold',
     fontSize: 12,
     letterSpacing: 1,
     marginBottom: 12,
@@ -146,9 +170,12 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    marginTop: 18,
-    color: Colors.textSecondary,
-    fontFamily: 'Inter-Medium',
+    marginTop: 22,
+    color: '#8A8A8A',
+    fontFamily:
+      'Inter-Regular',
     fontSize: 14,
+    letterSpacing: 0.3,
+    marginBottom: 4,
   },
 });

@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   StyleSheet,
+  Text,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -14,6 +15,14 @@ type Props = {
   content: string;
 };
 
+const systemFonts = [
+  'Inter-Regular',
+  'Inter-Medium',
+  'Inter-SemiBold',
+  'Lora-Regular',
+  'Lora-Bold',
+];
+
 export default function StoryBody({
   content,
 }: Props) {
@@ -22,17 +31,18 @@ export default function StoryBody({
   return (
     <View style={styles.container}>
       <RenderHtml
-        contentWidth={width - 48}
+        contentWidth={width - 56}
         source={{
           html: content,
         }}
+        systemFonts={systemFonts}
         tagsStyles={{
           p: {
             color: Colors.text,
             fontFamily: 'Inter-Regular',
             fontSize: 18,
-            lineHeight: 34,
-            marginBottom: 22,
+            lineHeight: 35,
+            marginBottom: 24,
           },
 
           h2: {
@@ -40,8 +50,8 @@ export default function StoryBody({
             fontFamily: 'Lora-Bold',
             fontSize: 28,
             lineHeight: 38,
-            marginTop: 36,
-            marginBottom: 18,
+            marginTop: 42,
+            marginBottom: 20,
           },
 
           h3: {
@@ -49,13 +59,13 @@ export default function StoryBody({
             fontFamily: 'Lora-Bold',
             fontSize: 24,
             lineHeight: 34,
-            marginTop: 32,
-            marginBottom: 16,
+            marginTop: 36,
+            marginBottom: 18,
           },
 
           strong: {
-            fontFamily: 'Inter-SemiBold',
             color: Colors.text,
+            fontFamily: 'Inter-SemiBold',
           },
 
           em: {
@@ -74,15 +84,15 @@ export default function StoryBody({
             color: Colors.text,
             fontFamily: 'Inter-Regular',
             fontSize: 18,
-            lineHeight: 32,
-            marginBottom: 8,
+            lineHeight: 33,
+            marginBottom: 10,
           },
 
           blockquote: {
             borderLeftWidth: 4,
             borderLeftColor: Colors.gold,
-            paddingLeft: 16,
-            marginVertical: 28,
+            paddingLeft: 18,
+            marginVertical: 30,
           },
 
           a: {
@@ -92,18 +102,50 @@ export default function StoryBody({
           },
 
           img: {
-            marginVertical: 28,
+            marginVertical: 32,
           },
         }}
       />
+
+      <View style={styles.endSection}>
+        <View style={styles.endDivider} />
+
+        <Text style={styles.endText}>
+          End of Story
+        </Text>
+
+        <View style={styles.endDivider} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 28,
     paddingTop: 28,
-    paddingBottom: 40,
+    paddingBottom: 48,
+  },
+
+  endSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    marginBottom: 12,
+  },
+
+  endDivider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#E8E8E8',
+  },
+
+  endText: {
+    marginHorizontal: 16,
+    fontFamily: 'Inter-Medium',
+    fontSize: 13,
+    color: Colors.textSecondary,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
 });

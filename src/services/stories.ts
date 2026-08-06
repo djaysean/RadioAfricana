@@ -19,12 +19,14 @@ export type StoryDetail = {
   category: string;
   image: string;
   publishedAt: string;
+  link: string;
 };
 
 type WPPost = {
   id: number;
   slug: string;
   date: string;
+  link: string;
 
   title: {
     rendered: string;
@@ -107,6 +109,8 @@ function mapStoryDetail(
         ?.source_url ?? '',
 
     publishedAt: post.date,
+
+    link: post.link,
   };
 }
 

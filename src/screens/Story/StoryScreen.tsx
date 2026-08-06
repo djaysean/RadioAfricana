@@ -29,6 +29,8 @@ import { RootStackParamList } from '../../navigation/types';
 
 import StoryHero from './components/StoryHero';
 import StoryBody from './components/StoryBody';
+import StoryFooter from './components/StoryFooter';
+import ContinueReading from './components/ContinueReading';
 
 import MiniPlayer from '../../components/MiniPlayer';
 
@@ -143,10 +145,20 @@ export default function StoryScreen() {
             category={story.category}
             title={story.title}
             publishedAt={story.publishedAt}
+            url={story.link}
           />
 
           <StoryBody
             content={story.content}
+          />
+
+          <StoryFooter
+            title={story.title}
+            url={story.link}
+          />
+
+          <ContinueReading
+            currentSlug={story.slug}
           />
         </ScrollView>
 
