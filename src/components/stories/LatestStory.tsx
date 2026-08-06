@@ -12,51 +12,51 @@ import StoryCard, {
 } from './StoryCard';
 
 import {
-  fetchLatestStories,
+  fetchLatestStory,
   Story,
 } from '../../services/stories';
 
-export default function LatestStories() {
-  const [stories, setStories] = useState<Story[]>([]);
+export default function LatestStory() {
+  const [story, setStory] = useState<Story>({
+    id: '',
+    title: '',
+    excerpt: '',
+    category: '',
+    slug: '',
+    image: require('../../../assets/images/logo.png'),
+  });
 
   useEffect(() => {
-    const loadStories = async () => {
+    const loadStory = async () => {
       try {
-        const latestStories = await fetchLatestStories();
-        setStories(latestStories);
+        const latestStory = await fetchLatestStory();
+        setStory(latestStory);
       } catch (error) {
         console.error(error);
       }
     };
 
-    loadStories();
+    loadStory();
   }, []);
+
+  const storyCard: StoryCardData = {
+    id: story.id,
+    title: story.title,
+    excerpt: story.excerpt,
+    category: story.category,
+    image: story.image,
+    onPress: () => {
+      console.log(story.slug);
+    },
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>
-        LATEST STORIES
+        LATEST STORY
       </Text>
 
-      {stories.map((story) => {
-        const storyCard: StoryCardData = {
-          id: story.id,
-          title: story.title,
-          excerpt: story.excerpt,
-          category: story.category,
-          image: story.image,
-          onPress: () => {
-            console.log(story.slug);
-          },
-        };
-
-        return (
-          <StoryCard
-            key={story.id}
-            story={storyCard}
-          />
-        );
-      })}
+      <StoryCard story={storyCard} />
     </View>
   );
 }

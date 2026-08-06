@@ -11,7 +11,7 @@ import {
 import BannerCarousel from '../../components/banners/BannerCarousel';
 import LiveHero from '../../components/LiveHero';
 import MiniPlayer from '../../components/MiniPlayer';
-import FeaturedStories from '../../components/stories/LatestStories';
+import LatestStory from '../../components/stories/LatestStory';
 
 import Colors from '../../constants/colors';
 
@@ -80,7 +80,7 @@ export default function HomeScreen() {
 
           <BannerCarousel />
 
-          <FeaturedStories />
+          <LatestStory />
         </ScrollView>
 
         <MiniPlayer

@@ -30,6 +30,8 @@ type WPPost = {
   };
 };
 
+const STORIES_PER_PAGE = 10;
+
 function stripHtml(html: string) {
   return html
     .replace(/<[^>]*>/g, '')
@@ -38,13 +40,7 @@ function stripHtml(html: string) {
     .trim();
 }
 
-export async function fetchFeaturedStory(): Promise<Story> {
-  const posts = await api.get<WPPost[]>(
-    '/wp/v2/posts?_embed&per_page=1'
-  );
-
-  const post = posts[0];
-
+function mapStory(post: WPPost): Story {
   return {
     id: String(post.id),
     title: post.title.rendered,
@@ -59,4 +55,20 @@ export async function fetchFeaturedStory(): Promise<Story> {
       post._embedded?.['wp:featuredmedia']?.[0]
         ?.source_url ?? '',
   };
+}
+
+export async function fetchLatestStories(
+  page: number = 1,
+): Promise<Story[]> {
+  const posts = await api.get<WPPost[]>(
+    `/wp/v2/posts?_embed&per_page=${STORIES_PER_PAGE}&page=${page}`,
+  );
+
+  return posts.map(mapStory);
+}
+
+export async function fetchLatestStory(): Promise<Story> {
+  const stories = await fetchLatestStories(1);
+
+  return stories[0];
 }
