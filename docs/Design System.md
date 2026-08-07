@@ -1,219 +1,403 @@
-# Radio Africana Design System
+# Radio Africana Mobile Design System
 
 ## Overview
 
-The Radio Africana Design System provides a single source of truth for the visual language of the mobile application.
+The Radio Africana Design System defines the visual language, interaction patterns and reusable interface standards for the Radio Africana Mobile application.
 
-Its purpose is to ensure consistency across every screen, reduce duplicated styling, improve maintainability, and make future design updates possible from a central location.
+It serves as the single source of truth for every screen, component and interaction within the application.
 
-Every new screen, component, or feature should use the design system instead of introducing new visual styles unless there is a clear product requirement to do otherwise.
-
----
-
-# Design Principles
-
-The Radio Africana app follows five core design principles.
-
-## 1. Editorial First
-
-The application is a digital publication before it is a mobile application.
-
-Typography, spacing, imagery, and layout should always prioritise readability and long-form content consumption.
+Every user interface element should either follow this design system or extend it intentionally.
 
 ---
 
-## 2. Consistency Before Customisation
+# Design Philosophy
 
-Visual consistency is more valuable than creating unique styling for individual screens.
+Radio Africana Mobile is inspired by the clarity of BBC Sounds, the simplicity of Spotify and the editorial quality of modern digital publications.
 
-Common design patterns should always reuse the design system.
+The application should feel:
 
----
+- Calm
+- Editorial
+- Modern
+- Premium
+- Purposeful
 
-## 3. Semantic Styling
-
-Styles are named by purpose rather than appearance.
-
-Examples:
-
-- Typography.heading1
-- Typography.body
-- Spacing.lg
-- Radius.md
-
-Avoid naming styles based on visual size or colour.
+Visual consistency is considered more important than individual screen creativity.
 
 ---
 
-## 4. Readability Over Decoration
+# Core Principles
 
-Whitespace, typography and hierarchy should improve reading comfort.
+## Editorial First
 
-Decorative styling should never reduce clarity.
+Reading should feel effortless.
 
----
-
-## 5. Single Source of Truth
-
-Colours, typography, spacing, radius and shadows must be managed from the constants directory.
-
-Hardcoded visual values should be avoided whenever possible.
+Typography, spacing and hierarchy always prioritise long-form content.
 
 ---
 
-# Colours
+## Listening First
 
-Location:
+Live radio is the primary experience.
 
-src/constants/colors.ts
+Playback should remain persistent while navigation changes around it.
 
-The colour palette defines the application's visual identity.
+---
 
-Primary usage includes:
+## Consistency Before Creativity
 
-- Brand colours
-- Text colours
-- Background colours
-- Accent colours
-- Borders
-- Status colours
+Reusable patterns are preferred over unique layouts.
 
-All components should reference Colours instead of hardcoded HEX values.
+Users should never have to relearn the interface between screens.
+
+---
+
+## Native Before Web
+
+Although powered by WordPress, the application must behave like a native Android application.
+
+---
+
+## Simplicity Before Density
+
+Only present what users need.
+
+Avoid unnecessary controls, visual clutter or decorative elements.
+
+---
+
+# Design Tokens
+
+The design tokens are maintained centrally within:
+
+```
+src/constants/
+```
+
+The application uses shared constants for:
+
+- Colours
+- Typography
+- Spacing
+- Radius
+- Shadows
+
+Hardcoded visual values should be avoided whenever practical.
 
 ---
 
 # Typography
 
-Location:
-
-src/constants/typography.ts
-
-The application uses two font families.
-
 ## Lora
-
-Used for:
-
-- Article titles
-- Editorial headings
-- Display text
 
 Purpose:
 
-To create a premium editorial appearance while maintaining excellent readability.
+Editorial display typography.
+
+Used for:
+
+- Story titles
+- Major editorial headings
+- Premium reading experiences
 
 ---
 
 ## Inter
 
+Purpose:
+
+Interface typography.
+
 Used for:
 
-- Body content
+- Body copy
 - Metadata
-- Navigation
 - Buttons
+- Navigation
 - Labels
+- Forms
+
+---
+
+# Colour System
+
+The application colour palette communicates hierarchy rather than decoration.
+
+Primary colours include:
+
+- Brand Gold
+- Editorial Black
+- White
+- Background Grey
+- Border Grey
+- Success / Live indicator
+
+Every component should reference shared colour constants.
+
+---
+
+# Layout Principles
+
+The application follows a predictable vertical hierarchy.
+
+```
+Header
+
+↓
+
+Primary Content
+
+↓
+
+Persistent Mini Player
+
+↓
+
+Bottom Navigation
+```
+
+This structure remains consistent across all primary screens.
+
+---
+
+# Header System
+
+The Radio Africana logo is the primary application header.
+
+Version 1 standard:
+
+Home
+
+Stories
+
+More
+
+All use the same branded header.
+
+Headers should maintain consistent height and spacing.
+
+---
+
+# Home Screen
 
 Purpose:
 
-To provide highly readable interface text across Android and iOS devices.
+Primary listening destination.
 
-Typography styles are semantic and should be reused throughout the application.
+Contains:
 
----
+- Radio Africana logo
+- LiveHero
+- Banner Carousel
+- Featured Story
+- Latest Stories
+- Persistent Mini Player
 
-# Spacing
-
-Location:
-
-src/constants/spacing.ts
-
-Spacing follows a consistent design scale.
-
-Values:
-
-- 4
-- 8
-- 12
-- 16
-- 24
-- 32
-- 40
-- 48
-- 64
-
-Spacing should always be referenced through the Spacing constant instead of hardcoded numeric values.
+The Home screen is the only location where the large LiveHero appears.
 
 ---
 
-# Radius
+# LiveHero
 
-Location:
+Purpose:
 
-src/constants/radius.ts
+Primary live listening experience.
 
-Corner radius values are centralised to maintain consistency across the application.
+Contains:
 
-Typical usage:
+- Dynamic artwork
+- Now Playing
+- Artist
+- Live status
+- Listen Live button
 
-- Buttons
-- Cards
-- Images
-- Containers
-- Modals
-
-Components should use Radius values instead of individual borderRadius numbers.
+Only displayed on the Home screen.
 
 ---
 
-# Shadows
+# Persistent Mini Player
 
-Location:
+Purpose:
 
-src/constants/shadows.ts
+Provide uninterrupted playback controls.
 
-The shadow system abstracts platform differences between Android and iOS.
+Visible throughout the application.
 
-Rather than defining shadow properties on individual components, screens should use the predefined shadow styles.
+Responsibilities:
 
-This ensures a consistent elevation system across the application.
+- Current artwork
+- Current title
+- Artist
+- Live status
+- Play/Pause
+
+The Mini Player should never replace the LiveHero.
+
+Instead, it complements it by remaining available during navigation.
 
 ---
 
-# Component Guidelines
+# Banner Carousel
 
-All reusable components should:
+Purpose:
 
-- Use Colours from the design system.
-- Use Typography styles.
-- Use Spacing values.
-- Use Radius values.
-- Use predefined Shadows where appropriate.
+Highlight promotional content.
 
-New components should avoid introducing duplicate visual styles.
+Rules:
+
+- CMS-driven
+- Swipeable
+- Responsive
+
+Interaction:
+
+If a banner has a destination URL:
+
+Tap opens the destination.
+
+If no URL exists:
+
+Banner remains non-interactive.
+
+Image enlargement is intentionally not supported.
+
+---
+
+# Story Cards
+
+Story cards should prioritise readability.
+
+Include:
+
+- Featured image
+- Title
+- Metadata
+- Clear spacing
+
+Avoid excessive text truncation.
+
+---
+
+# Story Reader
+
+The reader experience should resemble a premium publication.
+
+Characteristics:
+
+- Comfortable line spacing
+- Generous whitespace
+- Strong heading hierarchy
+- Minimal visual distractions
+
+---
+
+# Bottom Navigation
+
+Version 1 includes:
+
+- Home
+- Stories
+- More
+
+Requirements:
+
+- Branded icons
+- Active state
+- Consistent spacing
+- Native behaviour
+
+---
+
+# Interaction Principles
+
+Buttons must provide immediate feedback.
+
+Interactive elements should always communicate their state.
+
+Examples:
+
+Listen Live
+
+↓
+
+Playing Live
+
+READY
+
+↓
+
+LIVE
+
+Users should never wonder whether an action succeeded.
+
+---
+
+# Loading States
+
+Every network-driven component should define:
+
+- Loading
+- Empty
+- Error
+- Success
+
+Raw technical errors must never be shown to end users.
+
+---
+
+# Accessibility
+
+Version 1 requirements include:
+
+- Readable typography
+- Consistent touch targets
+- Colour contrast
+- Predictable navigation
+- Semantic hierarchy
+
+Accessibility improvements will continue in future releases.
+
+---
+
+# Responsive Behaviour
+
+Layouts should adapt gracefully across Android devices.
+
+Spacing should remain consistent without introducing screen-specific designs.
+
+---
+
+# Component Philosophy
+
+Reusable components should:
+
+- Have a single responsibility.
+- Avoid duplicated styling.
+- Consume shared constants.
+- Remain independent of business logic whenever possible.
 
 ---
 
 # Future Expansion
 
-Future versions of the design system may include:
+The design system is intended to grow alongside the application.
 
-- Icon sizing guidelines
-- Motion and animation tokens
-- Dark Mode support
-- Elevation guidelines
-- Responsive typography
-- Component state specifications
-- Accessibility standards
+Future additions may include:
 
-These additions will expand the design system while preserving backwards compatibility.
+- Motion guidelines
+- Animation tokens
+- Dark Mode
+- Iconography standards
+- Elevation system
+- Haptic feedback guidance
+- Component state documentation
 
 ---
 
 # Maintenance
 
-The Design System is considered the authoritative source for all visual styling within the Radio Africana mobile application.
+The Design System is the authoritative reference for every visual decision within Radio Africana Mobile.
 
-Changes to colours, typography, spacing, radius or shadows should be made in their respective constants files before individual screens are modified.
+Any change affecting appearance should first be reflected in this document before implementation.
 
-This approach keeps the application visually consistent and significantly reduces long-term maintenance effort.
+Maintaining a single visual language ensures consistency, reduces maintenance effort and preserves the premium identity of the application.

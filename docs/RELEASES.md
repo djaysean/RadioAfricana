@@ -2,11 +2,11 @@
 
 ## Overview
 
-This document records the evolution of the Radio Africana Mobile application.
+This document records every completed development milestone in the Radio Africana Mobile project.
 
-Each release represents a stable development milestone and documents the features, architectural improvements and design changes introduced during that phase of the project.
+Each release represents a stable implementation that has been completed, tested and committed.
 
-Future work belongs in the Roadmap document. Once completed, it is documented here.
+Planned work is documented separately in **Roadmap.md**.
 
 ---
 
@@ -16,12 +16,12 @@ Future work belongs in the Roadmap document. Once completed, it is documented he
 
 Established the React Native project and development environment.
 
-### Highlights
+### Completed
 
-- React Native project created.
-- Android development environment configured.
-- Initial application bootstrapped.
-- Repository created.
+- React Native project created
+- Android development environment configured
+- Initial application bootstrapped
+- Repository created
 
 ### Status
 
@@ -31,17 +31,18 @@ Established the React Native project and development environment.
 
 # Release 0.2
 
-## Application Architecture
+## Project Architecture
 
-Built the initial application structure that would support future development.
+Established the application's core architecture.
 
-### Highlights
+### Completed
 
-- Project folder architecture.
-- Base component structure.
-- Theme preparation.
-- Initial constants layer.
-- Initial services layer.
+- Modular project structure
+- Initial navigation architecture
+- Shared constants
+- Shared services layer
+- Base component structure
+- TypeScript foundation
 
 ### Status
 
@@ -53,16 +54,15 @@ Built the initial application structure that would support future development.
 
 ## Live Radio Foundation
 
-Introduced the application's first live radio experience.
+Introduced the first live listening experience.
 
-### Highlights
+### Completed
 
-- Live Now Playing.
-- Dynamic album artwork.
-- Shared playback service.
-- Initial Home screen.
-- Banner carousel foundation.
-- Persistent playback architecture.
+- Live Now Playing service
+- Dynamic album artwork
+- Initial Home screen
+- Banner carousel foundation
+- Radio service integration
 
 ### Status
 
@@ -74,37 +74,34 @@ Introduced the application's first live radio experience.
 
 ## Premium Home Experience
 
-Completely redesigned the Home screen into a premium streaming experience inspired by modern media applications.
+Transformed the Home screen into the primary listening experience.
 
-### Highlights
+### Completed
 
 #### User Experience
 
-- Premium Hero section.
-- Premium Banner Carousel.
-- Dynamic Now Playing.
-- Persistent Mini Player.
-- Improved visual hierarchy.
-- Premium spacing.
-- Premium typography.
+- Premium Home layout
+- LiveHero component
+- Banner Carousel
+- Featured Story
+- Improved spacing
+- Improved typography
 
 #### Components
 
-- LiveHero.
-- BannerCard.
-- MiniPlayer improvements.
-- Stories architecture preparation.
+- LiveHero
+- BannerCard
+- Home content architecture
 
 #### Architecture
 
-- Improved services layer.
-- Shared playback state.
-- Shared constants.
-- Better component separation.
+- Shared services improvements
+- Component separation
+- Improved API structure
 
 ### Git Milestone
 
-Release 0.4
+Release 0.4 – Premium Home Experience
 
 ### Status
 
@@ -116,46 +113,28 @@ Release 0.4
 
 ## Live Content Platform
 
-Transitioned the application from static content to a fully CMS-driven experience.
+Transitioned the application from static content to a fully CMS-driven platform.
 
-### Highlights
+### Completed
 
-#### Mobile Application
+#### Mobile
 
-- Shared API layer.
-- Featured Story service.
-- Banner service.
-- Live Featured Story.
-- Live Banner Carousel.
-- Remote image support.
-- Shared API architecture.
+- Featured Story service
+- Banner service
+- Shared API layer
+- Dynamic Home content
+- Remote image support
 
-#### WordPress Backend
+#### Backend
 
-- Custom REST API namespace.
-- Elementor Banner endpoint.
-- Backend documentation.
-- Child Theme customisations.
-- Upgrade-safe implementation.
-
-#### Architecture
-
-```
-WordPress CMS
-        │
-        ▼
-REST APIs
-        │
-        ▼
-Shared Services
-        │
-        ▼
-React Native Components
-```
+- Custom REST API namespace
+- Elementor Banner endpoint
+- Child Theme integration
+- Upgrade-safe implementation
 
 ### Git Milestone
 
-Release 0.5
+Release 0.5 – Live Content Platform
 
 ### Status
 
@@ -167,41 +146,32 @@ Release 0.5
 
 ## Editorial Platform
 
-Expanded the application beyond the Home screen by introducing the editorial experience.
+Expanded the application into a complete editorial experience.
 
-### Highlights
+### Completed
 
 #### Stories
 
-- Stories listing screen.
-- Infinite scrolling.
-- Story Detail screen.
-- Slug-based navigation.
-- HTML article rendering.
-- Featured Story improvements.
+- Stories feed
+- Infinite scrolling
+- Story Detail screen
+- HTML rendering
+- Slug navigation
 
 #### Reader
 
-- Story Hero.
-- Story metadata.
-- Article body rendering.
-- HTML decoding.
-- Better typography support.
-
-#### Navigation
-
-- Story navigation flow.
-- Screen architecture improvements.
+- Story metadata
+- Premium typography
+- Improved article layout
 
 #### Performance
 
-- Shared Story services.
-- Improved API usage.
-- Better component separation.
+- Shared Story services
+- API improvements
 
 ### Git Milestone
 
-Release 0.6
+Release 0.6 – Editorial Platform
 
 ### Status
 
@@ -213,89 +183,106 @@ Release 0.6
 
 ## Design System & Reader Experience
 
-Focused on transforming the application into a premium editorial product.
+Established the visual identity of the application and refined the editorial reading experience.
 
 ### Completed
 
 #### Design System
 
-- Shared typography system.
-- Shared spacing system.
-- Shared radius system.
-- Shared shadow system.
-- Central constants exports.
-- Custom font integration.
-- Inter font family.
-- Lora font family.
+- Shared colour system
+- Shared typography
+- Shared spacing
+- Shared radius
+- Shared shadows
+- Centralised design constants
+- Inter font integration
+- Lora font integration
 
 #### Reader Experience
 
-- Premium editorial typography.
-- Improved article hierarchy.
-- HTML rendering improvements.
-- Reader layout refinements.
+- Improved article hierarchy
+- HTML rendering refinements
+- Continue Reading
+- Native article sharing
+- Premium editorial layouts
 
 #### Documentation
 
-- Project documentation.
-- Design System documentation.
-- Roadmap updates.
-- Release documentation.
-- Changelog improvements.
+- Project documentation
+- Design System
+- Roadmap
+- Release documentation
+- Changelog
 
-### In Progress
+### Git Milestone
 
-- Native sharing.
-- Continue Reading section.
-- Reader polish.
-- API caching.
-- Performance optimisation.
+Release 0.7 – Design System & Reader Experience
 
 ### Status
 
-🟡 Active Development
+✅ Completed
 
 ---
 
-# Version 1.0
+# Release 0.8
 
-## Planned Public Release
+## Persistent Playback Architecture
 
-The first production release will include:
+Introduced the application's production playback architecture.
 
-### Core Features
+### Completed
 
-- Live Radio.
-- Stories.
-- Premium Reader.
-- Search.
-- Bookmarks.
-- Podcasts.
-- Events.
-- Programme Schedule.
+#### Playback
 
-### Platform
+- Global Playback Provider
+- Shared Playback Context
+- Persistent playback state
+- Cross-screen playback
+- Background playback support
+- Play / Pause controls
 
-- Android production build.
-- Google Play Store release.
+#### User Experience
 
-### Quality
+- Persistent Mini Player
+- LiveHero playback integration
+- Dynamic playback state
+- Shared playback controls
+- Continuous listening while navigating
 
-- Complete documentation.
-- Production optimisation.
-- Accessibility review.
-- Final UI polish.
+#### Architecture
+
+- Dedicated playback module
+- Playback state management
+- Reusable playback hooks
+- Screen-independent audio architecture
+
+### Git Milestone
+
+Release 0.8 – Persistent Live Playback
+
+### Status
+
+✅ Completed
 
 ---
 
 # Release Philosophy
 
-Each release should satisfy the following principles:
+Every release must satisfy the following principles.
 
-- Deliver a stable milestone.
+- Deliver a complete, stable milestone.
 - Improve architecture before adding complexity.
-- Maintain backward compatibility whenever possible.
-- Keep commits small and testable.
-- Document all completed work.
+- Remain backwards compatible whenever practical.
+- Be fully tested before completion.
+- End with a Git commit.
+- Update documentation immediately after completion.
 
-Every completed release becomes part of this document, providing a complete history of the project's evolution.
+---
+
+# Historical Record
+
+The Releases document is a permanent historical record.
+
+Once a release is completed, it is never removed or rewritten.
+
+Future work belongs exclusively in **Roadmap.md**.

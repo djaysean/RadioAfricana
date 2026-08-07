@@ -1,49 +1,116 @@
 # Changelog
 
-All notable changes to the Radio Africana Mobile application are documented in this file.
+All notable changes to Radio Africana Mobile are documented in this file.
 
-The format follows a simplified "Added / Changed / Fixed / Technical" structure.
+The project follows a simplified changelog format based on four categories:
+
+- Added
+- Changed
+- Fixed
+- Technical
+
+Each completed release is recorded once and never modified retrospectively except to correct factual inaccuracies.
 
 ---
 
-# Release 0.7 (In Progress)
+# Release 0.8 — Persistent Live Playback
 
 ## Added
 
-### Design System
+### Playback
 
-- Introduced shared typography system.
-- Introduced shared spacing system.
-- Introduced shared radius system.
-- Introduced shared shadow system.
-- Added central constants export (`index.ts`).
-- Added custom Inter font integration.
-- Added custom Lora font integration.
+- Global Playback Provider
+- Shared Playback Context
+- Dedicated playback module
+- Persistent playback architecture
+- Cross-screen playback
+- Shared playback controls
+- Play / Pause support
 
-### Reader
+### User Interface
 
-- Story Hero component.
-- Story Body component.
-- Premium article typography.
-- HTML rendering improvements.
-- Better editorial hierarchy.
+- LiveHero playback integration
+- Persistent Mini Player
+- Shared playback state
+- Dynamic playback status
+- Dynamic playback controls
 
-### Documentation
+### Navigation
 
-- Project documentation rewritten.
-- Roadmap documentation rewritten.
-- Releases documentation rewritten.
-- Design System documentation added.
-- Changelog restructured.
+- Playback persistence across Home
+- Playback persistence across Stories
+- Playback persistence across Story Detail
 
 ---
 
 ## Changed
 
-- Migrated article titles to Lora.
-- Migrated metadata to Inter.
+- Moved playback responsibility from individual screens to a global provider.
+- Simplified playback management throughout the application.
+- Unified playback state across all listening experiences.
+
+---
+
+## Fixed
+
+- Duplicate player rendering.
+- Mini Player layout regression.
+- Playback state synchronisation.
+- Navigation playback continuity.
+
+---
+
+## Technical
+
+- Introduced Playback Context.
+- Introduced Playback Provider.
+- Introduced playback module structure.
+- Improved separation between playback logic and presentation.
+
+### Status
+
+✅ Stable
+
+---
+
+# Release 0.7 — Design System & Reader Experience
+
+## Added
+
+### Design System
+
+- Shared typography system.
+- Shared spacing system.
+- Shared radius system.
+- Shared shadow system.
+- Central design token architecture.
+- Inter font integration.
+- Lora font integration.
+
+### Reader
+
+- Continue Reading.
+- Native article sharing.
+- Premium article typography.
+- Improved editorial hierarchy.
+- HTML rendering improvements.
+
+### Documentation
+
+- README rewrite.
+- Project specification.
+- Roadmap rewrite.
+- Releases documentation.
+- Design System documentation.
+- Changelog documentation.
+
+---
+
+## Changed
+
 - Improved typography consistency.
-- Improved Story component structure.
+- Improved Story architecture.
+- Improved article hierarchy.
 - Improved documentation standards.
 
 ---
@@ -52,39 +119,35 @@ The format follows a simplified "Added / Changed / Fixed / Technical" structure.
 
 - HTML entity decoding.
 - Apostrophe rendering.
-- Font loading configuration.
-- Reader typography consistency.
+- Font loading.
+- Typography consistency.
 
 ---
 
 ## Technical
 
-- Added `react-native.config.js`.
-- Linked custom font assets.
+- Added react-native.config.js.
 - Introduced design token architecture.
-- Introduced central design constants.
-- Improved project documentation structure.
+- Introduced shared constants.
+- Improved documentation structure.
+
+### Status
+
+✅ Stable
 
 ---
 
-## Status
-
-🟡 Active Development
-
----
-
-# Release 0.6
+# Release 0.6 — Editorial Platform
 
 ## Added
 
 ### Stories
 
-- Stories listing screen.
+- Stories feed.
 - Story Detail screen.
 - Infinite scrolling.
 - Story slug navigation.
-- Story services.
-- HTML article rendering.
+- HTML rendering.
 
 ### Components
 
@@ -97,93 +160,86 @@ The format follows a simplified "Added / Changed / Fixed / Technical" structure.
 ## Changed
 
 - Introduced modular Story architecture.
+- Improved WordPress rendering.
 - Improved navigation flow.
-- Improved WordPress content rendering.
 
 ---
 
 ## Fixed
 
-- Story loading issues.
-- HTML decoding issues.
-- Pagination improvements.
+- Story loading.
+- Pagination.
+- HTML decoding.
 
 ---
 
 ## Technical
 
 - Shared Story service architecture.
-- Better separation between presentation and data.
-- Improved API consumption.
+- Improved API separation.
+- Improved service organisation.
 
----
-
-## Status
+### Status
 
 ✅ Stable
 
 ---
 
-# Release 0.5
+# Release 0.5 — Live Content Platform
 
 ## Added
 
-### API
+### Services
 
-- Shared API layer (`src/services/api.ts`).
-- WordPress Featured Story service.
+- Shared API layer.
+- Featured Story service.
 - Banner service.
-- Banner endpoint (`/wp-json/radioafricana/v1/banners`).
+- Dynamic CMS content.
 
 ### Backend
 
-- Elementor integration.
-- Child Theme REST endpoint.
+- Custom REST namespace.
+- Elementor Banner endpoint.
+- Child Theme integration.
 - Backend documentation.
 
 ---
 
 ## Changed
 
-- Refactored API architecture.
-- Refactored Banner Carousel.
-- Replaced local banner content with CMS content.
+- Replaced static banners with CMS-driven content.
+- Improved API architecture.
 - Improved service separation.
 
 ---
 
 ## Technical
 
-- Introduced reusable CMS service pattern.
-- Introduced custom REST namespace.
-- Backend documentation structure.
+- Reusable CMS service pattern.
+- Upgrade-safe backend architecture.
 
----
-
-## Status
+### Status
 
 ✅ Stable
 
 ---
 
-# Release 0.4
+# Release 0.4 — Premium Home Experience
 
 ## Added
 
-- Premium Hero.
-- BannerCard.
 - LiveHero.
-- Shared playback service.
-- Persistent Mini Player.
-- Dynamic album artwork.
+- BannerCard.
+- Premium Home layout.
+- Featured Story.
+- Dynamic artwork.
 
 ---
 
 ## Changed
 
-- Redesigned Home screen.
-- Redesigned Hero section.
-- Redesigned Banner Carousel.
+- Home screen redesign.
+- Banner Carousel redesign.
 - Improved spacing.
 - Improved typography.
 
@@ -191,26 +247,9 @@ The format follows a simplified "Added / Changed / Fixed / Technical" structure.
 
 ## Technical
 
-- Introduced constants layer.
-- Introduced services layer.
+- Expanded services layer.
+- Expanded constants layer.
 - Prepared Stories architecture.
-
----
-
-## Status
-
-✅ Stable
-
----
-
-# Release 0.3
-
-## Added
-
-- Live Now Playing.
-- Shared playback.
-- Initial Home screen.
-- Album artwork support.
 
 ### Status
 
@@ -218,14 +257,29 @@ The format follows a simplified "Added / Changed / Fixed / Technical" structure.
 
 ---
 
-# Release 0.2
+# Release 0.3 — Live Radio Foundation
+
+## Added
+
+- Live Now Playing.
+- Dynamic album artwork.
+- Initial Home screen.
+- Banner Carousel foundation.
+
+### Status
+
+✅ Stable
+
+---
+
+# Release 0.2 — Project Architecture
 
 ## Added
 
 - Initial project architecture.
 - Folder structure.
+- Shared services.
 - Theme preparation.
-- Initial services.
 
 ### Status
 
@@ -233,7 +287,7 @@ The format follows a simplified "Added / Changed / Fixed / Technical" structure.
 
 ---
 
-# Release 0.1
+# Release 0.1 — Foundation
 
 ## Added
 

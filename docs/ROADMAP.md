@@ -2,193 +2,316 @@
 
 ## Overview
 
-This roadmap outlines the planned evolution of the Radio Africana Mobile application.
+This roadmap defines the remaining work required to complete Version 1.0 of Radio Africana Mobile.
 
-It represents the long-term product direction rather than a fixed release schedule. Features may move between milestones as development priorities evolve.
+Unlike the Releases document, which records completed milestones, this document contains only future work.
 
----
-
-# Current Focus
-
-## Release 0.7
-
-**Status**
-
-🟡 Active Development
-
-### Reader Experience
-
-- Premium article layout
-- HTML content rendering
-- Editorial typography
-- Story sharing
-- Continue Reading section
-- Improved article navigation
-
-### Design System
-
-- Shared colour system
-- Shared typography
-- Shared spacing
-- Shared radius
-- Shared shadows
-- Design documentation
-
-### Performance
-
-- API request optimisation
-- Request caching
-- Faster image loading
-- Improved loading states
-
-### User Experience
-
-- Better error handling
-- Pull to refresh improvements
-- Offline preparation
-- Reader polish
+Features are organised into small, testable releases that can each be completed, committed and verified independently.
 
 ---
 
-# Next Milestone
+# Current Development Status
 
-## Release 0.8
+## Target Version
 
-### Discovery
+Version 1.0
 
-- Search
-- Search suggestions
-- Search history
+## Status
 
-### Personalisation
+🟢 Active Development
 
-- Bookmarks
-- Recently Viewed Stories
-- Recently Played
-- Sleep Timer
+Core application architecture has been completed.
 
-### Notifications
-
-- Breaking News
-- Live Show reminders
-- Editorial highlights
+The remaining work focuses on feature completion, production readiness and final quality assurance.
 
 ---
 
-# Content Expansion
+# Version 1 Development Plan
 
-## Release 0.9
+## Release 0.8.1 — Navigation Polish
 
-### Audio
+### Objective
 
-- Podcasts
-- On-demand shows
-- Presenter profiles
+Complete the shared application shell and visual consistency.
 
-### Station
+### Tasks
 
-- Programme Schedule
-- Events
-- Competitions
-- Community announcements
+- Replace Stories text header with the Radio Africana logo.
+- Add the Radio Africana logo to the More screen.
+- Verify Mini Player placement across all primary screens.
+- Standardise header heights.
+- Review Safe Area spacing.
+- Review bottom navigation spacing.
 
-### Editorial
+### Success Criteria
 
-- Category pages
-- Featured collections
-- Related stories
-- Recommended reading
+- Every primary screen shares the same application header.
+- Mini Player placement is visually consistent.
+- Navigation feels seamless.
+
+### Git Milestone
+
+Release 0.8.1 – Navigation Polish
 
 ---
 
-# Version 1.0
+## Release 0.8.2 — Interaction Polish
 
-## Production Release
+### Objective
 
-### Core Experience
+Complete all user interactions before introducing new features.
 
-- Live Radio
-- Stories
-- Story Reader
-- Search
-- Bookmarks
-- Podcasts
-- Events
-- Programme Schedule
+### Tasks
 
-### Platform
+- Banner carousel links open correctly.
+- Non-clickable banners remain static.
+- Replace placeholder bottom navigation icons.
+- Verify background playback.
+- Improve sharing interactions where necessary.
 
-- Android Production Release
-- Google Play Store launch
+### Success Criteria
 
-### Quality
+- Every visible interactive element behaves correctly.
+- Playback continues while the application is backgrounded.
+- Navigation icons are production-ready.
 
+### Git Milestone
+
+Release 0.8.2 – Interaction Polish
+
+---
+
+## Release 0.8.3 — Network & User Experience
+
+### Objective
+
+Improve resilience and production behaviour.
+
+### Tasks
+
+- Friendly story loading errors.
+- Offline states.
+- Loading indicators.
+- Pull-to-refresh refinement.
+- Banner loading resilience.
+- Remove remaining development LogBox issues.
+- Improve API error handling.
+
+### Success Criteria
+
+- Network failures never expose technical errors.
+- Users always receive meaningful feedback.
+
+### Git Milestone
+
+Release 0.8.3 – Network & UX
+
+---
+
+## Release 0.9 — More Screen
+
+### Objective
+
+Complete the application's utility section.
+
+### Tasks
+
+- Contact Us
+- Meet the Team
+- Visit Website
+- Privacy Policy
+- Terms & Conditions
+- Share App
+- Application Version
+
+### Success Criteria
+
+- Every menu item is fully functional.
+- No placeholder content exists.
+
+### Git Milestone
+
+Release 0.9 – More Screen
+
+---
+
+## Release 0.9.5 — Firebase
+
+### Objective
+
+Complete the notification infrastructure.
+
+### Tasks
+
+- Firebase integration.
+- Firebase Cloud Messaging.
+- Notification permissions.
+- Notification tap handling.
+- Background notification behaviour.
+
+### Success Criteria
+
+- Push notifications work reliably.
+- Users can open the application directly from notifications.
+
+### Git Milestone
+
+Release 0.9.5 – Firebase
+
+---
+
+# Version 1.0 Release Candidate
+
+## Objective
+
+Prepare the application for public release.
+
+### Functional QA
+
+#### Live Radio
+
+- Persistent playback
+- Background playback
+- Mini Player
+- Dynamic metadata
+- Album artwork
+
+#### Stories
+
+- Story loading
+- Infinite scrolling
+- Continue Reading
+- Native sharing
+
+#### Banners
+
+- Clickable promotional banners
+- CMS-driven content
+
+#### More
+
+- Every menu item functional
+
+---
+
+### Production QA
+
+- Android release build
 - Performance optimisation
 - Accessibility review
-- Complete documentation
+- Final UI consistency review
 - Production testing
+- Google Play Store preparation
+
+### Success Criteria
+
+Every visible feature works exactly as intended.
+
+No placeholder interfaces remain.
+
+No known runtime issues remain.
+
+### Git Milestone
+
+Version 1.0 Release Candidate
 
 ---
 
-# Future Vision
+# Version 1 Scope (Locked)
 
-Following Version 1.0, development will expand the application into a complete Radio Africana ecosystem.
+The following features define Version 1.
 
-Planned features include:
+## Listening
 
-- iOS application
+- Live radio
+- Persistent playback
+- Cross-screen playback
+- Mini Player
+- Dynamic metadata
+- Dynamic artwork
+
+---
+
+## Reading
+
+- Stories
+- Story Detail
+- Continue Reading
+- Native sharing
+
+---
+
+## Content
+
+- CMS-driven banners
+- Clickable banners
+- Featured Story
+- Latest Stories
+
+---
+
+## Application
+
+- More screen
+- Firebase notifications
+- Production Android release
+
+---
+
+# Version 1.1
+
+The following features intentionally ship after Version 1.
+
+- Programme Schedule
+- Search
+- Bookmarks
+- Dark Mode
+- Sleep Timer
+- Favourite Stories
+
+---
+
+# Version 1.2
+
+- Podcasts
+- Presenter Profiles
+- Events
+- Community Resources
+
+---
+
+# Long-Term Vision
+
+Future development may include:
+
 - Android Auto
 - Apple CarPlay
 - Chromecast
-- User accounts
-- Saved preferences
-- Offline reading
-- Offline podcast playback
-- Smart recommendations
-- AI-powered content discovery
+- Offline Reading
+- Offline Audio
+- User Accounts
+- Personalisation
+- AI-powered recommendations
 
 ---
 
-# Product Direction
+# Roadmap Principles
 
-Radio Africana Mobile is being built around four core experiences.
+Every future release follows these principles.
 
-## Listen
-
-A premium live radio experience with modern playback controls and uninterrupted listening.
-
-## Read
-
-An editorial-first reading experience powered entirely by WordPress.
-
-## Discover
-
-Content discovery through search, recommendations and curated collections.
-
-## Connect
-
-Community engagement through events, notifications, competitions and future listener features.
-
----
-
-# Guiding Principles
-
-Future development should always prioritise:
-
-- Performance before features.
-- Editorial quality before quantity.
-- Consistency through the Design System.
-- WordPress-driven content management.
-- Modular architecture.
-- Maintainable code.
-- Incremental, testable releases.
+- Finish before expanding.
+- Build reusable solutions.
+- Every visible feature must work.
+- Keep releases small and testable.
+- Commit after every completed release.
+- Update documentation after every release.
 
 ---
 
 # Roadmap Maintenance
 
-This roadmap is a living document.
+This roadmap is the authoritative source for all future development.
 
-It should be reviewed after every completed release to ensure it accurately reflects the current direction of the project.
+Completed work must move to the Releases document.
 
-Completed work should move to the Releases document, while future work remains documented here.
+Only unfinished work belongs here.

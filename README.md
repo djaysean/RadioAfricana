@@ -3,69 +3,97 @@
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![React Native](https://img.shields.io/badge/React%20Native-0.82-blue)
 ![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
-![Release](https://img.shields.io/badge/Release-0.7-gold)
+![Version](https://img.shields.io/badge/Target-v1.0-gold)
 
-The official mobile application for Radio Africana.
+The official Android application for **Radio Africana**, designed to combine premium live radio streaming with a modern editorial reading experience.
 
-Built with React Native and powered by WordPress, Radio Africana Mobile delivers a premium listening and editorial experience by combining live radio streaming, dynamic content and modern storytelling within a single native application.
+Built with **React Native** and powered by **WordPress**, the application delivers live radio, dynamic programme metadata, editorial content, promotional campaigns and future community features through a single native mobile experience.
 
 ---
 
-# Overview
+# Project Vision
 
-Radio Africana Mobile is designed around two core experiences:
+Radio Africana Mobile is designed to become the primary digital experience for Radio Africana listeners.
 
-- **Listen** — A premium live radio experience with dynamic playback information.
-- **Read** — An editorial platform powered entirely by the Radio Africana website.
+Rather than replicating the website, the application focuses on providing a native, fast and immersive experience inspired by modern media platforms such as Spotify, BBC Sounds and Apple News.
 
-Unlike the website, which serves as the Content Management System (CMS), the mobile application is designed to be the primary experience for listeners and readers.
+The website remains the Content Management System (CMS), while the mobile application becomes the primary destination for listening and reading.
 
 ---
 
 # Current Status
 
-## Release
+## Version
 
-**Release 0.7 — Reader Experience & Design System**
+**Target Version:** 1.0
 
-## Status
+## Development Status
 
 🟢 Active Development
 
-### Current Focus
+The project is currently in the final implementation phase before Version 1.
 
-- Premium Story Reader
-- Shared Design System
-- Performance optimisation
-- API caching
-- Reader experience refinement
+Core architecture has been completed and development is focused on feature completion, UI consistency and production readiness.
 
 ---
 
-# Features
+# Current Features
 
 ## Live Radio
 
-- Live streaming
-- Dynamic Now Playing
+- Persistent live radio playback
+- Cross-screen audio playback
+- Dynamic "Now Playing" metadata
 - Dynamic album artwork
+- Home screen Live Hero
 - Persistent Mini Player
+- Play / Pause controls
+
+---
 
 ## Editorial
 
 - Featured Story
 - Stories listing
-- Infinite scrolling
 - Story Detail screen
-- HTML article rendering
-- Responsive article layouts
+- Premium article reader
+- Infinite scrolling
+- Continue Reading
+- Native article sharing
+
+---
 
 ## Content Platform
 
 - WordPress REST API integration
 - Custom Radio Africana REST API
 - Elementor Banner integration
-- Shared API layer
+- Dynamic CMS-driven content
+- Shared API service architecture
+
+---
+
+# Architecture
+
+The application follows a modular, component-first architecture.
+
+```
+WordPress CMS
+        │
+        ▼
+REST API Services
+        │
+        ▼
+Shared Services
+        │
+        ▼
+React Native Screens
+        │
+        ▼
+Reusable Components
+```
+
+Live playback is managed through a shared Playback Provider, allowing uninterrupted listening across the entire application.
 
 ---
 
@@ -76,6 +104,7 @@ Unlike the website, which serves as the Content Management System (CMS), the mob
 - React Native
 - TypeScript
 - React Navigation
+- react-native-video
 
 ## Backend
 
@@ -85,6 +114,10 @@ Unlike the website, which serves as the Content Management System (CMS), the mob
 - Pro.Radio Theme
 - Pro.Radio Child Theme
 
+## Planned
+
+- Firebase Cloud Messaging (FCM)
+
 ---
 
 # Project Structure
@@ -92,15 +125,14 @@ Unlike the website, which serves as the Content Management System (CMS), the mob
 ```text
 src/
 ├── components/
-├── screens/
-├── navigation/
-├── services/
 ├── constants/
-├── hooks/
+├── navigation/
+├── playback/
+├── screens/
+├── services/
 ├── types/
 
 assets/
-├── fonts/
 
 docs/
 
@@ -109,13 +141,7 @@ wordpress/
 
 ---
 
-# Quick Start
-
-Clone the repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/RadioAfricana.git
-```
+# Development Workflow
 
 Install dependencies
 
@@ -129,90 +155,80 @@ Start Metro
 npx react-native start
 ```
 
+Reset Metro cache
+
+```bash
+npx react-native start --reset-cache
+```
+
 Run Android
 
 ```bash
 npx react-native run-android
 ```
 
-Clear Metro cache (recommended after major changes)
+During normal UI development, JavaScript changes should be reloaded through Metro rather than rebuilding the Android application.
 
-```bash
-npx react-native start --reset-cache
-```
+---
+
+# Engineering Principles
+
+The project follows several core engineering principles.
+
+- Component-first architecture.
+- Service-first data layer.
+- CMS-driven content.
+- Shared Design System.
+- Reusable components before reusable screens.
+- Complete feature implementation before expansion.
+- Small, testable releases.
+- Git commit after every completed release.
+- Documentation updated after every release.
+
+---
+
+# Version 1 Scope
+
+Version 1 focuses on delivering a complete, polished experience rather than the largest possible feature set.
+
+Included:
+
+- Live Radio
+- Persistent Playback
+- Stories
+- Story Reader
+- Banner Carousel
+- More screen
+- Firebase Push Notifications
+- Premium Design System
+- Production Android Release
+
+Future versions will introduce additional capabilities such as Programme Schedule, Search, Podcasts and Dark Mode.
 
 ---
 
 # Documentation
 
-Detailed project documentation is available in the `docs` directory.
+The `/docs` directory contains the complete project documentation.
 
-| Document | Description |
-|----------|-------------|
-| Project.md | Product overview and project vision |
-| Roadmap.md | Development roadmap and future direction |
-| Releases.md | Release history and completed milestones |
-| Changelog.md | Detailed development changes |
+| Document | Purpose |
+|----------|---------|
+| Project.md | Product specification and architecture |
 | Design System.md | Visual language and UI standards |
+| Releases.md | Completed release history |
+| Changelog.md | Detailed implementation history |
+| Roadmap.md | Future development roadmap |
+| Version 1 Checklist.md | Production release checklist |
 
 ---
 
-# Development Principles
+# Development Philosophy
 
-The project follows several core principles throughout development.
+Radio Africana Mobile is built around one simple principle:
 
-- Component-first architecture.
-- Service-first data layer.
-- Shared Design System.
-- WordPress-driven content.
-- Upgrade-safe backend customisations.
-- Complete file replacements during development.
-- Small, testable milestones.
-- Git commits after every stable implementation.
+> Every feature that exists in Version 1 must feel complete.
 
----
-
-# Current Milestone
-
-Release 0.7 is focused on transforming the application into a premium editorial product.
-
-Current work includes:
-
-- Reader experience
-- Shared typography
-- Design System adoption
-- Native sharing
-- Performance optimisation
-- API request caching
-
----
-
-# Roadmap
-
-Upcoming milestones include:
-
-## Release 0.8
-
-- Search
-- Bookmarks
-- Recently Viewed
-- Notifications
-- Sleep Timer
-
-## Version 1.0
-
-- Android production release
-- Google Play Store launch
-- Podcasts
-- Programme Schedule
-- Events
-- Presenter Profiles
-
-For complete planning information, see:
-
-```
-docs/Roadmap.md
-```
+New functionality is introduced through future releases rather than shipping unfinished experiences.
 
 ---
 
