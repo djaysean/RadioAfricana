@@ -5,6 +5,7 @@ import React, {
 import {
   Dimensions,
   FlatList,
+  Linking,
   NativeScrollEvent,
   NativeSyntheticEvent,
   StyleSheet,
@@ -74,11 +75,17 @@ export default function BannerCarousel() {
           <View style={styles.card}>
             <BannerCard
               image={item.image}
-              onPress={() => {
-                if (item.hasLink) {
-                  console.log(item.link);
-                }
-              }}
+              onPress={async () => {
+  if (!item.hasLink || !item.link) {
+    return;
+  }
+
+  try {
+    await Linking.openURL(item.link);
+  } catch (error) {
+    console.error(error);
+  }
+}}
             />
           </View>
         )}

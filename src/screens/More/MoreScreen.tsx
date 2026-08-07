@@ -1,29 +1,60 @@
 import React from 'react';
+
 import {
+  Image,
+  SafeAreaView,
+  StatusBar,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
+import Colors from '../../constants/colors';
+
 export default function MoreScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>More</Text>
-    </View>
+    <>
+      <StatusBar
+        backgroundColor={Colors.white}
+        barStyle="dark-content"
+      />
+
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Image
+            source={require('../../../assets/images/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
+
+        <View style={styles.content} />
+      </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: Colors.background,
   },
 
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#111111',
+  header: {
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 18,
+    paddingBottom: 18,
+  },
+
+  logo: {
+    width: 190,
+    height: 65,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 24,
   },
 });

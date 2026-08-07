@@ -9,9 +9,8 @@ import {
   View,
 } from 'react-native';
 
-import {
-  useNavigation,
-} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import { ArrowLeft, Share2 } from 'lucide-react-native';
 
 import Colors from '../../../constants/colors';
 
@@ -55,22 +54,24 @@ export default function StoryHero({
             navigation.goBack()
           }
         >
-          <Text style={styles.icon}>
-            ←
-          </Text>
+          <ArrowLeft
+            size={24}
+            color={Colors.gold}
+            strokeWidth={2.25}
+          />
         </Pressable>
 
-        <Text style={styles.brand}>
-          RADIO AFRICANA
-        </Text>
+        <View style={styles.spacer} />
 
         <Pressable
           style={styles.iconButton}
           onPress={handleShare}
         >
-          <Text style={styles.icon}>
-            ⤴
-          </Text>
+          <Share2
+            size={22}
+            color={Colors.gold}
+            strokeWidth={2.25}
+          />
         </Pressable>
       </View>
 
@@ -111,8 +112,8 @@ export default function StoryHero({
 
 const styles = StyleSheet.create({
   header: {
-    height: 60,
-    paddingHorizontal: 16,
+    height: 72,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent:
@@ -124,28 +125,23 @@ const styles = StyleSheet.create({
   },
 
   iconButton: {
-    width: 44,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
-  icon: {
-    fontSize: 24,
-    color: Colors.gold,
-    fontWeight: '700',
+  spacer: {
+    flex: 1,
   },
 
-  brand: {
-    color: Colors.text,
-    fontFamily:
-      'Inter-SemiBold',
-    fontSize: 13,
-    letterSpacing: 1.6,
-  },
 
   image: {
     width: '100%',
     height: 260,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
   },
 
   content: {
