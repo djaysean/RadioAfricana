@@ -7,6 +7,8 @@ import BottomTabs from './BottomTabs';
 
 import StoryScreen from '../screens/Story/StoryScreen';
 
+import { PlaybackProvider } from '../playback';
+
 import { Routes } from './routes';
 import { RootStackParamList } from './types';
 
@@ -14,24 +16,26 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={Routes.HOME}
-        screenOptions={{
-          headerShown: false,
-          animation: 'slide_from_right',
-        }}
-      >
-        <Stack.Screen
-          name={Routes.HOME}
-          component={BottomTabs}
-        />
+    <PlaybackProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName={Routes.HOME}
+          screenOptions={{
+            headerShown: false,
+            animation: 'slide_from_right',
+          }}
+        >
+          <Stack.Screen
+            name={Routes.HOME}
+            component={BottomTabs}
+          />
 
-        <Stack.Screen
-          name={Routes.STORY_DETAIL}
-          component={StoryScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name={Routes.STORY_DETAIL}
+            component={StoryScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PlaybackProvider>
   );
 }

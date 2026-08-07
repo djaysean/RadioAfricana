@@ -9,22 +9,21 @@ import {
 } from 'react-native';
 
 import Colors from '../constants/colors';
+import { usePlayback } from '../playback/PlaybackContext';
 
 type MiniPlayerProps = {
   title: string;
   artist: string;
   picture?: string | null;
-  isPlaying?: boolean;
-  onPress?: () => void;
 };
 
-function MiniPlayer({
+export default function MiniPlayer({
   title,
   artist,
   picture,
-  isPlaying = false,
-  onPress,
 }: MiniPlayerProps) {
+  const { isPlaying, toggle } = usePlayback();
+
   const artwork: ImageSourcePropType = picture
     ? { uri: picture }
     : require('../../assets/images/default_artwork.png');
@@ -34,34 +33,34 @@ function MiniPlayer({
       <Image
         source={artwork}
         style={styles.artwork}
-        resizeMode="cover"
       />
 
       <View style={styles.info}>
         <Text
-          style={styles.song}
           numberOfLines={1}
+          style={styles.title}
         >
           {title}
         </Text>
 
         <Text
-          style={styles.artist}
           numberOfLines={1}
+          style={styles.artist}
         >
           {artist}
         </Text>
 
-        <Text style={styles.live}>
-          ● LIVE
+        <Text style={styles.status}>
+          {isPlaying ? '● LIVE' : '● READY'}
         </Text>
       </View>
 
       <TouchableOpacity
-        style={styles.playButton}
-        onPress={onPress}
+        onPress={toggle}
+        style={styles.button}
+        activeOpacity={0.8}
       >
-        <Text style={styles.playIcon}>
+        <Text style={styles.icon}>
           {isPlaying ? '❚❚' : '▶'}
         </Text>
       </TouchableOpacity>
@@ -73,59 +72,57 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.white,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    backgroundColor: Colors.white,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#E5E5E5',
   },
 
   artwork: {
-    width: 58,
-    height: 58,
+    width: 56,
+    height: 56,
     borderRadius: 10,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#EFEFEF',
   },
 
   info: {
     flex: 1,
-    marginLeft: 14,
+    marginLeft: 12,
   },
 
-  song: {
+  title: {
     fontSize: 15,
     fontWeight: '700',
     color: Colors.text,
   },
 
   artist: {
-    marginTop: 2,
     fontSize: 13,
     color: Colors.textSecondary,
+    marginTop: 2,
   },
 
-  live: {
-    marginTop: 5,
-    fontSize: 11,
+  status: {
+    marginTop: 4,
+    fontSize: 12,
     fontWeight: '700',
     color: Colors.live,
   },
 
-  playButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  button: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     backgroundColor: Colors.gold,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  playIcon: {
+  icon: {
     color: Colors.buttonText,
     fontSize: 18,
     fontWeight: '700',
     marginLeft: 2,
   },
 });
-
-export default MiniPlayer;

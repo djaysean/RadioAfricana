@@ -9,20 +9,21 @@ import {
 } from 'react-native';
 
 import Colors from '../constants/colors';
+import { usePlayback } from '../playback';
 
 type LiveHeroProps = {
   title: string;
   artist: string;
-  picture?: string |null;
-  onPress?: () => void;
+  picture?: string | null;
 };
 
 export default function LiveHero({
   title,
   artist,
   picture,
-  onPress,
 }: LiveHeroProps) {
+  const { play, isPlaying } = usePlayback();
+
   const artwork: ImageSourcePropType = picture
     ? { uri: picture }
     : require('../../assets/images/default_artwork.png');
@@ -57,17 +58,17 @@ export default function LiveHero({
         <View style={styles.liveDot} />
 
         <Text style={styles.liveText}>
-          LIVE
+          {isPlaying ? 'LIVE' : 'READY'}
         </Text>
       </View>
 
       <TouchableOpacity
         activeOpacity={0.9}
         style={styles.button}
-        onPress={onPress}
+        onPress={play}
       >
         <Text style={styles.buttonText}>
-          Listen Live
+          {isPlaying ? 'Playing Live' : 'Listen Live'}
         </Text>
       </TouchableOpacity>
     </View>
@@ -76,10 +77,10 @@ export default function LiveHero({
 
 const styles = StyleSheet.create({
   container: {
-  paddingHorizontal: 24,
-  paddingTop: 16,
-  alignItems: 'center',
-},
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    alignItems: 'center',
+  },
 
   heading: {
     alignSelf: 'flex-start',

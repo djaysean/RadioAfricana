@@ -1,7 +1,5 @@
 /**
  * Radio Africana Mobile
- *
- * Application Entry Point
  */
 
 import React from 'react';
