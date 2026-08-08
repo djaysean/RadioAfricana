@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -16,10 +13,7 @@ import {
 import BannerCard from './BannerCard';
 import Colors from '../../constants/colors';
 
-import {
-  Banner,
-  fetchBanners,
-} from '../../services/banners';
+import { Banner, fetchBanners } from '../../services/banners';
 
 const { width } = Dimensions.get('window');
 
@@ -47,8 +41,7 @@ export default function BannerCarousel() {
     event: NativeSyntheticEvent<NativeScrollEvent>,
   ) => {
     const index = Math.round(
-      event.nativeEvent.contentOffset.x /
-        (CARD_WIDTH + SPACING),
+      event.nativeEvent.contentOffset.x / (CARD_WIDTH + SPACING),
     );
 
     setActiveIndex(index);
@@ -56,14 +49,12 @@ export default function BannerCarousel() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>
-        BANNERS
-      </Text>
+      <Text style={styles.heading}>BANNERS</Text>
 
       <FlatList
         horizontal
         data={banners}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         showsHorizontalScrollIndicator={false}
         snapToInterval={CARD_WIDTH + SPACING}
         decelerationRate="fast"
@@ -76,16 +67,16 @@ export default function BannerCarousel() {
             <BannerCard
               image={item.image}
               onPress={async () => {
-  if (!item.hasLink || !item.link) {
-    return;
-  }
+                if (!item.hasLink || !item.link) {
+                  return;
+                }
 
-  try {
-    await Linking.openURL(item.link);
-  } catch (error) {
-    console.error(error);
-  }
-}}
+                try {
+                  await Linking.openURL(item.link);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
             />
           </View>
         )}
@@ -95,11 +86,7 @@ export default function BannerCarousel() {
         {banners.map((item, index) => (
           <View
             key={item.id}
-            style={[
-              styles.dot,
-              activeIndex === index &&
-                styles.activeDot,
-            ]}
+            style={[styles.dot, activeIndex === index && styles.activeDot]}
           />
         ))}
       </View>
