@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -49,15 +50,18 @@ export default function StoriesFeed() {
 
   const [hasMore, setHasMore] = useState(true);
 
+  const loadingRef = useRef(false);
+
   const loadStories = useCallback(
     async (
       pageToLoad: number,
       replace = false,
     ) => {
-      if (loading) {
+      if (loadingRef.current) {
         return;
       }
 
+      loadingRef.current = true;
       setLoading(true);
 
       try {
@@ -73,11 +77,9 @@ export default function StoriesFeed() {
           ]);
         }
 
-        if (
-          newStories.length < STORIES_PER_PAGE
-        ) {
-          setHasMore(false);
-        }
+        setHasMore(
+          newStories.length >= STORIES_PER_PAGE,
+        );
       } catch (error) {
         if (
           error instanceof Error &&
@@ -87,14 +89,16 @@ export default function StoriesFeed() {
         ) {
           setHasMore(false);
         } else {
-          console.error(error);
+          // Network failures are handled gracefully.
+          // Existing stories remain visible.
         }
       } finally {
+        loadingRef.current = false;
         setLoading(false);
         setRefreshing(false);
       }
     },
-    [loading],
+    [],
   );
 
   useEffect(() => {
@@ -102,7 +106,7 @@ export default function StoriesFeed() {
   }, [loadStories]);
 
   const loadMore = () => {
-    if (loading || !hasMore) {
+    if (loadingRef.current || !hasMore) {
       return;
     }
 
@@ -114,6 +118,10 @@ export default function StoriesFeed() {
   };
 
   const refresh = () => {
+    if (loadingRef.current) {
+      return;
+    }
+
     setRefreshing(true);
     setHasMore(true);
     setPage(1);
