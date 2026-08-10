@@ -1,28 +1,29 @@
-/**
- * Radio Africana Mobile
- * Release 0.6
- *
- * Stories Header
- */
-
 import React from 'react';
+
 import {
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
+
+import AppText from '../ui/AppText';
 
 export default function StoriesHeader() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
+      <AppText
+        variant="heading2"
+        style={styles.title}
+      >
         African Stories, Culture & Diaspora
-      </Text>
+      </AppText>
 
-      <Text style={styles.subtitle}>
+      <AppText
+        variant="bodySmall"
+        style={styles.subtitle}
+      >
         Explore stories celebrating African culture, history,
         travel, languages and diaspora life from Radio Africana.
-      </Text>
+      </AppText>
     </View>
   );
 }
@@ -35,16 +36,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    lineHeight: 36,
     color: '#111111',
   },
 
   subtitle: {
     marginTop: 8,
-    fontSize: 15,
-    lineHeight: 22,
     color: '#666666',
   },
 });

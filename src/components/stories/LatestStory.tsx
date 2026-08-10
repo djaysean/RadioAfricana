@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import {
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -9,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import Colors from '../../constants/colors';
+import AppText from '../ui/AppText';
 
 import StoryCard, {
   StoryCardData,
@@ -68,9 +72,12 @@ export default function LatestStory() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>
+      <AppText
+        variant="label"
+        style={styles.heading}
+      >
         LATEST STORY
-      </Text>
+      </AppText>
 
       <StoryCard story={storyCard} />
     </View>
@@ -85,8 +92,6 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    fontSize: 15,
-    fontWeight: '700',
     color: Colors.text,
     marginBottom: 18,
     letterSpacing: 0.5,

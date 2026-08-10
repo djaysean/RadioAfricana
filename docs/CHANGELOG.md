@@ -13,6 +13,104 @@ Each completed release is recorded once and never modified retrospectively excep
 
 ---
 
+# Release 0.9.5 — Firebase & Typography Foundation
+
+## Added
+
+### Firebase Cloud Messaging
+
+- Firebase Cloud Messaging integration.
+- Connection to the existing Radio Africana Firebase project.
+- Android Firebase application registration.
+- FCM token generation.
+- Firebase Console test notification support.
+
+### Typography
+
+- Shared `AppText` typography component.
+- Application typography foundation using the installed Inter and Lora fonts.
+- Centralised typography rendering through the shared UI layer.
+
+---
+
+## Changed
+
+### Firebase
+
+- Preserved the client's existing Firebase workflow.
+- Kept Firebase notifications independent from the Stories editorial system.
+- Deliberately did not introduce Stories-specific article notification automation at this stage.
+
+### Typography
+
+- Began migrating interface text away from the device's native font.
+- Applied the shared typography system to reusable components.
+- Migrated typography in the Mini Player.
+- Migrated typography in LiveHero.
+- Migrated typography across Stories components.
+- Migrated typography in BannerCarousel.
+- Migrated typography in SectionHeader.
+
+### Components
+
+- Updated shared components to use `AppText` where interface text is rendered.
+- Preserved existing component behaviour, navigation and data services while migrating typography.
+
+---
+
+## Fixed
+
+- Inconsistent typography between reusable application components.
+- Native device font usage in migrated shared components.
+- Typography path/import issue in `SectionHeader`.
+
+---
+
+## Technical
+
+- Established `AppText` as the shared typography rendering layer.
+- Retained the existing Inter and Lora font assets.
+- Verified Firebase notification delivery through the Firebase Console.
+- Verified FCM token generation on the Android application.
+- Preserved the existing playback and networking architecture during the typography work.
+
+### Status
+
+🟡 In Progress
+
+---
+
+# Release 0.9 — More Screen
+
+## Added
+
+### More
+
+- More screen.
+- More screen navigation.
+- Additional application information and utility content.
+- More screen integration into the application navigation structure.
+
+---
+
+## Changed
+
+- Expanded the primary application navigation experience.
+- Extended the shared visual language into the More section.
+
+---
+
+## Technical
+
+- Integrated the More screen into the existing navigation architecture.
+- Preserved the shared application structure established in previous releases.
+
+### Status
+
+✅ Stable
+
+---
+
 # Release 0.8 — Persistent Live Playback
 
 ## Added

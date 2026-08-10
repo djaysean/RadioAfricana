@@ -70,7 +70,7 @@ Avoid unnecessary controls, visual clutter or decorative elements.
 
 The design tokens are maintained centrally within:
 
-```
+```text
 src/constants/
 ```
 
@@ -88,6 +88,10 @@ Hardcoded visual values should be avoided whenever practical.
 
 # Typography
 
+Typography is centralised through the shared typography system and rendered through the reusable `AppText` component.
+
+The installed font families are used throughout the application rather than relying on the Android device's native font.
+
 ## Lora
 
 Purpose:
@@ -99,6 +103,7 @@ Used for:
 - Story titles
 - Major editorial headings
 - Premium reading experiences
+- Prominent editorial content
 
 ---
 
@@ -116,6 +121,30 @@ Used for:
 - Navigation
 - Labels
 - Forms
+- Status indicators
+- Supporting interface text
+
+---
+
+## AppText
+
+`AppText` is the shared typography component for application UI text.
+
+Components should use `AppText` rather than importing and styling React Native's native `Text` component directly whenever the text belongs to the application interface.
+
+The component consumes the central typography definitions and provides consistent variants across the application.
+
+Typography variants include:
+
+- Display
+- Heading
+- Body
+- Body Small
+- Label
+- Meta
+- Button
+
+The typography system is being progressively applied across the application as part of the Release 0.9.6 UI consistency work.
 
 ---
 
@@ -140,7 +169,7 @@ Every component should reference shared colour constants.
 
 The application follows a predictable vertical hierarchy.
 
-```
+```text
 Header
 
 ↓
@@ -176,6 +205,8 @@ All use the same branded header.
 
 Headers should maintain consistent height and spacing.
 
+Typography used within headers should follow the shared application typography system.
+
 ---
 
 # Home Screen
@@ -195,6 +226,8 @@ Contains:
 
 The Home screen is the only location where the large LiveHero appears.
 
+Home is also the primary location for live playback interaction and promotional content.
+
 ---
 
 # LiveHero
@@ -212,6 +245,8 @@ Contains:
 - Listen Live button
 
 Only displayed on the Home screen.
+
+All LiveHero interface text should use the shared typography system.
 
 ---
 
@@ -234,6 +269,8 @@ Responsibilities:
 The Mini Player should never replace the LiveHero.
 
 Instead, it complements it by remaining available during navigation.
+
+All Mini Player interface text should use the shared typography system.
 
 ---
 
@@ -261,6 +298,8 @@ Banner remains non-interactive.
 
 Image enlargement is intentionally not supported.
 
+Banner status and retry messaging should use the shared typography system.
+
 ---
 
 # Story Cards
@@ -276,6 +315,8 @@ Include:
 
 Avoid excessive text truncation.
 
+Story card typography should follow the established Lora and Inter hierarchy.
+
 ---
 
 # Story Reader
@@ -288,6 +329,25 @@ Characteristics:
 - Generous whitespace
 - Strong heading hierarchy
 - Minimal visual distractions
+
+Editorial display typography uses Lora, while interface and supporting text use Inter.
+
+---
+
+# Stories
+
+The Stories experience includes:
+
+- Stories Header
+- Stories Feed
+- Latest Stories
+- Latest Story
+- Story Cards
+- Story Detail
+
+The Stories feed supports pull-to-refresh.
+
+Loading, empty and error states should use the shared typography system and should never expose raw technical errors to users.
 
 ---
 
@@ -305,6 +365,8 @@ Requirements:
 - Active state
 - Consistent spacing
 - Native behaviour
+
+Navigation labels and supporting text should use the shared application typography system.
 
 ---
 
@@ -343,6 +405,8 @@ Every network-driven component should define:
 
 Raw technical errors must never be shown to end users.
 
+Loading, empty and error states should use the shared typography system.
+
 ---
 
 # Accessibility
@@ -375,6 +439,29 @@ Reusable components should:
 - Avoid duplicated styling.
 - Consume shared constants.
 - Remain independent of business logic whenever possible.
+- Use shared typography and colour primitives.
+- Avoid introducing one-off visual styles without a design-system requirement.
+
+---
+
+# Release 0.9.6 UI Consistency Work
+
+The current application-wide UI consistency pass focuses on bringing all primary screens and shared interface elements into the same visual language.
+
+Remaining work includes:
+
+- Home screen typography
+- More screen typography
+- Main player typography
+- Header consistency
+- Navigation consistency
+- Home pull-to-refresh
+- More pull-to-refresh
+- Final Stories UI verification
+- Final verification of the Banner presentation
+- Removal of remaining unnecessary native-font usage
+
+The objective is for the application to present one consistent Radio Africana visual identity from launch through navigation, listening and reading.
 
 ---
 

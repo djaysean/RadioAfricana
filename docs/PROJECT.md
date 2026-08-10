@@ -72,7 +72,7 @@ New capabilities are introduced through future releases rather than shipping inc
 
 The application follows a layered architecture.
 
-```
+```text
 WordPress CMS
         │
         ▼
@@ -104,7 +104,7 @@ Persistent playback is one of the core architectural features of the application
 
 Playback is managed globally through a shared Playback Provider rather than individual screens.
 
-```
+```text
 App
  └── Navigation
       └── PlaybackProvider
@@ -144,6 +144,8 @@ Responsibilities:
 - Latest Stories
 - Persistent Mini Player
 
+Home is also the primary location for promotional banner content and the main live listening experience.
+
 ---
 
 ## Stories
@@ -160,6 +162,8 @@ Responsibilities:
 - Continue Reading
 - Persistent Mini Player
 
+The Stories experience uses the WordPress content platform and is designed around a premium editorial presentation.
+
 ---
 
 ## Story Detail
@@ -174,6 +178,8 @@ Responsibilities:
 - Native sharing
 - Continue Reading
 - Persistent Mini Player
+
+Editorial display typography uses Lora, while interface and supporting text use Inter through the shared typography system.
 
 ---
 
@@ -193,6 +199,8 @@ Responsibilities:
 - Share App
 - Version Information
 - Persistent Mini Player
+
+The More screen remains part of the Version 1 application structure and will receive the same application-wide UI consistency treatment as Home and Stories.
 
 ---
 
@@ -220,9 +228,30 @@ Provides:
 - Additional application endpoints
 - Future mobile-specific services
 
+The backend remains CMS-driven wherever practical, with application-specific functionality exposed through the custom Radio Africana REST API.
+
 ---
 
-# Design Philosophy
+# Notifications Architecture
+
+Firebase Cloud Messaging is integrated into the Android application.
+
+The application is connected to the existing Radio Africana Firebase project and has been verified through Firebase Console test notifications.
+
+The current implementation supports:
+
+- Firebase Cloud Messaging
+- Android Firebase application registration
+- FCM token generation
+- Firebase Console test delivery
+
+The client's existing Firebase notification workflow remains available.
+
+Stories-specific article publication notifications are intentionally not part of the current implementation. If required later, editorial notification automation can be introduced as a separate feature.
+
+---
+
+# Design System
 
 The application follows an editorial-first design system.
 
@@ -234,6 +263,43 @@ Typography, spacing and hierarchy are designed to maximise readability.
 
 ---
 
+## Typography Architecture
+
+The application uses two primary font families:
+
+### Lora
+
+Used for editorial display typography, including:
+
+- Story titles
+- Major editorial headings
+- Premium reading experiences
+- Prominent editorial content
+
+### Inter
+
+Used for interface typography, including:
+
+- Body copy
+- Metadata
+- Buttons
+- Navigation
+- Labels
+- Forms
+- Status indicators
+
+### AppText
+
+`AppText` is the shared typography component used to render application interface text.
+
+It consumes the central typography definitions and provides consistent typography variants across reusable components and screens.
+
+Components should use `AppText` rather than directly styling React Native's native `Text` component whenever the text belongs to the application interface.
+
+The application is currently completing an application-wide typography consistency pass so that the established typography system is used consistently throughout Home, Stories, More, navigation and shared interface components.
+
+---
+
 # Technology Stack
 
 ## Mobile
@@ -242,6 +308,7 @@ Typography, spacing and hierarchy are designed to maximise readability.
 - TypeScript
 - React Navigation
 - react-native-video
+- React Native Firebase
 
 ## Backend
 
@@ -251,10 +318,12 @@ Typography, spacing and hierarchy are designed to maximise readability.
 - Pro.Radio Theme
 - Pro.Radio Child Theme
 
-## Planned
+## Services
 
 - Firebase Cloud Messaging
-- Firebase Analytics (future)
+- Firebase Console
+- WordPress REST API
+- Radio Africana custom REST services
 
 ---
 
@@ -278,6 +347,8 @@ Version 1 includes:
 - Story Detail
 - Native sharing
 - Continue Reading
+- Pull-to-refresh on Stories
+- Infinite scrolling
 
 ---
 
@@ -295,6 +366,28 @@ Version 1 includes:
 - More screen
 - Firebase notifications
 - Production Android release
+
+---
+
+# Current UI Consistency Work
+
+The current development phase is completing the application-wide visual consistency pass.
+
+The work includes:
+
+- Shared typography across Home
+- Shared typography across Stories
+- Shared typography across More
+- Main player typography
+- Mini Player typography
+- Header consistency
+- Navigation consistency
+- Banner presentation consistency
+- Pull-to-refresh on Home
+- Pull-to-refresh on More
+- Final Stories UI verification
+
+The goal is for the entire application to present one consistent Radio Africana visual identity from launch through listening, navigation and editorial reading.
 
 ---
 
@@ -324,6 +417,32 @@ The project follows these engineering principles.
 - Stable releases before rapid expansion.
 - Every visible feature must function correctly.
 - Documentation evolves alongside the application.
+- Existing client workflows should be preserved wherever practical.
+- New functionality should not be introduced unless it is required by the current product scope.
+
+---
+
+# Release Strategy
+
+The project is developed through small, controlled releases.
+
+Each release should be:
+
+1. Implemented.
+2. Tested.
+3. Documented.
+4. Committed.
+5. Pushed to the repository.
+
+The current development checkpoint is:
+
+**Release 0.9.5 — Firebase & Typography Foundation**
+
+The next planned UI milestone is:
+
+**Release 0.9.6 — App-Wide UI Consistency**
+
+Network and playback verification will follow as a separate milestone once the UI consistency work is complete and testing can be performed under stable network conditions.
 
 ---
 
@@ -336,4 +455,6 @@ Version 1 will be considered complete when:
 - Stories provide a premium reading experience.
 - Every visible feature is fully functional.
 - Firebase notifications are operational.
+- The application uses a consistent visual and typography system.
+- Home and More provide appropriate pull-to-refresh behaviour.
 - The application is production-ready for Google Play.

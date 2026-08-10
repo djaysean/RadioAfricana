@@ -33,7 +33,9 @@ The website remains the Content Management System (CMS), while the mobile applic
 
 The project is currently in the final implementation phase before Version 1.
 
-Core architecture has been completed and development is focused on feature completion, UI consistency and production readiness.
+Core architecture has been completed and development is focused on feature completion, application-wide UI consistency, production readiness and final quality assurance.
+
+The latest completed development checkpoint is **Release 0.9.5 — Firebase & Typography Foundation**.
 
 ---
 
@@ -48,6 +50,7 @@ Core architecture has been completed and development is focused on feature compl
 - Home screen Live Hero
 - Persistent Mini Player
 - Play / Pause controls
+- Shared playback state
 
 ---
 
@@ -58,6 +61,7 @@ Core architecture has been completed and development is focused on feature compl
 - Story Detail screen
 - Premium article reader
 - Infinite scrolling
+- Pull-to-refresh on Stories
 - Continue Reading
 - Native article sharing
 
@@ -70,6 +74,41 @@ Core architecture has been completed and development is focused on feature compl
 - Elementor Banner integration
 - Dynamic CMS-driven content
 - Shared API service architecture
+- CMS-driven promotional banners
+
+---
+
+# Notifications
+
+- Firebase Cloud Messaging integration
+- Existing Radio Africana Firebase project connection
+- Android Firebase app registration
+- FCM token generation
+- Firebase Console notification delivery
+
+Firebase Cloud Messaging has been integrated into the new application and successfully tested through the existing Radio Africana Firebase project.
+
+The client's existing Firebase workflow remains available for general-purpose Radio Africana notifications.
+
+Stories-specific notification automation is not currently part of the application scope. If article publication notifications are required in the future, they can be introduced as a separate feature.
+
+---
+
+# Design System
+
+- Centralised colour system
+- Centralised typography system
+- Inter font integration
+- Lora font integration
+- Shared spacing system
+- Shared radius system
+- Shared shadow system
+- Reusable `AppText` typography component
+- Shared component styling architecture
+
+The application is currently undergoing an application-wide typography consistency pass so that interface text uses the established Radio Africana typography system rather than relying on the device's native font.
+
+The typography foundation is now established through the shared `AppText` component and is being progressively applied across the application.
 
 ---
 
@@ -77,7 +116,7 @@ Core architecture has been completed and development is focused on feature compl
 
 The application follows a modular, component-first architecture.
 
-```
+```text
 WordPress CMS
         │
         ▼
@@ -95,6 +134,8 @@ Reusable Components
 
 Live playback is managed through a shared Playback Provider, allowing uninterrupted listening across the entire application.
 
+Firebase Cloud Messaging is integrated independently of the editorial content system, allowing the client to continue using Firebase for general-purpose Radio Africana notifications.
+
 ---
 
 # Technology Stack
@@ -105,6 +146,14 @@ Live playback is managed through a shared Playback Provider, allowing uninterrup
 - TypeScript
 - React Navigation
 - react-native-video
+- React Native Firebase
+
+## Services
+
+- Firebase Cloud Messaging
+- Firebase Console
+- WordPress REST API
+- Radio Africana custom REST services
 
 ## Backend
 
@@ -114,10 +163,6 @@ Live playback is managed through a shared Playback Provider, allowing uninterrup
 - Pro.Radio Theme
 - Pro.Radio Child Theme
 
-## Planned
-
-- Firebase Cloud Messaging (FCM)
-
 ---
 
 # Project Structure
@@ -125,6 +170,9 @@ Live playback is managed through a shared Playback Provider, allowing uninterrup
 ```text
 src/
 ├── components/
+│   ├── common/
+│   ├── stories/
+│   └── ui/
 ├── constants/
 ├── navigation/
 ├── playback/
@@ -143,31 +191,33 @@ wordpress/
 
 # Development Workflow
 
-Install dependencies
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Start Metro
+Start Metro:
 
 ```bash
 npx react-native start
 ```
 
-Reset Metro cache
+Reset Metro cache:
 
 ```bash
 npx react-native start --reset-cache
 ```
 
-Run Android
+Run Android:
 
 ```bash
 npx react-native run-android
 ```
 
 During normal UI development, JavaScript changes should be reloaded through Metro rather than rebuilding the Android application.
+
+For native dependency, Firebase, Android configuration or other native changes, a fresh Android build may be required.
 
 ---
 
@@ -184,6 +234,8 @@ The project follows several core engineering principles.
 - Small, testable releases.
 - Git commit after every completed release.
 - Documentation updated after every release.
+- Preserve existing client workflows wherever practical.
+- Avoid introducing functionality that is not required by the current product scope.
 
 ---
 
@@ -204,6 +256,44 @@ Included:
 - Production Android Release
 
 Future versions will introduce additional capabilities such as Programme Schedule, Search, Podcasts and Dark Mode.
+
+---
+
+# Current Development Priorities
+
+The remaining Version 1 work is being completed through small, controlled milestones.
+
+## Release 0.9.6 — App-Wide UI Consistency
+
+Current UI work includes:
+
+- Complete application-wide typography migration
+- Home screen typography
+- More screen typography
+- Header consistency
+- Navigation consistency
+- Main player typography
+- Mini Player typography
+- Banner presentation consistency
+- Pull-to-refresh on Home
+- Pull-to-refresh on More
+- Final Stories UI verification
+
+## Release 0.9.7 — Network & Playback Verification
+
+After the UI consistency work is complete, network-dependent functionality will be verified under stable network conditions.
+
+This includes:
+
+- Stories loading
+- Story pagination
+- Banner loading
+- Now Playing metadata
+- Live radio streaming
+- Buffering behaviour
+- Playback recovery
+
+No unnecessary changes will be made to networking or playback services until the behaviour has been tested under a reliable network connection.
 
 ---
 
@@ -229,6 +319,8 @@ Radio Africana Mobile is built around one simple principle:
 > Every feature that exists in Version 1 must feel complete.
 
 New functionality is introduced through future releases rather than shipping unfinished experiences.
+
+The project follows a controlled release process: each milestone is implemented, tested, documented and committed before the next milestone begins.
 
 ---
 

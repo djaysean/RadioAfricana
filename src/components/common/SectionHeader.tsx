@@ -1,16 +1,11 @@
-/**
- * Radio Africana Mobile
- * Release 0.6
- *
- * Reusable Section Header
- */
-
 import React from 'react';
+
 import {
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
+
+import AppText from '../ui/AppText';
 
 interface SectionHeaderProps {
   title: string;
@@ -23,14 +18,20 @@ export default function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
+      <AppText
+        variant="heading3"
+        style={styles.title}
+      >
         {title}
-      </Text>
+      </AppText>
 
       {subtitle ? (
-        <Text style={styles.subtitle}>
+        <AppText
+          variant="bodySmall"
+          style={styles.subtitle}
+        >
           {subtitle}
-        </Text>
+        </AppText>
       ) : null}
     </View>
   );
@@ -44,15 +45,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: '700',
     color: '#111111',
   },
 
   subtitle: {
     marginTop: 6,
-    fontSize: 14,
-    lineHeight: 20,
     color: '#666666',
   },
 });

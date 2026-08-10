@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import {
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
 import Colors from '../../constants/colors';
+import AppText from '../ui/AppText';
 
 import StoryCard, {
   StoryCardData,
@@ -17,12 +21,15 @@ import {
 } from '../../services/stories';
 
 export default function LatestStories() {
-  const [stories, setStories] = useState<Story[]>([]);
+  const [stories, setStories] =
+    useState<Story[]>([]);
 
   useEffect(() => {
     const loadStories = async () => {
       try {
-        const latestStories = await fetchLatestStories();
+        const latestStories =
+          await fetchLatestStories();
+
         setStories(latestStories);
       } catch (error) {
         console.error(error);
@@ -34,9 +41,12 @@ export default function LatestStories() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>
+      <AppText
+        variant="label"
+        style={styles.heading}
+      >
         LATEST STORIES
-      </Text>
+      </AppText>
 
       {stories.map((story) => {
         const storyCard: StoryCardData = {
@@ -69,8 +79,6 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    fontSize: 15,
-    fontWeight: '700',
     color: Colors.text,
     marginBottom: 18,
     letterSpacing: 0.5,

@@ -2,11 +2,13 @@
 
 ## Overview
 
-This document records every completed development milestone in the Radio Africana Mobile project.
+This document records every completed development milestone and formal development checkpoint in the Radio Africana Mobile project.
 
-Each release represents a stable implementation that has been completed, tested and committed.
+Each release represents a defined implementation milestone that has been completed, tested and committed.
 
-Planned work is documented separately in **Roadmap.md**.
+Development checkpoints may document substantial work that has been committed while follow-up work remains in progress.
+
+Planned future work is documented separately in **Roadmap.md**.
 
 ---
 
@@ -266,16 +268,186 @@ Release 0.8 – Persistent Live Playback
 
 ---
 
+# Release 0.9
+
+## More Screen
+
+Expanded the application structure with the More experience.
+
+### Completed
+
+#### More
+
+- More screen
+- More screen navigation
+- Application information and utility content
+- Contact access
+- Meet the Team access
+- Website access
+- Privacy Policy access
+- Terms & Conditions access
+- Share App functionality
+- Version information
+- Persistent Mini Player integration
+
+#### Navigation
+
+- More integrated into the primary application navigation
+- Shared application structure preserved across Home, Stories and More
+
+### Git Milestone
+
+Release 0.9 – More Screen
+
+### Status
+
+✅ Completed
+
+---
+
+# Release 0.9.5
+
+## Firebase & Typography Foundation
+
+Established the Firebase notification foundation and began the application-wide typography consistency migration.
+
+### Completed
+
+#### Firebase Cloud Messaging
+
+- Firebase Cloud Messaging integration
+- Existing Radio Africana Firebase project connection
+- Android Firebase application registration
+- FCM token generation
+- Firebase Console test notification delivery
+- Verified notification delivery to the new application installation
+
+#### Notification Strategy
+
+- Preserved the client's existing Firebase notification workflow
+- Kept Firebase notification functionality independent of the Stories editorial system
+- Deliberately excluded Stories-specific article notification automation from the current implementation
+
+#### Typography Foundation
+
+- Shared `AppText` typography component
+- Centralised typography rendering
+- Inter font integration through the shared typography system
+- Lora font integration through the shared typography system
+- Established shared typography variants
+
+#### Shared Component Typography
+
+Typography migration was completed across the shared components worked on during this checkpoint, including:
+
+- Mini Player
+- LiveHero
+- Latest Story
+- Latest Stories
+- Stories Header
+- Stories Feed
+- Story Card
+- Banner Carousel
+- Section Header
+
+#### Banner Presentation
+
+- Banner Carousel typography migrated to the shared typography system
+- Existing Banner Card behaviour preserved
+
+### Changed
+
+- Replaced native interface text usage with `AppText` in migrated shared components.
+- Preserved existing playback behaviour while updating Mini Player and LiveHero typography.
+- Preserved existing Stories data, pagination and refresh behaviour while updating Stories typography.
+- Preserved existing Banner Carousel behaviour while updating its typography.
+- Preserved existing component APIs and navigation behaviour throughout the typography migration.
+
+### Fixed
+
+- Inconsistent native-font usage across migrated shared components.
+- Typography import/path issue in `SectionHeader`.
+- Shared component typography now follows the central typography system where migrated.
+
+### Technical
+
+- Established `AppText` as the shared typography rendering layer.
+- Retained the installed Inter and Lora font assets.
+- Verified Firebase notification delivery through Firebase Console.
+- Verified FCM token generation on Android.
+- Preserved the existing playback, Stories and API architecture during the typography work.
+
+### Git Milestone
+
+Release 0.9.5 – Firebase & Typography Foundation
+
+### Status
+
+🟡 Current Checkpoint
+
+The Firebase implementation is operational and verified.
+
+The typography foundation and shared-component migration are established, but the application-wide typography consistency pass is not yet complete.
+
+The remaining UI consistency work continues under Release 0.9.6.
+
+---
+
 # Release Philosophy
 
 Every release must satisfy the following principles.
 
-- Deliver a complete, stable milestone.
-- Improve architecture before adding complexity.
+- Deliver a clearly defined implementation milestone.
+- Improve architecture before adding unnecessary complexity.
 - Remain backwards compatible whenever practical.
-- Be fully tested before completion.
-- End with a Git commit.
-- Update documentation immediately after completion.
+- Test completed functionality before declaring it complete.
+- End each formal milestone with a Git commit.
+- Update documentation immediately after the milestone.
+- Do not mark unfinished work as complete.
+- Preserve the client's existing operational workflows wherever practical.
+
+---
+
+# Current Development Sequence
+
+## Release 0.9.6
+
+### App-Wide UI Consistency
+
+The next development milestone focuses on completing the visual consistency pass across the application.
+
+Planned work includes:
+
+- Home screen typography
+- More screen typography
+- Main player typography
+- Header consistency
+- Navigation consistency
+- Banner presentation verification
+- Pull-to-refresh on Home
+- Pull-to-refresh on More
+- Final Stories UI verification
+- Removal of remaining unnecessary native-font usage
+
+---
+
+## Release 0.9.7
+
+### Network & Playback Verification
+
+After the UI consistency work is complete, network-dependent functionality will be verified under stable network conditions.
+
+Planned verification includes:
+
+- Stories loading
+- Story pagination
+- Banner loading
+- Now Playing metadata
+- Live radio streaming
+- Buffering behaviour
+- Playback recovery
+
+No unnecessary networking or playback changes will be introduced until the existing functionality has been tested under a reliable network connection.
 
 ---
 
@@ -283,6 +455,8 @@ Every release must satisfy the following principles.
 
 The Releases document is a permanent historical record.
 
-Once a release is completed, it is never removed or rewritten.
+Completed releases are not removed or rewritten.
+
+Development checkpoints may be documented when a substantial implementation boundary has been committed while follow-up work remains active.
 
 Future work belongs exclusively in **Roadmap.md**.

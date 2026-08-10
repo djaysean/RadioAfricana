@@ -12,12 +12,12 @@ import {
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
 import BannerCard from './BannerCard';
 import Colors from '../../constants/colors';
+import AppText from '../ui/AppText';
 
 import {
   Banner,
@@ -138,9 +138,12 @@ export default function BannerCarousel() {
   if (state.loading) {
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>
+        <AppText
+          variant="label"
+          style={styles.heading}
+        >
           BANNERS
-        </Text>
+        </AppText>
 
         <View style={styles.statusContainer}>
           <ActivityIndicator
@@ -155,14 +158,20 @@ export default function BannerCarousel() {
   if (state.error) {
     return (
       <View style={styles.container}>
-        <Text style={styles.heading}>
+        <AppText
+          variant="label"
+          style={styles.heading}
+        >
           BANNERS
-        </Text>
+        </AppText>
 
         <View style={styles.statusContainer}>
-          <Text style={styles.statusText}>
+          <AppText
+            variant="bodySmall"
+            style={styles.statusText}
+          >
             Unable to load banners right now.
-          </Text>
+          </AppText>
 
           <Pressable
             onPress={retry}
@@ -172,9 +181,12 @@ export default function BannerCarousel() {
                 styles.retryButtonPressed,
             ]}
           >
-            <Text style={styles.retryText}>
+            <AppText
+              variant="label"
+              style={styles.retryText}
+            >
               Try Again
-            </Text>
+            </AppText>
           </Pressable>
         </View>
       </View>
@@ -187,9 +199,12 @@ export default function BannerCarousel() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>
+      <AppText
+        variant="label"
+        style={styles.heading}
+      >
         BANNERS
-      </Text>
+      </AppText>
 
       <FlatList
         horizontal
@@ -246,8 +261,6 @@ const styles = StyleSheet.create({
   heading: {
     paddingHorizontal: 24,
     marginBottom: 12,
-    fontSize: 15,
-    fontWeight: '700',
     color: Colors.text,
     letterSpacing: 0.5,
   },
@@ -295,7 +308,6 @@ const styles = StyleSheet.create({
   },
 
   statusText: {
-    fontSize: 13,
     color: Colors.text,
     textAlign: 'center',
     marginBottom: 12,
@@ -313,8 +325,6 @@ const styles = StyleSheet.create({
   },
 
   retryText: {
-    fontSize: 12,
-    fontWeight: '700',
     color: Colors.white,
   },
 });

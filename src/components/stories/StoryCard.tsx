@@ -1,15 +1,16 @@
 import React from 'react';
+
 import {
   Image,
   ImageSourcePropType,
   ImageURISource,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 import Colors from '../../constants/colors';
+import AppText from '../ui/AppText';
 
 export type StoryCardData = {
   id: string;
@@ -45,30 +46,36 @@ export default function StoryCard({
       />
 
       <View style={styles.content}>
-        <Text
+        <AppText
+          variant="label"
           numberOfLines={1}
           style={styles.category}
         >
           {story.category.toUpperCase()}
-        </Text>
+        </AppText>
 
-        <Text
+        <AppText
+          variant="heading3"
           numberOfLines={2}
           style={styles.title}
         >
           {story.title}
-        </Text>
+        </AppText>
 
-        <Text
+        <AppText
+          variant="bodySmall"
           numberOfLines={3}
           style={styles.excerpt}
         >
           {story.excerpt}
-        </Text>
+        </AppText>
 
-        <Text style={styles.readMore}>
+        <AppText
+          variant="meta"
+          style={styles.readMore}
+        >
           Read Story →
-        </Text>
+        </AppText>
       </View>
     </TouchableOpacity>
   );
@@ -93,30 +100,21 @@ const styles = StyleSheet.create({
 
   category: {
     color: Colors.gold,
-    fontWeight: '700',
-    fontSize: 12,
-    letterSpacing: 1,
     marginBottom: 10,
+    letterSpacing: 1,
   },
 
   title: {
-    fontSize: 20,
-    fontWeight: '700',
     color: Colors.text,
-    lineHeight: 28,
   },
 
   excerpt: {
     marginTop: 10,
-    fontSize: 15,
-    lineHeight: 24,
     color: Colors.textSecondary,
   },
 
   readMore: {
     marginTop: 16,
     color: Colors.gold,
-    fontWeight: '700',
-    fontSize: 14,
   },
 });

@@ -1,14 +1,16 @@
 import React from 'react';
+
 import {
   Image,
   ImageSourcePropType,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 import Colors from '../constants/colors';
+import AppText from './ui/AppText';
+
 import { usePlayback } from '../playback';
 
 type LiveHeroProps = {
@@ -30,9 +32,12 @@ export default function LiveHero({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>
+      <AppText
+        variant="label"
+        style={styles.heading}
+      >
         NOW PLAYING
-      </Text>
+      </AppText>
 
       <Image
         source={artwork}
@@ -40,26 +45,31 @@ export default function LiveHero({
         style={styles.artwork}
       />
 
-      <Text
+      <AppText
+        variant="heading3"
         numberOfLines={2}
         style={styles.title}
       >
         {title}
-      </Text>
+      </AppText>
 
-      <Text
+      <AppText
+        variant="meta"
         numberOfLines={1}
         style={styles.artist}
       >
         {artist}
-      </Text>
+      </AppText>
 
       <View style={styles.liveContainer}>
         <View style={styles.liveDot} />
 
-        <Text style={styles.liveText}>
+        <AppText
+          variant="label"
+          style={styles.liveText}
+        >
           {isPlaying ? 'LIVE' : 'READY'}
-        </Text>
+        </AppText>
       </View>
 
       <TouchableOpacity
@@ -67,9 +77,12 @@ export default function LiveHero({
         style={styles.button}
         onPress={play}
       >
-        <Text style={styles.buttonText}>
+        <AppText
+          variant="button"
+          style={styles.buttonText}
+        >
           {isPlaying ? 'Playing Live' : 'Listen Live'}
-        </Text>
+        </AppText>
       </TouchableOpacity>
     </View>
   );
@@ -84,11 +97,9 @@ const styles = StyleSheet.create({
 
   heading: {
     alignSelf: 'flex-start',
-    fontSize: 15,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    color: Colors.text,
     marginBottom: 12,
+    color: Colors.text,
+    letterSpacing: 0.5,
   },
 
   artwork: {
@@ -100,17 +111,13 @@ const styles = StyleSheet.create({
 
   title: {
     marginTop: 14,
-    fontSize: 20,
-    fontWeight: '700',
     color: Colors.text,
     textAlign: 'center',
-    lineHeight: 27,
     paddingHorizontal: 12,
   },
 
   artist: {
     marginTop: 2,
-    fontSize: 15,
     color: Colors.textSecondary,
     textAlign: 'center',
   },
@@ -131,8 +138,6 @@ const styles = StyleSheet.create({
 
   liveText: {
     color: Colors.live,
-    fontSize: 13,
-    fontWeight: '700',
     letterSpacing: 0.5,
   },
 
@@ -147,7 +152,5 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: Colors.buttonText,
-    fontWeight: '700',
-    fontSize: 16,
   },
 });

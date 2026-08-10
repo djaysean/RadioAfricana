@@ -1,14 +1,16 @@
 import React from 'react';
+
 import {
   Image,
   ImageSourcePropType,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 import Colors from '../constants/colors';
+import AppText from './ui/AppText';
+
 import { usePlayback } from '../playback/PlaybackContext';
 
 type MiniPlayerProps = {
@@ -36,23 +38,28 @@ export default function MiniPlayer({
       />
 
       <View style={styles.info}>
-        <Text
+        <AppText
+          variant="bodySmall"
           numberOfLines={1}
           style={styles.title}
         >
           {title}
-        </Text>
+        </AppText>
 
-        <Text
+        <AppText
+          variant="meta"
           numberOfLines={1}
           style={styles.artist}
         >
           {artist}
-        </Text>
+        </AppText>
 
-        <Text style={styles.status}>
+        <AppText
+          variant="label"
+          style={styles.status}
+        >
           {isPlaying ? '● LIVE' : '● READY'}
-        </Text>
+        </AppText>
       </View>
 
       <TouchableOpacity
@@ -60,9 +67,12 @@ export default function MiniPlayer({
         style={styles.button}
         activeOpacity={0.8}
       >
-        <Text style={styles.icon}>
+        <AppText
+          variant="button"
+          style={styles.icon}
+        >
           {isPlaying ? '❚❚' : '▶'}
-        </Text>
+        </AppText>
       </TouchableOpacity>
     </View>
   );
@@ -92,21 +102,16 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 15,
-    fontWeight: '700',
     color: Colors.text,
   },
 
   artist: {
-    fontSize: 13,
     color: Colors.textSecondary,
     marginTop: 2,
   },
 
   status: {
     marginTop: 4,
-    fontSize: 12,
-    fontWeight: '700',
     color: Colors.live,
   },
 
@@ -121,8 +126,6 @@ const styles = StyleSheet.create({
 
   icon: {
     color: Colors.buttonText,
-    fontSize: 18,
-    fontWeight: '700',
     marginLeft: 2,
   },
 });

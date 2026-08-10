@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "753751112429",
+    "firebase_url": "https://radio-africana.firebaseio.com",
+    "project_id": "radio-africana",
+    "storage_bucket": "radio-africana.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753751112429:android:4c15a09a862bdc4d",
+        "android_client_info": {
+          "package_name": "com.radioafricana.radio.africana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "753751112429-9ska24otcbktm85hm75d9br6u6g6fkep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU2IJqkuC3UmGG2ayQ9FIJC_JrNj10DDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "753751112429-9ska24otcbktm85hm75d9br6u6g6fkep.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "753751112429-cpg288l00v6luifo0703kvav4q118u87.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.radioafricana.radaf",
+                "app_store_id": "1288018231"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

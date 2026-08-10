@@ -11,7 +11,6 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -24,6 +23,7 @@ import {
 } from '@react-navigation/native-stack';
 
 import Colors from '../../constants/colors';
+import AppText from '../ui/AppText';
 
 import StoryCard, {
   StoryCardData,
@@ -34,8 +34,8 @@ import {
   Story,
 } from '../../services/stories';
 
-import {Routes} from '../../navigation/routes';
-import {RootStackParamList} from '../../navigation/types';
+import { Routes } from '../../navigation/routes';
+import { RootStackParamList } from '../../navigation/types';
 
 const STORIES_PER_PAGE = 10;
 
@@ -231,15 +231,21 @@ export default function StoriesFeed() {
         <View
           style={styles.emptyContainer}
         >
-          <Text style={styles.emptyTitle}>
+          <AppText
+            variant="heading3"
+            style={styles.emptyTitle}
+          >
             Unable to load Stories
-          </Text>
+          </AppText>
 
-          <Text style={styles.emptyText}>
+          <AppText
+            variant="bodySmall"
+            style={styles.emptyText}
+          >
             We couldn't load the latest
             stories right now. Please try
             again.
-          </Text>
+          </AppText>
 
           <Pressable
             onPress={retryInitialLoad}
@@ -249,9 +255,12 @@ export default function StoriesFeed() {
                 styles.retryButtonPressed,
             ]}
           >
-            <Text style={styles.retryText}>
+            <AppText
+              variant="label"
+              style={styles.retryText}
+            >
               Try Again
-            </Text>
+            </AppText>
           </Pressable>
         </View>
       );
@@ -261,15 +270,21 @@ export default function StoriesFeed() {
       <View
         style={styles.emptyContainer}
       >
-        <Text style={styles.emptyTitle}>
+        <AppText
+          variant="heading3"
+          style={styles.emptyTitle}
+        >
           No Stories Yet
-        </Text>
+        </AppText>
 
-        <Text style={styles.emptyText}>
+        <AppText
+          variant="bodySmall"
+          style={styles.emptyText}
+        >
           There are no stories available
           right now. Please check again
           later.
-        </Text>
+        </AppText>
       </View>
     );
   };
@@ -290,9 +305,12 @@ export default function StoriesFeed() {
         <View
           style={styles.footerContainer}
         >
-          <Text style={styles.footerText}>
+          <AppText
+            variant="meta"
+            style={styles.footerText}
+          >
             Couldn't load more stories.
-          </Text>
+          </AppText>
 
           <Pressable
             onPress={retryLoadMore}
@@ -302,9 +320,12 @@ export default function StoriesFeed() {
                 styles.retryButtonPressed,
             ]}
           >
-            <Text style={styles.retryText}>
+            <AppText
+              variant="label"
+              style={styles.retryText}
+            >
               Try Again
-            </Text>
+            </AppText>
           </Pressable>
         </View>
       );
@@ -363,16 +384,12 @@ const styles = StyleSheet.create({
 
   emptyTitle: {
     marginBottom: 8,
-    fontSize: 18,
-    fontWeight: '700',
     color: Colors.text,
     textAlign: 'center',
   },
 
   emptyText: {
     maxWidth: 300,
-    fontSize: 14,
-    lineHeight: 21,
     color: Colors.text,
     textAlign: 'center',
   },
@@ -390,8 +407,6 @@ const styles = StyleSheet.create({
   },
 
   retryText: {
-    fontSize: 12,
-    fontWeight: '700',
     color: Colors.white,
   },
 
@@ -407,7 +422,6 @@ const styles = StyleSheet.create({
 
   footerText: {
     marginBottom: 4,
-    fontSize: 13,
     color: Colors.text,
     textAlign: 'center',
   },
