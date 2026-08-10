@@ -42,10 +42,19 @@ export default function PlaybackProvider({
       {children}
 
       <Video
-        source={{ uri: STREAM_URL }}
+        source={{
+          uri: STREAM_URL,
+          metadata: {
+            title: 'Radio Africana',
+            subtitle: 'Live Radio',
+            artist: 'Radio Africana',
+            description: 'Live Radio',
+          },
+        }}
         paused={!isPlaying}
         playInBackground
         playWhenInactive
+        showNotificationControls
         ignoreSilentSwitch="ignore"
         onError={error => {
           console.log('Playback Error:', error);
