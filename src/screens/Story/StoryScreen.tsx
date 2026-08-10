@@ -9,7 +9,6 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
 } from 'react-native';
 
 import {
@@ -18,6 +17,8 @@ import {
 } from '@react-navigation/native';
 
 import Colors from '../../constants/colors';
+
+import AppText from '../../components/ui/AppText';
 
 import {
   fetchStoryBySlug,
@@ -45,7 +46,8 @@ type StoryScreenRouteProp = RouteProp<
 >;
 
 export default function StoryScreen() {
-  const route = useRoute<StoryScreenRouteProp>();
+  const route =
+    useRoute<StoryScreenRouteProp>();
 
   const { slug } = route.params;
 
@@ -122,9 +124,12 @@ export default function StoryScreen() {
   if (!story) {
     return (
       <SafeAreaView style={styles.loading}>
-        <Text style={styles.error}>
+        <AppText
+          variant="body"
+          style={styles.error}
+        >
           Story could not be loaded.
-        </Text>
+        </AppText>
       </SafeAreaView>
     );
   }
@@ -187,6 +192,5 @@ const styles = StyleSheet.create({
 
   error: {
     color: Colors.text,
-    fontSize: 16,
   },
 });

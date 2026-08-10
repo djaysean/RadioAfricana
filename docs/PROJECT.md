@@ -123,6 +123,8 @@ This architecture allows:
 - cross-screen navigation while listening
 - future lock-screen and notification controls
 
+Playback architecture is implemented. Final verification of background playback, lock-screen behaviour, resume behaviour, buffering and recovery remains part of Release 0.9.7.
+
 ---
 
 # Application Structure
@@ -143,6 +145,7 @@ Responsibilities:
 - Featured Story
 - Latest Stories
 - Persistent Mini Player
+- Pull-to-refresh
 
 Home is also the primary location for promotional banner content and the main live listening experience.
 
@@ -198,9 +201,10 @@ Responsibilities:
 - Terms & Conditions
 - Share App
 - Version Information
+- Pull-to-refresh
 - Persistent Mini Player
 
-The More screen remains part of the Version 1 application structure and will receive the same application-wide UI consistency treatment as Home and Stories.
+The More screen is part of the Version 1 application structure and follows the same application-wide visual and typography system as Home and Stories.
 
 ---
 
@@ -296,7 +300,44 @@ It consumes the central typography definitions and provides consistent typograph
 
 Components should use `AppText` rather than directly styling React Native's native `Text` component whenever the text belongs to the application interface.
 
-The application is currently completing an application-wide typography consistency pass so that the established typography system is used consistently throughout Home, Stories, More, navigation and shared interface components.
+The application-wide typography consistency migration has been completed and verified across the primary application experience.
+
+A repository-wide audit confirmed that the only remaining direct React Native `Text` implementation under `src/` is the intentional implementation inside `AppText.tsx`.
+
+The Story reader retains its dedicated Inter and Lora typography configuration for editorial content.
+
+---
+
+# UI Consistency
+
+Release 0.9.6 completed the application-wide UI consistency pass.
+
+The completed work includes:
+
+- Shared typography across Home
+- Shared typography across Stories
+- Shared typography across More
+- Main player typography
+- Mini Player typography
+- Header consistency
+- Navigation typography
+- Banner presentation consistency
+- Pull-to-refresh on Home
+- Pull-to-refresh on More
+- Story Detail typography
+- Continue Reading typography
+- Story Footer typography
+- Story Hero typography
+- Story Body interface typography
+
+The application was visually verified across:
+
+- Home
+- Stories
+- Story Detail
+- More
+
+The goal is for the entire application to present one consistent Radio Africana visual identity from launch through listening, navigation and editorial reading.
 
 ---
 
@@ -363,31 +404,104 @@ Version 1 includes:
 
 ## Application
 
-- More screen
+- Home
+- Stories
+- More
 - Firebase notifications
 - Production Android release
 
 ---
 
-# Current UI Consistency Work
+# Current Development Status
 
-The current development phase is completing the application-wide visual consistency pass.
+## Completed
 
-The work includes:
+### Release 0.9.5 — Firebase & Typography Foundation
 
-- Shared typography across Home
-- Shared typography across Stories
-- Shared typography across More
-- Main player typography
-- Mini Player typography
-- Header consistency
-- Navigation consistency
-- Banner presentation consistency
-- Pull-to-refresh on Home
-- Pull-to-refresh on More
+Completed:
+
+- Firebase Cloud Messaging integration
+- Existing Radio Africana Firebase project connection
+- FCM token generation
+- Firebase Console notification testing
+- Shared `AppText` typography foundation
+- Inter and Lora typography integration
+- Shared component typography migration
+
+---
+
+### Release 0.9.6 — App-Wide UI Consistency
+
+Completed:
+
+- Application-wide typography migration
+- Home typography verification
+- More typography migration
+- Main Player typography verification
+- Mini Player typography verification
+- Header consistency verification
+- Navigation typography verification
+- Banner presentation verification
+- Home pull-to-refresh
+- More pull-to-refresh
 - Final Stories UI verification
+- Story Detail typography migration
+- Continue Reading typography migration
+- Story Hero typography migration
+- Story Footer typography migration
+- Story Body interface typography migration
+- Repository-wide native `Text` audit
 
-The goal is for the entire application to present one consistent Radio Africana visual identity from launch through listening, navigation and editorial reading.
+Release 0.9.6 has been implemented and visually verified.
+
+---
+
+# Current Development Milestone
+
+## Release 0.9.7 — Network & Playback Verification
+
+The next development milestone focuses on verifying existing network-dependent functionality under stable network conditions.
+
+### Stories
+
+- Verify Stories loading.
+- Verify Story pagination.
+- Verify pull-to-refresh.
+- Verify Story Detail loading.
+- Verify Continue Reading.
+- Verify native sharing.
+
+### Banners
+
+- Verify CMS-driven banner loading.
+- Verify banner carousel behaviour.
+- Verify clickable banners.
+- Verify non-clickable banners.
+- Verify loading and error states.
+
+### Live Radio
+
+- Verify radio stream connection.
+- Verify Now Playing metadata.
+- Verify dynamic artwork.
+- Verify persistent playback.
+- Verify Mini Player.
+- Verify playback across navigation.
+- Verify background playback.
+- Verify lock-screen behaviour.
+- Verify resume after background.
+- Verify buffering behaviour.
+- Verify playback recovery.
+
+### Network Resilience
+
+- Verify loading states.
+- Verify friendly error states.
+- Verify retry behaviour.
+- Verify offline behaviour.
+- Confirm temporary network failures do not expose technical errors to users.
+
+No unnecessary changes will be made to networking or playback services until the existing behaviour has been tested under a reliable network connection.
 
 ---
 
@@ -419,6 +533,7 @@ The project follows these engineering principles.
 - Documentation evolves alongside the application.
 - Existing client workflows should be preserved wherever practical.
 - New functionality should not be introduced unless it is required by the current product scope.
+- Completed releases must be documented and committed before the next milestone begins.
 
 ---
 
@@ -434,15 +549,23 @@ Each release should be:
 4. Committed.
 5. Pushed to the repository.
 
-The current development checkpoint is:
+Completed milestones:
 
-**Release 0.9.5 — Firebase & Typography Foundation**
+- Release 0.1 — Foundation
+- Release 0.2 — Project Architecture
+- Release 0.3 — Live Radio Foundation
+- Release 0.4 — Premium Home Experience
+- Release 0.5 — Live Content Platform
+- Release 0.6 — Editorial Platform
+- Release 0.7 — Design System & Reader Experience
+- Release 0.8 — Persistent Playback Architecture
+- Release 0.9 — More Screen
+- Release 0.9.5 — Firebase & Typography Foundation
+- Release 0.9.6 — App-Wide UI Consistency
 
-The next planned UI milestone is:
+The current development milestone is:
 
-**Release 0.9.6 — App-Wide UI Consistency**
-
-Network and playback verification will follow as a separate milestone once the UI consistency work is complete and testing can be performed under stable network conditions.
+**Release 0.9.7 — Network & Playback Verification**
 
 ---
 
@@ -450,11 +573,17 @@ Network and playback verification will follow as a separate milestone once the U
 
 Version 1 will be considered complete when:
 
-- Live radio functions reliably.
+- Live radio functions reliably under stable network conditions.
 - Playback continues across navigation.
+- Background playback has been verified.
+- Lock-screen behaviour has been verified.
+- Playback recovery has been verified.
 - Stories provide a premium reading experience.
+- Stories function reliably under stable network conditions.
+- Banner content loads reliably.
 - Every visible feature is fully functional.
 - Firebase notifications are operational.
 - The application uses a consistent visual and typography system.
 - Home and More provide appropriate pull-to-refresh behaviour.
+- Network failure and offline behaviour provide appropriate user feedback.
 - The application is production-ready for Google Play.

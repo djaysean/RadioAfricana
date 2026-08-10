@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+
 import {
   Image,
+  RefreshControl,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -21,18 +27,40 @@ import {
 } from '../../services/nowPlaying';
 
 export default function HomeScreen() {
-  const [nowPlaying, setNowPlaying] = useState<NowPlaying>({
-    artist: '',
-    title: 'Loading...',
-    picture: null,
-  });
+  const [nowPlaying, setNowPlaying] =
+    useState<NowPlaying>({
+      artist: '',
+      title: 'Loading...',
+      picture: null,
+    });
+
+  const [refreshing, setRefreshing] =
+    useState(false);
+
+  const [refreshKey, setRefreshKey] =
+    useState(0);
+
+  const loadNowPlaying = useCallback(
+    async () => {
+      try {
+        const data =
+          await fetchNowPlaying();
+
+        setNowPlaying(data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     let mounted = true;
 
-    const loadNowPlaying = async () => {
+    const load = async () => {
       try {
-        const data = await fetchNowPlaying();
+        const data =
+          await fetchNowPlaying();
 
         if (mounted) {
           setNowPlaying(data);
@@ -42,15 +70,34 @@ export default function HomeScreen() {
       }
     };
 
-    loadNowPlaying();
+    load();
 
-    const interval = setInterval(loadNowPlaying, 5000);
+    const interval = setInterval(
+      load,
+      5000,
+    );
 
     return () => {
       mounted = false;
       clearInterval(interval);
     };
   }, []);
+
+  const refreshHome = async () => {
+    if (refreshing) {
+      return;
+    }
+
+    setRefreshing(true);
+
+    setRefreshKey(
+      current => current + 1,
+    );
+
+    await loadNowPlaying();
+
+    setRefreshing(false);
+  };
 
   return (
     <>
@@ -63,6 +110,13 @@ export default function HomeScreen() {
         <ScrollView
           contentContainerStyle={styles.content}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refreshHome}
+              tintColor={Colors.gold}
+            />
+          }
         >
           <View style={styles.header}>
             <Image
@@ -73,14 +127,19 @@ export default function HomeScreen() {
           </View>
 
           <LiveHero
+            key={`live-hero-${refreshKey}`}
             title={nowPlaying.title}
             artist={nowPlaying.artist}
             picture={nowPlaying.picture}
           />
 
-          <BannerCarousel />
+          <BannerCarousel
+            key={`banners-${refreshKey}`}
+          />
 
-          <LatestStory />
+          <LatestStory
+            key={`latest-story-${refreshKey}`}
+          />
         </ScrollView>
 
         <MiniPlayer

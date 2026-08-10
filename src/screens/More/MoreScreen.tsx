@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   useState,
 } from 'react';
@@ -7,11 +8,12 @@ import {
   Image,
   Linking,
   Pressable,
+  RefreshControl,
   SafeAreaView,
+  ScrollView,
   Share,
   StatusBar,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -27,6 +29,7 @@ import {
 
 import Colors from '../../constants/colors';
 
+import AppText from '../../components/ui/AppText';
 import MiniPlayer from '../../components/MiniPlayer';
 
 import {
@@ -60,9 +63,12 @@ function MenuItem({
         {icon}
       </View>
 
-      <Text style={styles.menuLabel}>
+      <AppText
+        variant="body"
+        style={styles.menuLabel}
+      >
         {label}
-      </Text>
+      </AppText>
 
       <ChevronRight
         size={20}
@@ -81,10 +87,27 @@ export default function MoreScreen() {
       picture: null,
     });
 
+  const [refreshing, setRefreshing] =
+    useState(false);
+
+  const loadNowPlaying = useCallback(
+    async () => {
+      try {
+        const data =
+          await fetchNowPlaying();
+
+        setNowPlaying(data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [],
+  );
+
   useEffect(() => {
     let mounted = true;
 
-    const loadNowPlaying = async () => {
+    const load = async () => {
       try {
         const data =
           await fetchNowPlaying();
@@ -97,10 +120,10 @@ export default function MoreScreen() {
       }
     };
 
-    loadNowPlaying();
+    load();
 
     const interval = setInterval(
-      loadNowPlaying,
+      load,
       5000,
     );
 
@@ -109,6 +132,18 @@ export default function MoreScreen() {
       clearInterval(interval);
     };
   }, []);
+
+  const refreshMore = async () => {
+    if (refreshing) {
+      return;
+    }
+
+    setRefreshing(true);
+
+    await loadNowPlaying();
+
+    setRefreshing(false);
+  };
 
   const openUrl = async (
     url: string,
@@ -139,7 +174,17 @@ export default function MoreScreen() {
       />
 
       <SafeAreaView style={styles.container}>
-        <View style={styles.content}>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={refreshMore}
+              tintColor={Colors.gold}
+            />
+          }
+        >
           <View style={styles.header}>
             <Image
               source={require('../../../assets/images/logo.png')}
@@ -149,9 +194,12 @@ export default function MoreScreen() {
           </View>
 
           <View style={styles.body}>
-            <Text style={styles.sectionTitle}>
+            <AppText
+              variant="label"
+              style={styles.sectionTitle}
+            >
               MORE
-            </Text>
+            </AppText>
 
             <View style={styles.menu}>
               <MenuItem
@@ -242,7 +290,7 @@ export default function MoreScreen() {
               />
             </View>
           </View>
-        </View>
+        </ScrollView>
 
         <MiniPlayer
           title={nowPlaying.title}
@@ -261,7 +309,8 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    flex: 1,
+    flexGrow: 1,
+    paddingBottom: 40,
   },
 
   header: {
@@ -285,8 +334,6 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     marginBottom: 12,
-    fontSize: 13,
-    fontWeight: '700',
     color: Colors.text,
     letterSpacing: 1,
   },
@@ -318,8 +365,6 @@ const styles = StyleSheet.create({
 
   menuLabel: {
     flex: 1,
-    fontSize: 15,
-    fontWeight: '600',
     color: Colors.text,
   },
 });

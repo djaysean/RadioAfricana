@@ -4,11 +4,11 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
 import Colors from '../../../constants/colors';
+import AppText from '../../../components/ui/AppText';
 
 type Props = {
   image: string;
@@ -29,22 +29,26 @@ export default function ContinueReadingCard({
       onPress={onPress}
     >
       <Image
-        source={{ uri: image }}
+        source={{uri: image}}
         style={styles.image}
         resizeMode="cover"
       />
 
       <View style={styles.content}>
-        <Text style={styles.category}>
+        <AppText
+          variant="label"
+          style={styles.category}
+        >
           {category.toUpperCase()}
-        </Text>
+        </AppText>
 
-        <Text
-          style={styles.title}
+        <AppText
+          variant="heading3"
           numberOfLines={3}
+          style={styles.title}
         >
           {title}
-        </Text>
+        </AppText>
       </View>
     </Pressable>
   );
@@ -78,17 +82,13 @@ const styles = StyleSheet.create({
   },
 
   category: {
-    fontFamily: 'Inter-SemiBold',
     color: Colors.gold,
-    fontSize: 12,
     letterSpacing: 1,
     marginBottom: 8,
   },
 
   title: {
-    fontFamily: 'Lora-Bold',
     color: Colors.text,
-    fontSize: 21,
     lineHeight: 30,
   },
 });

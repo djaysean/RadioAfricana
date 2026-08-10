@@ -5,14 +5,17 @@ import {
   Pressable,
   Share,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-import { ArrowLeft, Share2 } from 'lucide-react-native';
+import {useNavigation} from '@react-navigation/native';
+import {
+  ArrowLeft,
+  Share2,
+} from 'lucide-react-native';
 
 import Colors from '../../../constants/colors';
+import AppText from '../../../components/ui/AppText';
 
 type Props = {
   image: string;
@@ -29,7 +32,8 @@ export default function StoryHero({
   publishedAt,
   url,
 }: Props) {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation();
 
   async function handleShare() {
     try {
@@ -77,22 +81,31 @@ export default function StoryHero({
 
       {image ? (
         <Image
-          source={{ uri: image }}
+          source={{uri: image}}
           style={styles.image}
           resizeMode="cover"
         />
       ) : null}
 
       <View style={styles.content}>
-        <Text style={styles.category}>
+        <AppText
+          variant="label"
+          style={styles.category}
+        >
           {category.toUpperCase()}
-        </Text>
+        </AppText>
 
-        <Text style={styles.title}>
+        <AppText
+          variant="display"
+          style={styles.title}
+        >
           {title}
-        </Text>
+        </AppText>
 
-        <Text style={styles.date}>
+        <AppText
+          variant="meta"
+          style={styles.date}
+        >
           Published •{' '}
           {new Date(
             publishedAt,
@@ -104,7 +117,7 @@ export default function StoryHero({
               year: 'numeric',
             },
           )}
-        </Text>
+        </AppText>
       </View>
     </>
   );
@@ -136,7 +149,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-
   image: {
     width: '100%',
     height: 260,
@@ -151,16 +163,12 @@ const styles = StyleSheet.create({
 
   category: {
     color: Colors.gold,
-    fontFamily:
-      'Inter-SemiBold',
-    fontSize: 12,
     letterSpacing: 1,
     marginBottom: 12,
   },
 
   title: {
     color: Colors.text,
-    fontFamily: 'Lora-Bold',
     fontSize: 34,
     lineHeight: 44,
   },
@@ -168,9 +176,6 @@ const styles = StyleSheet.create({
   date: {
     marginTop: 22,
     color: '#8A8A8A',
-    fontFamily:
-      'Inter-Regular',
-    fontSize: 14,
     letterSpacing: 0.3,
     marginBottom: 4,
   },

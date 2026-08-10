@@ -383,13 +383,122 @@ Release 0.9.5 – Firebase & Typography Foundation
 
 ### Status
 
-🟡 Current Checkpoint
+✅ Completed
 
-The Firebase implementation is operational and verified.
+---
 
-The typography foundation and shared-component migration are established, but the application-wide typography consistency pass is not yet complete.
+# Release 0.9.6
 
-The remaining UI consistency work continues under Release 0.9.6.
+## App-Wide UI Consistency
+
+Completed the application-wide visual consistency pass and verified the primary user interface experience.
+
+### Completed
+
+#### Home
+
+- Home pull-to-refresh
+- Home refresh integration with Now Playing
+- Home refresh support for CMS-driven content
+- Existing Home layout preserved
+
+#### More
+
+- More pull-to-refresh
+- More refresh integration with Now Playing
+- More screen typography migrated to `AppText`
+- Existing More navigation and utility links preserved
+
+#### Stories
+
+- Stories screen heading migrated to `AppText`
+- Existing Stories pull-to-refresh preserved
+- Stories interface typography verified
+
+#### Story Detail
+
+- Story Hero typography migrated to `AppText`
+- Story Body end-state typography migrated to `AppText`
+- Story Footer typography migrated to `AppText`
+- Continue Reading heading migrated to `AppText`
+- Continue Reading Card typography migrated to `AppText`
+- Existing article HTML typography preserved
+- Existing Story navigation and sharing behaviour preserved
+
+#### Application-Wide Typography
+
+- Completed the remaining application-level native `Text` migration.
+- Confirmed interface typography is routed through the shared `AppText` system.
+- Preserved Inter and Lora font usage.
+- Verified the repository contains no remaining unnecessary direct native `Text` usage under `src/`.
+
+#### Existing Components Verified
+
+The following components were audited and confirmed to already use the shared typography system correctly:
+
+- LiveHero
+- Mini Player
+- Banner Carousel
+- Bottom Navigation
+- Latest Story
+- Latest Stories
+- Stories Header
+- Stories Feed
+- Story Card
+- Section Header
+
+### Changed
+
+- Standardised application interface typography through `AppText`.
+- Added pull-to-refresh to Home.
+- Added pull-to-refresh to More.
+- Preserved existing Stories refresh behaviour.
+- Preserved existing playback architecture.
+- Preserved existing CMS and API architecture.
+- Preserved existing Firebase implementation.
+- Preserved existing navigation architecture.
+
+### Fixed
+
+- Remaining inconsistent native-font usage across the application interface.
+- Typography inconsistencies in Story Detail supporting elements.
+- Typography inconsistencies in Continue Reading.
+- Typography inconsistencies in Story Hero.
+- Typography inconsistencies in Story Footer.
+- Typography inconsistencies in the Story Body end state.
+- Missing Home pull-to-refresh behaviour.
+- Missing More pull-to-refresh behaviour.
+
+### Technical
+
+- Performed a repository-wide `.tsx` audit for direct React Native `Text` usage.
+- Confirmed the only remaining direct native `Text` implementation is the intentional wrapper inside `AppText.tsx`.
+- Kept networking and playback services unchanged.
+- Kept Firebase notification functionality unchanged.
+- Kept the existing Stories data architecture unchanged.
+
+### Verification
+
+- Home screen verified.
+- More screen verified.
+- Stories screen verified.
+- Story Detail verified.
+- Home pull-to-refresh verified.
+- More pull-to-refresh verified.
+- Existing Stories pull-to-refresh verified.
+- Application-wide typography visually verified.
+- Main player typography verified.
+- Mini Player typography verified.
+- Banner presentation typography verified.
+- Bottom navigation typography verified.
+
+### Git Milestone
+
+Release 0.9.6 – App-Wide UI Consistency
+
+### Status
+
+✅ Completed
 
 ---
 
@@ -410,32 +519,11 @@ Every release must satisfy the following principles.
 
 # Current Development Sequence
 
-## Release 0.9.6
-
-### App-Wide UI Consistency
-
-The next development milestone focuses on completing the visual consistency pass across the application.
-
-Planned work includes:
-
-- Home screen typography
-- More screen typography
-- Main player typography
-- Header consistency
-- Navigation consistency
-- Banner presentation verification
-- Pull-to-refresh on Home
-- Pull-to-refresh on More
-- Final Stories UI verification
-- Removal of remaining unnecessary native-font usage
-
----
-
 ## Release 0.9.7
 
 ### Network & Playback Verification
 
-After the UI consistency work is complete, network-dependent functionality will be verified under stable network conditions.
+The next development milestone focuses on verifying network-dependent functionality and the existing playback architecture under stable network conditions.
 
 Planned verification includes:
 
@@ -446,6 +534,9 @@ Planned verification includes:
 - Live radio streaming
 - Buffering behaviour
 - Playback recovery
+- Background playback
+- Lock-screen behaviour
+- Resume after background
 
 No unnecessary networking or playback changes will be introduced until the existing functionality has been tested under a reliable network connection.
 

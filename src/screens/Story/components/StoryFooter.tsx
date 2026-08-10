@@ -4,10 +4,10 @@ import {
   Pressable,
   Share,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
+import AppText from '../../../components/ui/AppText';
 import Colors from '../../../constants/colors';
 
 type Props = {
@@ -37,22 +37,31 @@ export default function StoryFooter({
     <View style={styles.container}>
       <View style={styles.divider} />
 
-      <Text style={styles.heading}>
+      <AppText
+        variant="heading3"
+        style={styles.heading}
+      >
         Enjoyed this story?
-      </Text>
+      </AppText>
 
-      <Text style={styles.subheading}>
+      <AppText
+        variant="body"
+        style={styles.subheading}
+      >
         Share it with someone who might
         enjoy it too.
-      </Text>
+      </AppText>
 
       <Pressable
         style={styles.button}
         onPress={handleShare}
       >
-        <Text style={styles.buttonText}>
+        <AppText
+          variant="button"
+          style={styles.buttonText}
+        >
           Share Story
-        </Text>
+        </AppText>
       </Pressable>
     </View>
   );
@@ -72,16 +81,11 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    fontFamily: 'Lora-Bold',
-    fontSize: 24,
     color: Colors.text,
     marginBottom: 10,
   },
 
   subheading: {
-    fontFamily: 'Inter-Regular',
-    fontSize: 16,
-    lineHeight: 27,
     color: Colors.textSecondary,
     marginBottom: 28,
   },
@@ -95,8 +99,6 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    fontFamily: 'Inter-SemiBold',
-    fontSize: 16,
     color: Colors.white,
   },
 });

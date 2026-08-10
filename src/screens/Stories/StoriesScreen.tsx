@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
+
 import {
   Image,
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
+import AppText from '../../components/ui/AppText';
 import StoriesHeader from '../../components/stories/StoriesHeader';
 import StoriesFeed from '../../components/stories/StoriesFeed';
-
 import MiniPlayer from '../../components/MiniPlayer';
 
 import Colors from '../../constants/colors';
@@ -21,18 +21,20 @@ import {
 } from '../../services/nowPlaying';
 
 export default function StoriesScreen() {
-  const [nowPlaying, setNowPlaying] = useState<NowPlaying>({
-    artist: '',
-    title: 'Loading...',
-    picture: null,
-  });
+  const [nowPlaying, setNowPlaying] =
+    useState<NowPlaying>({
+      artist: '',
+      title: 'Loading...',
+      picture: null,
+    });
 
   useEffect(() => {
     let mounted = true;
 
     const loadNowPlaying = async () => {
       try {
-        const data = await fetchNowPlaying();
+        const data =
+          await fetchNowPlaying();
 
         if (mounted) {
           setNowPlaying(data);
@@ -44,7 +46,10 @@ export default function StoriesScreen() {
 
     loadNowPlaying();
 
-    const interval = setInterval(loadNowPlaying, 5000);
+    const interval = setInterval(
+      loadNowPlaying,
+      5000,
+    );
 
     return () => {
       mounted = false;
@@ -71,9 +76,12 @@ export default function StoriesScreen() {
 
           <StoriesHeader />
 
-          <Text style={styles.heading}>
+          <AppText
+            variant="label"
+            style={styles.heading}
+          >
             LATEST STORIES
-          </Text>
+          </AppText>
 
           <View style={styles.feedContainer}>
             <StoriesFeed />
@@ -117,10 +125,7 @@ const styles = StyleSheet.create({
     marginTop: 28,
     marginBottom: 18,
     marginHorizontal: 24,
-    fontSize: 15,
-    fontWeight: '700',
     letterSpacing: 0.5,
-    color: Colors.text,
   },
 
   feedContainer: {

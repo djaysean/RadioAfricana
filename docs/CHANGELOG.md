@@ -13,6 +13,113 @@ Each completed release is recorded once and never modified retrospectively excep
 
 ---
 
+# Release 0.9.6 — App-Wide UI Consistency
+
+## Added
+
+### Home
+
+- Pull-to-refresh support on the Home screen.
+- Home refresh now refreshes Now Playing data.
+- Home refresh remounts CMS-driven content so banners and the latest story can refresh through their existing services.
+
+### More
+
+- Pull-to-refresh support on the More screen.
+- More refresh now refreshes Now Playing data.
+
+### Typography
+
+- Completed application-wide migration from direct React Native `Text` usage to the shared `AppText` typography component where appropriate.
+- Migrated remaining Story Detail interface typography to the shared typography system.
+- Migrated Continue Reading heading typography.
+- Migrated Continue Reading Card typography.
+- Migrated Story Body end-of-story typography.
+- Migrated Story Footer typography.
+- Migrated Story Hero typography.
+
+---
+
+## Changed
+
+### Home
+
+- Added a native pull-to-refresh interaction while preserving the existing Home layout and playback architecture.
+
+### More
+
+- Replaced native interface text with `AppText`.
+- Added pull-to-refresh without changing the existing menu structure, links or Now Playing polling.
+
+### Story Experience
+
+- Replaced remaining direct native `Text` usage in Story Detail components with `AppText`.
+- Preserved the existing article HTML typography configuration using Inter and Lora.
+- Preserved existing Story navigation, sharing and Continue Reading behaviour.
+
+### Typography
+
+- Completed the application-wide typography consistency pass.
+- Centralised remaining interface typography through `AppText`.
+- Preserved the established Inter and Lora font families.
+- Removed unnecessary direct native-font styling from application interface components.
+
+### Navigation
+
+- Audited bottom navigation typography.
+- Confirmed navigation labels already use the installed Inter font.
+- No navigation architecture changes were required.
+
+### Existing Components
+
+The following major components were audited and confirmed to already use the shared typography system correctly:
+
+- LiveHero
+- MiniPlayer
+- BannerCarousel
+
+---
+
+## Fixed
+
+- Remaining native-font usage across application interface components.
+- Typography inconsistency in Story Detail supporting elements.
+- Typography inconsistency in Continue Reading.
+- Typography inconsistency in Story Hero.
+- Typography inconsistency in Story Footer.
+- Typography inconsistency in the Story Body end state.
+- Missing Home pull-to-refresh behaviour.
+- Missing More pull-to-refresh behaviour.
+
+---
+
+## Technical
+
+- Performed a repository-wide audit of `.tsx` files for direct React Native `Text` usage.
+- Confirmed that the only remaining direct `Text` usage is the intentional implementation inside `AppText.tsx`.
+- Preserved the existing playback architecture.
+- Preserved the existing Stories architecture.
+- Preserved the existing CMS and API services.
+- Preserved the existing Firebase implementation.
+- No networking or playback service changes were introduced during this release.
+
+### Verification
+
+- Home screen verified.
+- Stories screen verified.
+- Story Detail verified.
+- More screen verified.
+- Home pull-to-refresh verified.
+- More pull-to-refresh verified.
+- Stories pull-to-refresh preserved and verified.
+- Typography verified across the primary application experience.
+
+### Status
+
+✅ Stable
+
+---
+
 # Release 0.9.5 — Firebase & Typography Foundation
 
 ## Added
@@ -76,7 +183,7 @@ Each completed release is recorded once and never modified retrospectively excep
 
 ### Status
 
-🟡 In Progress
+✅ Stable
 
 ---
 

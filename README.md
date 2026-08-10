@@ -31,11 +31,15 @@ The website remains the Content Management System (CMS), while the mobile applic
 
 🟢 Active Development
 
-The project is currently in the final implementation phase before Version 1.
+The project is in the final development and verification phase before Version 1.
 
-Core architecture has been completed and development is focused on feature completion, application-wide UI consistency, production readiness and final quality assurance.
+Core architecture has been completed.
 
-The latest completed development checkpoint is **Release 0.9.5 — Firebase & Typography Foundation**.
+Firebase Cloud Messaging has been integrated and verified.
+
+The application-wide UI consistency pass has been completed and verified, including the shared typography system, primary screen consistency and pull-to-refresh behaviour on Home and More.
+
+The remaining Version 1 work focuses on network and playback verification, production quality assurance and Android release preparation.
 
 ---
 
@@ -106,9 +110,11 @@ Stories-specific notification automation is not currently part of the applicatio
 - Reusable `AppText` typography component
 - Shared component styling architecture
 
-The application is currently undergoing an application-wide typography consistency pass so that interface text uses the established Radio Africana typography system rather than relying on the device's native font.
+The application-wide typography consistency pass has been completed and verified.
 
-The typography foundation is now established through the shared `AppText` component and is being progressively applied across the application.
+Interface typography now uses the established Radio Africana typography system through the shared `AppText` component where appropriate, rather than relying on the device's native font.
+
+The Story reader retains its dedicated Inter and Lora typography configuration for editorial content.
 
 ---
 
@@ -259,41 +265,69 @@ Future versions will introduce additional capabilities such as Programme Schedul
 
 ---
 
-# Current Development Priorities
+# Completed Development Milestones
 
-The remaining Version 1 work is being completed through small, controlled milestones.
+## Release 0.9.5 — Firebase & Typography Foundation
+
+Completed:
+
+- Firebase Cloud Messaging integration
+- Existing Radio Africana Firebase project connection
+- FCM token generation
+- Firebase Console notification testing
+- Shared `AppText` typography foundation
+- Inter and Lora typography integration
+- Shared component typography migration
+
+---
 
 ## Release 0.9.6 — App-Wide UI Consistency
 
-Current UI work includes:
+Completed:
 
-- Complete application-wide typography migration
-- Home screen typography
-- More screen typography
-- Header consistency
-- Navigation consistency
-- Main player typography
-- Mini Player typography
-- Banner presentation consistency
-- Pull-to-refresh on Home
-- Pull-to-refresh on More
+- Application-wide typography migration
+- Home typography verification
+- More typography migration
+- Main Player typography verification
+- Mini Player typography verification
+- Header consistency verification
+- Navigation typography verification
+- Banner presentation verification
+- Home pull-to-refresh
+- More pull-to-refresh
 - Final Stories UI verification
+- Story Detail typography migration
+- Continue Reading typography migration
+- Repository-wide native `Text` audit
+
+The application was visually tested across Home, Stories, Story Detail and More after the 0.9.6 changes.
+
+---
+
+# Current Development Priorities
 
 ## Release 0.9.7 — Network & Playback Verification
 
-After the UI consistency work is complete, network-dependent functionality will be verified under stable network conditions.
+The next development milestone focuses on verifying existing network-dependent functionality under stable network conditions.
 
 This includes:
 
 - Stories loading
 - Story pagination
 - Banner loading
+- Banner interaction
 - Now Playing metadata
 - Live radio streaming
 - Buffering behaviour
 - Playback recovery
+- Background playback
+- Lock-screen behaviour
+- Resume after background
+- Network failure handling
+- Offline behaviour
+- Retry behaviour
 
-No unnecessary changes will be made to networking or playback services until the behaviour has been tested under a reliable network connection.
+No unnecessary changes will be made to networking or playback services until the existing behaviour has been tested under a reliable network connection.
 
 ---
 

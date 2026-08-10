@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   StyleSheet,
-  Text,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -10,6 +9,7 @@ import {
 import RenderHtml from 'react-native-render-html';
 
 import Colors from '../../../constants/colors';
+import AppText from '../../../components/ui/AppText';
 
 type Props = {
   content: string;
@@ -26,7 +26,7 @@ const systemFonts = [
 export default function StoryBody({
   content,
 }: Props) {
-  const { width } = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   return (
     <View style={styles.container}>
@@ -110,9 +110,12 @@ export default function StoryBody({
       <View style={styles.endSection}>
         <View style={styles.endDivider} />
 
-        <Text style={styles.endText}>
+        <AppText
+          variant="meta"
+          style={styles.endText}
+        >
           End of Story
-        </Text>
+        </AppText>
 
         <View style={styles.endDivider} />
       </View>
@@ -142,8 +145,6 @@ const styles = StyleSheet.create({
 
   endText: {
     marginHorizontal: 16,
-    fontFamily: 'Inter-Medium',
-    fontSize: 13,
     color: Colors.textSecondary,
     letterSpacing: 1,
     textTransform: 'uppercase',

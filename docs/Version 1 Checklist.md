@@ -14,7 +14,9 @@ Overall Progress
 
 🟨 In Progress
 
-The application is feature-complete in several core areas, but final UI consistency, playback verification, network verification and production QA remain outstanding.
+The application core, Firebase notification foundation and application-wide UI consistency work have been completed and verified.
+
+Remaining work focuses on network and playback verification, production QA and Android release preparation.
 
 ---
 
@@ -25,9 +27,9 @@ The application is feature-complete in several core areas, but final UI consiste
 - [x] Home screen complete
 - [x] Stories screen complete
 - [x] More screen complete
-- [ ] Header consistency verified
-- [ ] Safe Area verified
-- [ ] Bottom navigation verified
+- [x] Header consistency verified
+- [x] Safe Area verified
+- [x] Bottom navigation verified
 
 ---
 
@@ -50,9 +52,9 @@ The application is feature-complete in several core areas, but final UI consiste
 
 ## Interaction
 
-- [ ] Banner links verified
-- [ ] Banner loading states verified
-- [ ] Pull to refresh
+- [x] Banner links verified
+- [x] Banner loading states verified
+- [x] Pull to refresh
 
 ---
 
@@ -94,7 +96,7 @@ The application is feature-complete in several core areas, but final UI consiste
 
 ## Interaction
 
-- [ ] Pull to refresh
+- [x] Pull to refresh
 
 ---
 
@@ -151,13 +153,13 @@ Stories-specific article publication notification automation is not currently pa
 - [x] Inter font integrated
 - [x] Lora font integrated
 - [x] Shared `AppText` typography component
-- [ ] Application-wide typography migration
-- [ ] Main Player typography verified
-- [ ] Mini Player typography verified
-- [ ] Home typography verified
-- [ ] Stories typography verified
-- [ ] More typography verified
-- [ ] Navigation typography verified
+- [x] Application-wide typography migration
+- [x] Main Player typography verified
+- [x] Mini Player typography verified
+- [x] Home typography verified
+- [x] Stories typography verified
+- [x] More typography verified
+- [x] Navigation typography verified
 
 ## Components
 
@@ -166,16 +168,16 @@ Stories-specific article publication notification automation is not currently pa
 - [x] Banner Carousel
 - [x] Stories components
 - [x] Section Header
-- [ ] Logo headers
-- [ ] Bottom navigation icons
+- [x] Logo headers
+- [x] Bottom navigation icons
 
 ## Consistency
 
-- [ ] Shared spacing verified
-- [ ] Shared typography verified
-- [ ] Shared colours verified
-- [ ] Header consistency verified
-- [ ] Application-wide UI consistency verified
+- [x] Shared spacing verified
+- [x] Shared typography verified
+- [x] Shared colours verified
+- [x] Header consistency verified
+- [x] Application-wide UI consistency verified
 
 ---
 
@@ -202,11 +204,11 @@ Stories-specific article publication notification automation is not currently pa
 
 ## Functional Testing
 
-- [ ] Home
-- [ ] Stories
-- [ ] Story Detail
-- [ ] More
-- [ ] Playback
+- [x] Home
+- [x] Stories
+- [x] Story Detail
+- [x] More
+- [x] Playback
 - [x] Firebase notification delivery
 
 ## Network Verification
@@ -266,38 +268,22 @@ Stories-specific article publication notification automation is not currently pa
 - [x] Release 0.8.2 committed
 - [x] Release 0.8.3 committed
 - [x] Release 0.9 committed
-- [ ] Release 0.9.5 committed
+- [x] Release 0.9.5 committed
+- [ ] Release 0.9.6 committed
 - [ ] Version 1 tagged
 
 ---
 
 # Current Development Sequence
 
-## Release 0.9.6 — App-Wide UI Consistency
-
-Remaining UI work includes:
-
-- [ ] Complete application-wide typography migration
-- [ ] Home typography
-- [ ] More typography
-- [ ] Main Player typography
-- [ ] Mini Player typography
-- [ ] Header consistency
-- [ ] Navigation consistency
-- [ ] Banner presentation verification
-- [ ] Home pull-to-refresh
-- [ ] More pull-to-refresh
-- [ ] Final Stories UI verification
-
----
-
 ## Release 0.9.7 — Network & Playback Verification
 
 Remaining verification includes:
 
-- [ ] Stories loading
-- [ ] Story pagination
-- [ ] Banner loading
+- [ ] Stories loading under stable network
+- [ ] Story pagination under stable network
+- [ ] Banner loading under stable network
+- [ ] Banner interaction
 - [ ] Now Playing metadata
 - [ ] Live radio streaming
 - [ ] Buffering behaviour
@@ -305,6 +291,9 @@ Remaining verification includes:
 - [ ] Background playback
 - [ ] Lock screen behaviour
 - [ ] Resume after background
+- [ ] Network failure handling
+- [ ] Offline behaviour
+- [ ] Retry behaviour
 
 ---
 
@@ -323,4 +312,6 @@ Radio Africana Mobile Version 1.0 is considered complete when:
 - Firebase notifications are operational.
 - Required notification behaviour has been verified.
 - The application successfully builds as a signed Android App Bundle (AAB).
+- Production QA has been completed.
+- Store assets and metadata are ready.
 - The application is ready for submission to Google Play.

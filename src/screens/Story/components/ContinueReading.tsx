@@ -6,7 +6,6 @@ import React, {
 import {
   ActivityIndicator,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 
@@ -15,6 +14,7 @@ import {
 } from '@react-navigation/native';
 
 import Colors from '../../../constants/colors';
+import AppText from '../../../components/ui/AppText';
 
 import {
   fetchLatestStories,
@@ -34,9 +34,8 @@ export default function ContinueReading({
 }: Props) {
   const navigation = useNavigation<any>();
 
-  const [stories, setStories] = useState<
-    Story[]
-  >([]);
+  const [stories, setStories] =
+    useState<Story[]>([]);
 
   const [loading, setLoading] =
     useState(true);
@@ -67,9 +66,12 @@ export default function ContinueReading({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>
+      <AppText
+        variant="heading1"
+        style={styles.heading}
+      >
         Continue Reading
-      </Text>
+      </AppText>
 
       {loading ? (
         <ActivityIndicator
@@ -104,8 +106,6 @@ const styles = StyleSheet.create({
   },
 
   heading: {
-    fontFamily: 'Lora-Bold',
-    fontSize: 30,
     color: Colors.text,
     marginBottom: 28,
   },
