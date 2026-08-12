@@ -2,125 +2,73 @@
 
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![React Native](https://img.shields.io/badge/React%20Native-0.82-blue)
-![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
+![Status](https://img.shields.io/badge/Status-Version%201%20Release%20Candidate-gold)
 ![Version](https://img.shields.io/badge/Target-v1.0-gold)
 
-The official Android application for **Radio Africana**, designed to combine premium live radio streaming with a modern editorial reading experience.
+The official Android application for **Radio Africana**, combining premium live radio streaming with an editorial reading experience.
 
-Built with **React Native** and powered by **WordPress**, the application delivers live radio, dynamic programme metadata, editorial content, promotional campaigns and future community features through a single native mobile experience.
+## Current Status
 
----
+**Target Version:** 1.0  
+**Current Milestone:** Version 1.0 Release Candidate  
+**Development State:** 🟡 Active QA / Production Preparation
 
-# Project Vision
+Release 0.9.7 — Network & Playback Verification — has been completed and manually verified on the current Android build.
 
-Radio Africana Mobile is designed to become the primary digital experience for Radio Africana listeners.
+The application has been tested across Home, Stories, Story Detail, More, banners, live playback, Now Playing metadata, dynamic artwork, persistent playback, background playback, lock-screen playback and resume behaviour.
 
-Rather than replicating the website, the application focuses on providing a native, fast and immersive experience inspired by modern media platforms such as Spotify, BBC Sounds and Apple News.
+The project is now frozen at the end of Release 0.9.7 while Version 1.0 Release Candidate work begins.
 
-The website remains the Content Management System (CMS), while the mobile application becomes the primary destination for listening and reading.
+## Current Features
 
----
-
-# Current Status
-
-## Version
-
-**Target Version:** 1.0
-
-## Development Status
-
-🟢 Active Development
-
-The project is in the final development and verification phase before Version 1.
-
-Core architecture has been completed.
-
-Firebase Cloud Messaging has been integrated and verified.
-
-The application-wide UI consistency pass has been completed and verified, including the shared typography system, primary screen consistency and pull-to-refresh behaviour on Home and More.
-
-The remaining Version 1 work focuses on network and playback verification, production quality assurance and Android release preparation.
-
----
-
-# Current Features
-
-## Live Radio
+### Live Radio
 
 - Persistent live radio playback
-- Cross-screen audio playback
-- Dynamic "Now Playing" metadata
+- Cross-screen playback
+- Dynamic Now Playing metadata
 - Dynamic album artwork
-- Home screen Live Hero
+- Home LiveHero
 - Persistent Mini Player
-- Play / Pause controls
-- Shared playback state
+- Play / Pause
+- Android media notification
+- Background playback
+- Lock-screen playback
 
----
-
-## Editorial
+### Editorial
 
 - Featured Story
 - Stories listing
-- Story Detail screen
-- Premium article reader
 - Infinite scrolling
-- Pull-to-refresh on Stories
+- Pull-to-refresh
+- Story Detail
+- HTML rendering
 - Continue Reading
-- Native article sharing
+- Native sharing
 
----
+### Content Platform
 
-## Content Platform
-
-- WordPress REST API integration
+- WordPress REST API
 - Custom Radio Africana REST API
-- Elementor Banner integration
-- Dynamic CMS-driven content
-- Shared API service architecture
+- CMS-driven Featured Story
 - CMS-driven promotional banners
+- Shared API service architecture
 
----
+### Notifications
 
-# Notifications
-
-- Firebase Cloud Messaging integration
+- Firebase Cloud Messaging
 - Existing Radio Africana Firebase project connection
-- Android Firebase app registration
 - FCM token generation
 - Firebase Console notification delivery
 
-Firebase Cloud Messaging has been integrated into the new application and successfully tested through the existing Radio Africana Firebase project.
+## Known Playback Limitation
 
-The client's existing Firebase workflow remains available for general-purpose Radio Africana notifications.
+Dynamic Now Playing metadata and artwork update correctly while the application is active and are reflected in the Android notification.
 
-Stories-specific notification automation is not currently part of the application scope. If article publication notifications are required in the future, they can be introduced as a separate feature.
+When the application remains fully backgrounded, the React Native JavaScript polling loop can be suspended by Android. In that state, the notification may retain the previous track until the application becomes active again.
 
----
+This is a known enhancement opportunity and is intentionally **not being expanded during the current Version 1 Release Candidate preparation** because playback itself remains stable and uninterrupted.
 
-# Design System
-
-- Centralised colour system
-- Centralised typography system
-- Inter font integration
-- Lora font integration
-- Shared spacing system
-- Shared radius system
-- Shared shadow system
-- Reusable `AppText` typography component
-- Shared component styling architecture
-
-The application-wide typography consistency pass has been completed and verified.
-
-Interface typography now uses the established Radio Africana typography system through the shared `AppText` component where appropriate, rather than relying on the device's native font.
-
-The Story reader retains its dedicated Inter and Lora typography configuration for editorial content.
-
----
-
-# Architecture
-
-The application follows a modular, component-first architecture.
+## Architecture
 
 ```text
 WordPress CMS
@@ -132,36 +80,31 @@ REST API Services
 Shared Services
         │
         ▼
-React Native Screens
+Application State
+        │
+        ▼
+Navigation
+        │
+        ▼
+Screens
         │
         ▼
 Reusable Components
 ```
 
-Live playback is managed through a shared Playback Provider, allowing uninterrupted listening across the entire application.
+Live playback is managed globally through the shared Playback Provider.
 
-Firebase Cloud Messaging is integrated independently of the editorial content system, allowing the client to continue using Firebase for general-purpose Radio Africana notifications.
+## Technology Stack
 
----
+### Mobile
 
-# Technology Stack
-
-## Mobile
-
-- React Native
+- React Native 0.82
 - TypeScript
 - React Navigation
 - react-native-video
 - React Native Firebase
 
-## Services
-
-- Firebase Cloud Messaging
-- Firebase Console
-- WordPress REST API
-- Radio Africana custom REST services
-
-## Backend
+### Backend
 
 - WordPress REST API
 - Custom Radio Africana REST API
@@ -169,16 +112,11 @@ Firebase Cloud Messaging is integrated independently of the editorial content sy
 - Pro.Radio Theme
 - Pro.Radio Child Theme
 
----
-
-# Project Structure
+## Project Structure
 
 ```text
 src/
 ├── components/
-│   ├── common/
-│   ├── stories/
-│   └── ui/
 ├── constants/
 ├── navigation/
 ├── playback/
@@ -187,69 +125,24 @@ src/
 ├── types/
 
 assets/
-
 docs/
-
 wordpress/
 ```
 
----
-
-# Development Workflow
-
-Install dependencies:
+## Development Workflow
 
 ```bash
 npm install
-```
-
-Start Metro:
-
-```bash
 npx react-native start
-```
-
-Reset Metro cache:
-
-```bash
 npx react-native start --reset-cache
-```
-
-Run Android:
-
-```bash
 npx react-native run-android
 ```
 
-During normal UI development, JavaScript changes should be reloaded through Metro rather than rebuilding the Android application.
+JavaScript-only changes should normally be reloaded through Metro. Native dependency, Firebase or Android configuration changes require a fresh Android build.
 
-For native dependency, Firebase, Android configuration or other native changes, a fresh Android build may be required.
+## Version 1 Scope
 
----
-
-# Engineering Principles
-
-The project follows several core engineering principles.
-
-- Component-first architecture.
-- Service-first data layer.
-- CMS-driven content.
-- Shared Design System.
-- Reusable components before reusable screens.
-- Complete feature implementation before expansion.
-- Small, testable releases.
-- Git commit after every completed release.
-- Documentation updated after every release.
-- Preserve existing client workflows wherever practical.
-- Avoid introducing functionality that is not required by the current product scope.
-
----
-
-# Version 1 Scope
-
-Version 1 focuses on delivering a complete, polished experience rather than the largest possible feature set.
-
-Included:
+Version 1 includes:
 
 - Live Radio
 - Persistent Playback
@@ -261,105 +154,23 @@ Included:
 - Premium Design System
 - Production Android Release
 
-Future versions will introduce additional capabilities such as Programme Schedule, Search, Podcasts and Dark Mode.
+Intentionally post-Version-1 features include Programme Schedule, Search, Bookmarks, Podcasts, Presenter Profiles, Events, Dark Mode, Sleep Timer and Offline Reading.
 
----
+## Documentation
 
-# Completed Development Milestones
-
-## Release 0.9.5 — Firebase & Typography Foundation
-
-Completed:
-
-- Firebase Cloud Messaging integration
-- Existing Radio Africana Firebase project connection
-- FCM token generation
-- Firebase Console notification testing
-- Shared `AppText` typography foundation
-- Inter and Lora typography integration
-- Shared component typography migration
-
----
-
-## Release 0.9.6 — App-Wide UI Consistency
-
-Completed:
-
-- Application-wide typography migration
-- Home typography verification
-- More typography migration
-- Main Player typography verification
-- Mini Player typography verification
-- Header consistency verification
-- Navigation typography verification
-- Banner presentation verification
-- Home pull-to-refresh
-- More pull-to-refresh
-- Final Stories UI verification
-- Story Detail typography migration
-- Continue Reading typography migration
-- Repository-wide native `Text` audit
-
-The application was visually tested across Home, Stories, Story Detail and More after the 0.9.6 changes.
-
----
-
-# Current Development Priorities
-
-## Release 0.9.7 — Network & Playback Verification
-
-The next development milestone focuses on verifying existing network-dependent functionality under stable network conditions.
-
-This includes:
-
-- Stories loading
-- Story pagination
-- Banner loading
-- Banner interaction
-- Now Playing metadata
-- Live radio streaming
-- Buffering behaviour
-- Playback recovery
-- Background playback
-- Lock-screen behaviour
-- Resume after background
-- Network failure handling
-- Offline behaviour
-- Retry behaviour
-
-No unnecessary changes will be made to networking or playback services until the existing behaviour has been tested under a reliable network connection.
-
----
-
-# Documentation
-
-The `/docs` directory contains the complete project documentation.
+The `/docs` directory is the project's documentation source of truth:
 
 | Document | Purpose |
-|----------|---------|
+|---|---|
 | Project.md | Product specification and architecture |
 | Design System.md | Visual language and UI standards |
-| Releases.md | Completed release history |
-| Changelog.md | Detailed implementation history |
-| Roadmap.md | Future development roadmap |
-| Version 1 Checklist.md | Production release checklist |
+| Releases.md | Completed milestones |
+| Changelog.md | Implementation history |
+| Roadmap.md | Remaining work |
+| Version 1 Checklist.md | Release QA checklist |
 
----
+## Development Rule
 
-# Development Philosophy
+Completed milestones are never reopened as active development stages. Once a release is frozen, future work begins from the current roadmap state only.
 
-Radio Africana Mobile is built around one simple principle:
-
-> Every feature that exists in Version 1 must feel complete.
-
-New functionality is introduced through future releases rather than shipping unfinished experiences.
-
-The project follows a controlled release process: each milestone is implemented, tested, documented and committed before the next milestone begins.
-
----
-
-# License
-
-Copyright © Radio Africana.
-
-All rights reserved.
+Copyright © Radio Africana. All rights reserved.

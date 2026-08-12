@@ -1,20 +1,14 @@
 # Radio Africana Mobile Design System
 
-## Overview
+## Current Status
 
-The Radio Africana Design System defines the visual language, interaction patterns and reusable interface standards for the Radio Africana Mobile application.
+The application-wide UI consistency work of Release 0.9.6 is complete and verified.
 
-It serves as the single source of truth for every screen, component and interaction within the application.
+The Design System is now the visual source of truth for Version 1 Release Candidate work.
 
-Every user interface element should either follow this design system or extend it intentionally.
+## Design Philosophy
 
----
-
-# Design Philosophy
-
-Radio Africana Mobile is inspired by the clarity of BBC Sounds, the simplicity of Spotify and the editorial quality of modern digital publications.
-
-The application should feel:
+Radio Africana Mobile should feel:
 
 - Calm
 - Editorial
@@ -22,59 +16,39 @@ The application should feel:
 - Premium
 - Purposeful
 
-Visual consistency is considered more important than individual screen creativity.
+Visual consistency takes priority over screen-specific creativity.
 
----
+## Core Principles
 
-# Core Principles
+### Editorial First
 
-## Editorial First
+Reading should feel effortless. Typography, spacing and hierarchy prioritise long-form content.
 
-Reading should feel effortless.
+### Listening First
 
-Typography, spacing and hierarchy always prioritise long-form content.
+Live radio is the primary experience. Playback remains persistent while navigation changes around it.
 
----
-
-## Listening First
-
-Live radio is the primary experience.
-
-Playback should remain persistent while navigation changes around it.
-
----
-
-## Consistency Before Creativity
+### Consistency Before Creativity
 
 Reusable patterns are preferred over unique layouts.
 
-Users should never have to relearn the interface between screens.
+### Native Before Web
 
----
+Although powered by WordPress, the application behaves as a native Android product.
 
-## Native Before Web
-
-Although powered by WordPress, the application must behave like a native Android application.
-
----
-
-## Simplicity Before Density
+### Simplicity Before Density
 
 Only present what users need.
 
-Avoid unnecessary controls, visual clutter or decorative elements.
+## Design Tokens
 
----
-
-# Design Tokens
-
-The design tokens are maintained centrally within:
+Centralised tokens are maintained in:
 
 ```text
 src/constants/
 ```
 
-The application uses shared constants for:
+Shared tokens cover:
 
 - Colours
 - Typography
@@ -82,36 +56,23 @@ The application uses shared constants for:
 - Radius
 - Shadows
 
-Hardcoded visual values should be avoided whenever practical.
+## Typography
 
----
+`src/constants/typography.ts` is the source of truth for typography tokens.
 
-# Typography
+`src/components/ui/AppText.tsx` is the shared rendering layer.
 
-Typography is centralised through the shared typography system and rendered through the reusable `AppText` component.
+All new interface text should use `AppText` rather than raw React Native `Text` wherever practical.
 
-The installed font families are used throughout the application rather than relying on the Android device's native font.
-
-## Lora
-
-Purpose:
-
-Editorial display typography.
+### Lora
 
 Used for:
 
 - Story titles
-- Major editorial headings
+- Editorial headings
 - Premium reading experiences
-- Prominent editorial content
 
----
-
-## Inter
-
-Purpose:
-
-Interface typography.
+### Inter
 
 Used for:
 
@@ -121,36 +82,8 @@ Used for:
 - Navigation
 - Labels
 - Forms
-- Status indicators
-- Supporting interface text
 
----
-
-## AppText
-
-`AppText` is the shared typography component for application UI text.
-
-Components should use `AppText` rather than importing and styling React Native's native `Text` component directly whenever the text belongs to the application interface.
-
-The component consumes the central typography definitions and provides consistent variants across the application.
-
-Typography variants include:
-
-- Display
-- Heading
-- Body
-- Body Small
-- Label
-- Meta
-- Button
-
-The typography system is being progressively applied across the application as part of the Release 0.9.6 UI consistency work.
-
----
-
-# Colour System
-
-The application colour palette communicates hierarchy rather than decoration.
+## Colour System
 
 Primary colours include:
 
@@ -161,59 +94,35 @@ Primary colours include:
 - Border Grey
 - Success / Live indicator
 
-Every component should reference shared colour constants.
+Components should consume shared colour constants.
 
----
-
-# Layout Principles
-
-The application follows a predictable vertical hierarchy.
+## Layout Principles
 
 ```text
 Header
-
-↓
-
+   ↓
 Primary Content
-
-↓
-
+   ↓
 Persistent Mini Player
-
-↓
-
+   ↓
 Bottom Navigation
 ```
 
-This structure remains consistent across all primary screens.
+This hierarchy remains consistent across primary screens.
 
----
-
-# Header System
+## Header System
 
 The Radio Africana logo is the primary application header.
 
-Version 1 standard:
+Version 1 primary screens:
 
-Home
-
-Stories
-
-More
-
-All use the same branded header.
+- Home
+- Stories
+- More
 
 Headers should maintain consistent height and spacing.
 
-Typography used within headers should follow the shared application typography system.
-
----
-
-# Home Screen
-
-Purpose:
-
-Primary listening destination.
+## Home
 
 Contains:
 
@@ -224,17 +133,9 @@ Contains:
 - Latest Stories
 - Persistent Mini Player
 
-The Home screen is the only location where the large LiveHero appears.
+LiveHero is the primary large listening surface and appears on Home.
 
-Home is also the primary location for live playback interaction and promotional content.
-
----
-
-# LiveHero
-
-Purpose:
-
-Primary live listening experience.
+## LiveHero
 
 Contains:
 
@@ -242,19 +143,9 @@ Contains:
 - Now Playing
 - Artist
 - Live status
-- Listen Live button
+- Listen Live control
 
-Only displayed on the Home screen.
-
-All LiveHero interface text should use the shared typography system.
-
----
-
-# Persistent Mini Player
-
-Purpose:
-
-Provide uninterrupted playback controls.
+## Persistent Mini Player
 
 Visible throughout the application.
 
@@ -266,47 +157,23 @@ Responsibilities:
 - Live status
 - Play/Pause
 
-The Mini Player should never replace the LiveHero.
+The Mini Player complements rather than replaces LiveHero.
 
-Instead, it complements it by remaining available during navigation.
-
-All Mini Player interface text should use the shared typography system.
-
----
-
-# Banner Carousel
-
-Purpose:
-
-Highlight promotional content.
+## Banner Carousel
 
 Rules:
 
 - CMS-driven
 - Swipeable
 - Responsive
+- Clickable when a destination URL exists
+- Non-interactive when no destination exists
 
-Interaction:
+Image enlargement is intentionally unsupported.
 
-If a banner has a destination URL:
+## Story Cards
 
-Tap opens the destination.
-
-If no URL exists:
-
-Banner remains non-interactive.
-
-Image enlargement is intentionally not supported.
-
-Banner status and retry messaging should use the shared typography system.
-
----
-
-# Story Cards
-
-Story cards should prioritise readability.
-
-Include:
+Prioritise:
 
 - Featured image
 - Title
@@ -315,45 +182,20 @@ Include:
 
 Avoid excessive text truncation.
 
-Story card typography should follow the established Lora and Inter hierarchy.
+Story typography follows the Lora/Inter hierarchy.
 
----
+## Story Reader
 
-# Story Reader
-
-The reader experience should resemble a premium publication.
-
-Characteristics:
+The reader should provide:
 
 - Comfortable line spacing
 - Generous whitespace
 - Strong heading hierarchy
-- Minimal visual distractions
+- Minimal visual distraction
 
-Editorial display typography uses Lora, while interface and supporting text use Inter.
+## Bottom Navigation
 
----
-
-# Stories
-
-The Stories experience includes:
-
-- Stories Header
-- Stories Feed
-- Latest Stories
-- Latest Story
-- Story Cards
-- Story Detail
-
-The Stories feed supports pull-to-refresh.
-
-Loading, empty and error states should use the shared typography system and should never expose raw technical errors to users.
-
----
-
-# Bottom Navigation
-
-Version 1 includes:
+Version 1:
 
 - Home
 - Stories
@@ -366,35 +208,13 @@ Requirements:
 - Consistent spacing
 - Native behaviour
 
-Navigation labels and supporting text should use the shared application typography system.
+## Interaction Principles
 
----
+Buttons provide immediate feedback.
 
-# Interaction Principles
+Users should always understand whether an action succeeded.
 
-Buttons must provide immediate feedback.
-
-Interactive elements should always communicate their state.
-
-Examples:
-
-Listen Live
-
-↓
-
-Playing Live
-
-READY
-
-↓
-
-LIVE
-
-Users should never wonder whether an action succeeded.
-
----
-
-# Loading States
+## Loading States
 
 Every network-driven component should define:
 
@@ -403,13 +223,9 @@ Every network-driven component should define:
 - Error
 - Success
 
-Raw technical errors must never be shown to end users.
+Technical errors must never be exposed directly to users.
 
-Loading, empty and error states should use the shared typography system.
-
----
-
-# Accessibility
+## Accessibility
 
 Version 1 requirements include:
 
@@ -419,72 +235,39 @@ Version 1 requirements include:
 - Predictable navigation
 - Semantic hierarchy
 
-Accessibility improvements will continue in future releases.
+## Responsive Behaviour
 
----
+Layouts must adapt gracefully across Android devices without introducing screen-specific design systems.
 
-# Responsive Behaviour
-
-Layouts should adapt gracefully across Android devices.
-
-Spacing should remain consistent without introducing screen-specific designs.
-
----
-
-# Component Philosophy
+## Component Philosophy
 
 Reusable components should:
 
 - Have a single responsibility.
 - Avoid duplicated styling.
 - Consume shared constants.
-- Remain independent of business logic whenever possible.
+- Remain independent of business logic where practical.
 - Use shared typography and colour primitives.
-- Avoid introducing one-off visual styles without a design-system requirement.
+- Avoid one-off styles without a design-system requirement.
 
----
+## Release 0.9.6 Status
 
-# Release 0.9.6 UI Consistency Work
+Completed and verified:
 
-The current application-wide UI consistency pass focuses on bringing all primary screens and shared interface elements into the same visual language.
-
-Remaining work includes:
-
-- Home screen typography
-- More screen typography
-- Main player typography
+- Application-wide typography migration
+- Home typography
+- More typography
+- Story Detail typography
+- Continue Reading typography
+- Main Player typography
+- Mini Player typography
 - Header consistency
-- Navigation consistency
+- Navigation typography
+- Banner presentation
 - Home pull-to-refresh
 - More pull-to-refresh
-- Final Stories UI verification
-- Final verification of the Banner presentation
-- Removal of remaining unnecessary native-font usage
+- Repository-wide native `Text` audit
 
-The objective is for the application to present one consistent Radio Africana visual identity from launch through navigation, listening and reading.
+## Maintenance
 
----
-
-# Future Expansion
-
-The design system is intended to grow alongside the application.
-
-Future additions may include:
-
-- Motion guidelines
-- Animation tokens
-- Dark Mode
-- Iconography standards
-- Elevation system
-- Haptic feedback guidance
-- Component state documentation
-
----
-
-# Maintenance
-
-The Design System is the authoritative reference for every visual decision within Radio Africana Mobile.
-
-Any change affecting appearance should first be reflected in this document before implementation.
-
-Maintaining a single visual language ensures consistency, reduces maintenance effort and preserves the premium identity of the application.
+Any future visual change should first be reflected in this document before implementation.

@@ -1,15 +1,54 @@
 # Changelog
 
-All notable changes to Radio Africana Mobile are documented in this file.
+All notable changes to Radio Africana Mobile are documented here.
 
-The project follows a simplified changelog format based on four categories:
+Completed milestones are recorded chronologically. This file is historical; current work belongs in `Roadmap.md`.
 
-- Added
-- Changed
-- Fixed
-- Technical
+---
 
-Each completed release is recorded once and never modified retrospectively except to correct factual inaccuracies.
+# Release 0.9.7 — Network & Playback Verification
+
+## Added / Verified
+
+- Verified Stories loading and pagination.
+- Verified Stories pull-to-refresh.
+- Verified Story Detail navigation.
+- Verified Continue Reading.
+- Verified native sharing.
+- Verified CMS-driven banners.
+- Verified clickable and non-clickable banner behaviour.
+- Verified live radio stream connection.
+- Verified Now Playing metadata.
+- Verified dynamic artwork.
+- Verified persistent playback.
+- Verified Mini Player.
+- Verified cross-screen playback.
+- Verified background playback.
+- Verified buffering behaviour.
+- Verified playback recovery.
+- Verified lock-screen playback.
+- Verified resume after background.
+- Repeatedly tested foreground/background transitions while playback continued.
+
+## Fixed / Stabilised
+
+- Removed unwanted Android notification seek controls through the maintained `react-native-video` patch.
+- Preserved Play/Pause-only notification behaviour.
+- Stabilised Android notification metadata presentation including title, artist and artwork.
+- Corrected Media3 metadata application so the current MediaItem carries updated metadata without using the unavailable `ExoPlayer.setMediaMetadata()` API.
+
+## Known Limitation
+
+- Background Now Playing notification metadata is not guaranteed to refresh in real time while the React Native JavaScript runtime is suspended. The notification catches up when the application becomes active.
+- Playback itself remains stable and uninterrupted.
+
+## Technical
+
+- `react-native-video@6.19.2` is maintained with a project patch.
+- Android playback uses the existing Media3/ExoPlayer service architecture.
+- No new native background-polling architecture was introduced for Version 1 preparation.
+
+**Status:** 🟩 Completed / Frozen
 
 ---
 
@@ -17,106 +56,30 @@ Each completed release is recorded once and never modified retrospectively excep
 
 ## Added
 
-### Home
-
-- Pull-to-refresh support on the Home screen.
-- Home refresh now refreshes Now Playing data.
-- Home refresh remounts CMS-driven content so banners and the latest story can refresh through their existing services.
-
-### More
-
-- Pull-to-refresh support on the More screen.
-- More refresh now refreshes Now Playing data.
-
-### Typography
-
-- Completed application-wide migration from direct React Native `Text` usage to the shared `AppText` typography component where appropriate.
-- Migrated remaining Story Detail interface typography to the shared typography system.
-- Migrated Continue Reading heading typography.
-- Migrated Continue Reading Card typography.
-- Migrated Story Body end-of-story typography.
-- Migrated Story Footer typography.
-- Migrated Story Hero typography.
-
----
+- Application-wide typography consistency.
+- Home pull-to-refresh.
+- More pull-to-refresh.
 
 ## Changed
 
-### Home
-
-- Added a native pull-to-refresh interaction while preserving the existing Home layout and playback architecture.
-
-### More
-
-- Replaced native interface text with `AppText`.
-- Added pull-to-refresh without changing the existing menu structure, links or Now Playing polling.
-
-### Story Experience
-
-- Replaced remaining direct native `Text` usage in Story Detail components with `AppText`.
-- Preserved the existing article HTML typography configuration using Inter and Lora.
-- Preserved existing Story navigation, sharing and Continue Reading behaviour.
-
-### Typography
-
-- Completed the application-wide typography consistency pass.
-- Centralised remaining interface typography through `AppText`.
-- Preserved the established Inter and Lora font families.
-- Removed unnecessary direct native-font styling from application interface components.
-
-### Navigation
-
-- Audited bottom navigation typography.
-- Confirmed navigation labels already use the installed Inter font.
-- No navigation architecture changes were required.
-
-### Existing Components
-
-The following major components were audited and confirmed to already use the shared typography system correctly:
-
-- LiveHero
-- MiniPlayer
-- BannerCarousel
-
----
+- Migrated Home, More, Story Detail and shared player interface text to the shared typography system.
+- Standardised header and navigation presentation.
+- Verified Banner presentation.
+- Preserved existing Stories refresh behaviour.
 
 ## Fixed
 
-- Remaining native-font usage across application interface components.
-- Typography inconsistency in Story Detail supporting elements.
-- Typography inconsistency in Continue Reading.
-- Typography inconsistency in Story Hero.
-- Typography inconsistency in Story Footer.
-- Typography inconsistency in the Story Body end state.
-- Missing Home pull-to-refresh behaviour.
-- Missing More pull-to-refresh behaviour.
-
----
+- Remaining inconsistent native-font usage.
+- Typography inconsistencies in Story Detail and reader supporting elements.
+- Missing Home and More pull-to-refresh.
 
 ## Technical
 
-- Performed a repository-wide audit of `.tsx` files for direct React Native `Text` usage.
-- Confirmed that the only remaining direct `Text` usage is the intentional implementation inside `AppText.tsx`.
-- Preserved the existing playback architecture.
-- Preserved the existing Stories architecture.
-- Preserved the existing CMS and API services.
-- Preserved the existing Firebase implementation.
-- No networking or playback service changes were introduced during this release.
+- Repository-wide `.tsx` audit for direct React Native `Text`.
+- Confirmed the intentional native `Text` wrapper remains inside `AppText`.
+- Preserved playback, Stories, API, Firebase and navigation architecture.
 
-### Verification
-
-- Home screen verified.
-- Stories screen verified.
-- Story Detail verified.
-- More screen verified.
-- Home pull-to-refresh verified.
-- More pull-to-refresh verified.
-- Stories pull-to-refresh preserved and verified.
-- Typography verified across the primary application experience.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
@@ -124,382 +87,127 @@ The following major components were audited and confirmed to already use the sha
 
 ## Added
 
-### Firebase Cloud Messaging
-
-- Firebase Cloud Messaging integration.
-- Connection to the existing Radio Africana Firebase project.
-- Android Firebase application registration.
+- Firebase Cloud Messaging.
 - FCM token generation.
-- Firebase Console test notification support.
-
-### Typography
-
-- Shared `AppText` typography component.
-- Application typography foundation using the installed Inter and Lora fonts.
-- Centralised typography rendering through the shared UI layer.
-
----
+- Firebase Console notification testing.
+- Shared `AppText`.
+- Inter and Lora typography integration.
 
 ## Changed
 
-### Firebase
-
-- Preserved the client's existing Firebase workflow.
-- Kept Firebase notifications independent from the Stories editorial system.
-- Deliberately did not introduce Stories-specific article notification automation at this stage.
-
-### Typography
-
-- Began migrating interface text away from the device's native font.
-- Applied the shared typography system to reusable components.
-- Migrated typography in the Mini Player.
-- Migrated typography in LiveHero.
-- Migrated typography across Stories components.
-- Migrated typography in BannerCarousel.
-- Migrated typography in SectionHeader.
-
-### Components
-
-- Updated shared components to use `AppText` where interface text is rendered.
-- Preserved existing component behaviour, navigation and data services while migrating typography.
-
----
-
-## Fixed
-
-- Inconsistent typography between reusable application components.
-- Native device font usage in migrated shared components.
-- Typography path/import issue in `SectionHeader`.
-
----
+- Migrated core shared components to the shared typography system.
 
 ## Technical
 
-- Established `AppText` as the shared typography rendering layer.
-- Retained the existing Inter and Lora font assets.
-- Verified Firebase notification delivery through the Firebase Console.
-- Verified FCM token generation on the Android application.
-- Preserved the existing playback and networking architecture during the typography work.
+- Existing Radio Africana Firebase registration retained.
+- Firebase notification delivery verified on physical Android hardware.
 
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.9 — More Screen
 
-## Added
+- More screen and utility navigation.
+- Contact and information features.
+- Website, privacy, terms, sharing and version information.
 
-### More
-
-- More screen.
-- More screen navigation.
-- Additional application information and utility content.
-- More screen integration into the application navigation structure.
-
----
-
-## Changed
-
-- Expanded the primary application navigation experience.
-- Extended the shared visual language into the More section.
-
----
-
-## Technical
-
-- Integrated the More screen into the existing navigation architecture.
-- Preserved the shared application structure established in previous releases.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.8 — Persistent Live Playback
 
-## Added
+- Global Playback Provider.
+- Shared Playback Context.
+- Persistent playback.
+- Cross-screen playback.
+- Background playback.
+- Mini Player.
+- Play/Pause controls.
 
-### Playback
-
-- Global Playback Provider
-- Shared Playback Context
-- Dedicated playback module
-- Persistent playback architecture
-- Cross-screen playback
-- Shared playback controls
-- Play / Pause support
-
-### User Interface
-
-- LiveHero playback integration
-- Persistent Mini Player
-- Shared playback state
-- Dynamic playback status
-- Dynamic playback controls
-
-### Navigation
-
-- Playback persistence across Home
-- Playback persistence across Stories
-- Playback persistence across Story Detail
-
----
-
-## Changed
-
-- Moved playback responsibility from individual screens to a global provider.
-- Simplified playback management throughout the application.
-- Unified playback state across all listening experiences.
-
----
-
-## Fixed
-
-- Duplicate player rendering.
-- Mini Player layout regression.
-- Playback state synchronisation.
-- Navigation playback continuity.
-
----
-
-## Technical
-
-- Introduced Playback Context.
-- Introduced Playback Provider.
-- Introduced playback module structure.
-- Improved separation between playback logic and presentation.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.7 — Design System & Reader Experience
 
-## Added
-
-### Design System
-
-- Shared typography system.
-- Shared spacing system.
-- Shared radius system.
-- Shared shadow system.
-- Central design token architecture.
-- Inter font integration.
-- Lora font integration.
-
-### Reader
-
+- Shared design tokens.
+- Inter and Lora.
 - Continue Reading.
-- Native article sharing.
-- Premium article typography.
-- Improved editorial hierarchy.
-- HTML rendering improvements.
+- Native sharing.
+- Premium reader typography.
+- Documentation foundation.
 
-### Documentation
-
-- README rewrite.
-- Project specification.
-- Roadmap rewrite.
-- Releases documentation.
-- Design System documentation.
-- Changelog documentation.
-
----
-
-## Changed
-
-- Improved typography consistency.
-- Improved Story architecture.
-- Improved article hierarchy.
-- Improved documentation standards.
-
----
-
-## Fixed
-
-- HTML entity decoding.
-- Apostrophe rendering.
-- Font loading.
-- Typography consistency.
-
----
-
-## Technical
-
-- Added react-native.config.js.
-- Introduced design token architecture.
-- Introduced shared constants.
-- Improved documentation structure.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.6 — Editorial Platform
 
-## Added
-
-### Stories
-
 - Stories feed.
-- Story Detail screen.
+- Story Detail.
 - Infinite scrolling.
-- Story slug navigation.
+- Slug navigation.
 - HTML rendering.
+- Shared Story services.
 
-### Components
-
-- StoryHero.
-- StoryBody.
-- StoriesFeed.
-
----
-
-## Changed
-
-- Introduced modular Story architecture.
-- Improved WordPress rendering.
-- Improved navigation flow.
-
----
-
-## Fixed
-
-- Story loading.
-- Pagination.
-- HTML decoding.
-
----
-
-## Technical
-
-- Shared Story service architecture.
-- Improved API separation.
-- Improved service organisation.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.5 — Live Content Platform
 
-## Added
-
-### Services
-
 - Shared API layer.
 - Featured Story service.
 - Banner service.
 - Dynamic CMS content.
-
-### Backend
-
 - Custom REST namespace.
-- Elementor Banner endpoint.
-- Child Theme integration.
-- Backend documentation.
+- Elementor integration.
 
----
-
-## Changed
-
-- Replaced static banners with CMS-driven content.
-- Improved API architecture.
-- Improved service separation.
-
----
-
-## Technical
-
-- Reusable CMS service pattern.
-- Upgrade-safe backend architecture.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.4 — Premium Home Experience
 
-## Added
-
 - LiveHero.
 - BannerCard.
-- Premium Home layout.
+- Premium Home.
 - Featured Story.
 - Dynamic artwork.
+- Improved spacing and typography.
 
----
-
-## Changed
-
-- Home screen redesign.
-- Banner Carousel redesign.
-- Improved spacing.
-- Improved typography.
-
----
-
-## Technical
-
-- Expanded services layer.
-- Expanded constants layer.
-- Prepared Stories architecture.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.3 — Live Radio Foundation
 
-## Added
+- Now Playing.
+- Dynamic artwork.
+- Initial Home.
+- Banner carousel foundation.
 
-- Live Now Playing.
-- Dynamic album artwork.
-- Initial Home screen.
-- Banner Carousel foundation.
-
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.2 — Project Architecture
 
-## Added
-
-- Initial project architecture.
+- Initial architecture.
 - Folder structure.
 - Shared services.
 - Theme preparation.
 
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed
 
 ---
 
 # Release 0.1 — Foundation
 
-## Added
-
 - React Native project.
 - Android development environment.
 - Initial repository.
 
-### Status
-
-✅ Stable
+**Status:** 🟩 Completed

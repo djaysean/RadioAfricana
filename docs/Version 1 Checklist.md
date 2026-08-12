@@ -2,21 +2,13 @@
 
 # Version 1.0 Release Checklist
 
-This document defines every requirement that must be completed before Radio Africana Mobile Version 1.0 is released publicly.
+This checklist defines the remaining requirements before Version 1.0 can be released publicly.
 
-Version 1 ships only when every applicable item has been completed, tested and verified.
+## Current Progress
 
----
+**🟨 In Progress — Release Candidate**
 
-# Release Progress
-
-Overall Progress
-
-🟨 In Progress
-
-The application core, Firebase notification foundation and application-wide UI consistency work have been completed and verified.
-
-Remaining work focuses on network and playback verification, production QA and Android release preparation.
+Release 0.9.7 functional verification is complete. Production QA and release preparation remain.
 
 ---
 
@@ -24,18 +16,18 @@ Remaining work focuses on network and playback verification, production QA and A
 
 ## Navigation
 
-- [x] Home screen complete
-- [x] Stories screen complete
-- [x] More screen complete
+- [x] Home screen verified
+- [x] Stories screen verified
+- [x] More screen verified
 - [x] Header consistency verified
-- [x] Safe Area verified
+- [x] Safe Area behaviour verified
 - [x] Bottom navigation verified
 
 ---
 
-# Home Screen
+# Home
 
-## Listening Experience
+## Listening
 
 - [x] LiveHero
 - [x] Live stream playback
@@ -52,9 +44,9 @@ Remaining work focuses on network and playback verification, production QA and A
 
 ## Interaction
 
-- [x] Banner links verified
-- [x] Banner loading states verified
-- [x] Pull to refresh
+- [x] Banner links
+- [x] Non-clickable banners
+- [x] Banner loading behaviour
 
 ---
 
@@ -64,7 +56,7 @@ Remaining work focuses on network and playback verification, production QA and A
 
 - [x] Story listing
 - [x] Infinite scrolling
-- [x] Pull to refresh
+- [x] Pull-to-refresh
 
 ## Reading
 
@@ -73,18 +65,9 @@ Remaining work focuses on network and playback verification, production QA and A
 - [x] Continue Reading
 - [x] Native sharing
 
-## Experience
-
-- [ ] Friendly offline state verified
-- [x] Friendly loading state
-- [x] Friendly error state
-- [ ] Network behaviour verified under stable connection
-
 ---
 
 # More
-
-## Information
 
 - [x] Contact Us
 - [x] Meet the Team
@@ -93,10 +76,6 @@ Remaining work focuses on network and playback verification, production QA and A
 - [x] Terms & Conditions
 - [x] Share App
 - [x] Version Number
-
-## Interaction
-
-- [x] Pull to refresh
 
 ---
 
@@ -113,11 +92,10 @@ Remaining work focuses on network and playback verification, production QA and A
 
 ## Verification
 
-- [ ] Background playback verified
-- [ ] Lock screen verified
-- [ ] Resume after background verified
-- [ ] Playback recovery verified
-- [ ] Buffering behaviour verified under stable network conditions
+- [x] Background playback
+- [x] Lock-screen playback
+- [x] Resume after background
+- [x] Playback recovery
 
 ---
 
@@ -132,71 +110,57 @@ Remaining work focuses on network and playback verification, production QA and A
 ## Notifications
 
 - [x] Push notifications
-- [x] Notification permission verified
-- [ ] Notification tap handling
-- [ ] Background notifications
+- [x] Notification permissions
+- [ ] Notification tap handling final verification
+- [ ] Background notification final verification
 
-## Current Implementation
+## Verification
 
-Firebase Cloud Messaging has been integrated into the Android application and successfully tested through the existing Radio Africana Firebase project.
-
-The client's existing Firebase notification workflow remains available.
-
-Stories-specific article publication notification automation is not currently part of the Version 1 implementation.
+- [x] FCM token generated
+- [x] Firebase Console test notification received on physical Android device
 
 ---
 
 # Design
 
-## Typography
-
-- [x] Inter font integrated
-- [x] Lora font integrated
-- [x] Shared `AppText` typography component
-- [x] Application-wide typography migration
-- [x] Main Player typography verified
-- [x] Mini Player typography verified
-- [x] Home typography verified
-- [x] Stories typography verified
-- [x] More typography verified
-- [x] Navigation typography verified
-
 ## Components
 
 - [x] LiveHero
 - [x] Mini Player
-- [x] Banner Carousel
-- [x] Stories components
-- [x] Section Header
 - [x] Logo headers
-- [x] Bottom navigation icons
+- [x] Bottom navigation
 
 ## Consistency
 
 - [x] Shared spacing verified
 - [x] Shared typography verified
 - [x] Shared colours verified
-- [x] Header consistency verified
-- [x] Application-wide UI consistency verified
+
+### Typography
+
+- [x] Central typography tokens
+- [x] AppText component
+- [x] Core shared component migration
+- [x] Screen-level migration
+- [x] Repository-wide native `Text` audit
 
 ---
 
 # Performance
 
-- [ ] Image loading
-- [ ] API performance
-- [ ] Smooth scrolling
+- [ ] Image loading review
+- [ ] API performance review
+- [ ] Smooth scrolling review
 - [ ] Memory review
 
 ---
 
 # Error Handling
 
-- [x] Story loading errors
-- [x] Banner loading errors
-- [ ] Network failures
-- [ ] Offline handling
-- [ ] Playback recovery
+- [ ] Story loading error review
+- [ ] Banner loading error review
+- [ ] Network failure review
+- [ ] Offline behaviour review
 
 ---
 
@@ -209,24 +173,14 @@ Stories-specific article publication notification automation is not currently pa
 - [x] Story Detail
 - [x] More
 - [x] Playback
-- [x] Firebase notification delivery
-
-## Network Verification
-
-- [ ] Stories loading under stable network
-- [ ] Story pagination under stable network
-- [ ] Banner loading under stable network
-- [ ] Live radio streaming under stable network
-- [ ] Buffering behaviour
-- [ ] Playback recovery
+- [x] Firebase basic delivery
 
 ## Device Testing
 
 - [ ] Cold start
 - [ ] Warm start
-- [ ] Background
-- [ ] Lock screen
-- [ ] Screen rotation (if supported)
+- [x] Background
+- [ ] Screen rotation, if supported
 
 ---
 
@@ -264,54 +218,22 @@ Stories-specific article publication notification automation is not currently pa
 # Git
 
 - [x] Release 0.8 committed
-- [x] Release 0.8.1 committed
-- [x] Release 0.8.2 committed
-- [x] Release 0.8.3 committed
 - [x] Release 0.9 committed
-- [x] Release 0.9.5 committed
-- [ ] Release 0.9.6 committed
-- [ ] Version 1 tagged
-
----
-
-# Current Development Sequence
-
-## Release 0.9.7 — Network & Playback Verification
-
-Remaining verification includes:
-
-- [ ] Stories loading under stable network
-- [ ] Story pagination under stable network
-- [ ] Banner loading under stable network
-- [ ] Banner interaction
-- [ ] Now Playing metadata
-- [ ] Live radio streaming
-- [ ] Buffering behaviour
-- [ ] Playback recovery
-- [ ] Background playback
-- [ ] Lock screen behaviour
-- [ ] Resume after background
-- [ ] Network failure handling
-- [ ] Offline behaviour
-- [ ] Retry behaviour
+- [x] Release 0.9.5 committed/recorded
+- [x] Release 0.9.6 completed/recorded
+- [x] Release 0.9.7 completed/recorded
+- [ ] Version 1.0 release candidate commit
+- [ ] Version 1.0 tag
 
 ---
 
 # Definition of Done
 
-Radio Africana Mobile Version 1.0 is considered complete when:
+Radio Africana Mobile Version 1.0 is complete when:
 
 - Every visible feature works as intended.
 - No placeholder interfaces remain.
-- No known blocking runtime errors remain.
+- No known release-blocking runtime issues remain.
 - All applicable Version 1 checklist items are complete.
-- Application-wide typography is consistent.
-- Home and More provide the required pull-to-refresh behaviour.
-- Live radio has been verified under stable network conditions.
-- Stories have been verified under stable network conditions.
-- Firebase notifications are operational.
-- Required notification behaviour has been verified.
-- The application successfully builds as a signed Android App Bundle (AAB).
-- Production QA has been completed.
-- Store assets and metadata are ready.
-- The application is ready for submission to Google Play.
+- The application successfully builds as a signed Android App Bundle.
+- The application is ready for Google Play submission.

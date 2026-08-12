@@ -1,553 +1,200 @@
-# Radio Africana Mobile Releases
+# Radio Africana Mobile Roadmap
 
 ## Overview
 
-This document records every completed development milestone and formal development checkpoint in the Radio Africana Mobile project.
+This roadmap contains **only unfinished work**.
 
-Each release represents a defined implementation milestone that has been completed, tested and committed.
+Completed milestones belong in `Releases.md`. Historical releases are never reopened as active development stages.
 
-Development checkpoints may document substantial work that has been committed while follow-up work remains in progress.
+## Current Development Status
 
-Planned future work is documented separately in **Roadmap.md**.
+**Target Version:** 1.0  
+**Current Milestone:** Version 1.0 Release Candidate  
+**Status:** 🟡 Active QA / Production Preparation
 
----
-
-# Release 0.1
-
-## Foundation
-
-Established the React Native project and development environment.
-
-### Completed
-
-- React Native project created
-- Android development environment configured
-- Initial application bootstrapped
-- Repository created
-
-### Status
-
-✅ Completed
+Release 0.9.7 — Network & Playback Verification — is complete and frozen.
 
 ---
 
-# Release 0.2
+# Version 1.0 Release Candidate
 
-## Project Architecture
+## Objective
 
-Established the application's core architecture.
+Prepare the verified application for a production Android release.
 
-### Completed
+## Functional QA
 
-- Modular project structure
-- Initial navigation architecture
-- Shared constants
-- Shared services layer
-- Base component structure
-- TypeScript foundation
+### Live Radio
 
-### Status
+- [x] Persistent playback verified
+- [x] Background playback verified
+- [x] Mini Player verified
+- [x] Dynamic metadata verified
+- [x] Dynamic artwork verified
+- [x] Lock-screen playback verified
+- [x] Resume after background verified
+- [x] Playback recovery verified
 
-✅ Completed
+### Stories
 
----
+- [x] Story loading verified
+- [x] Infinite scrolling verified
+- [x] Pull-to-refresh verified
+- [x] Story Detail verified
+- [x] Continue Reading verified
+- [x] Native sharing verified
 
-# Release 0.3
+### Banners
 
-## Live Radio Foundation
+- [x] CMS-driven loading verified
+- [x] Carousel behaviour verified
+- [x] Clickable banners verified
+- [x] Non-clickable banners verified
 
-Introduced the first live listening experience.
+### More
 
-### Completed
+- [ ] Final functional audit of every menu item
+- [ ] Final content/link verification
 
-- Live Now Playing service
-- Dynamic album artwork
-- Initial Home screen
-- Banner carousel foundation
-- Radio service integration
+### Firebase
 
-### Status
-
-✅ Completed
-
----
-
-# Release 0.4
-
-## Premium Home Experience
-
-Transformed the Home screen into the primary listening experience.
-
-### Completed
-
-#### User Experience
-
-- Premium Home layout
-- LiveHero component
-- Banner Carousel
-- Featured Story
-- Improved spacing
-- Improved typography
-
-#### Components
-
-- LiveHero
-- BannerCard
-- Home content architecture
-
-#### Architecture
-
-- Shared services improvements
-- Component separation
-- Improved API structure
-
-### Git Milestone
-
-Release 0.4 – Premium Home Experience
-
-### Status
-
-✅ Completed
+- [x] Firebase project connection verified
+- [x] Android configuration verified
+- [x] FCM token generation verified
+- [x] Firebase Console test notification verified
+- [ ] Notification tap handling final verification
+- [ ] Background notification final verification
 
 ---
 
-# Release 0.5
+# Production QA
 
-## Live Content Platform
+## Android
 
-Transitioned the application from static content to a fully CMS-driven platform.
+- [ ] Clean release build
+- [ ] Signed AAB
+- [ ] Version number confirmed
+- [ ] Version code confirmed
+- [ ] Install and launch verification on physical device
 
-### Completed
+## Performance
 
-#### Mobile
+- [ ] Image loading review
+- [ ] API performance review
+- [ ] Smooth scrolling review
+- [ ] Memory review
 
-- Featured Story service
-- Banner service
-- Shared API layer
-- Dynamic Home content
-- Remote image support
+## Accessibility
 
-#### Backend
+- [ ] Typography/readability review
+- [ ] Touch target review
+- [ ] Contrast review
+- [ ] Navigation/semantic review
 
-- Custom REST API namespace
-- Elementor Banner endpoint
-- Child Theme integration
-- Upgrade-safe implementation
+## Final UI
 
-### Git Milestone
+- [ ] Final Home review
+- [ ] Final Stories review
+- [ ] Final Story Detail review
+- [ ] Final More review
+- [ ] Header review
+- [ ] Bottom navigation review
+- [ ] Mini Player review
 
-Release 0.5 – Live Content Platform
+## Store Preparation
 
-### Status
-
-✅ Completed
-
----
-
-# Release 0.6
-
-## Editorial Platform
-
-Expanded the application into a complete editorial experience.
-
-### Completed
-
-#### Stories
-
-- Stories feed
-- Infinite scrolling
-- Story Detail screen
-- HTML rendering
-- Slug navigation
-
-#### Reader
-
-- Story metadata
-- Premium typography
-- Improved article layout
-
-#### Performance
-
-- Shared Story services
-- API improvements
-
-### Git Milestone
-
-Release 0.6 – Editorial Platform
-
-### Status
-
-✅ Completed
+- [ ] App icon
+- [ ] Feature graphic
+- [ ] Screenshots
+- [ ] Store description
+- [ ] Privacy policy URL
+- [ ] Google Play preparation
 
 ---
 
-# Release 0.7
+# Known Enhancement — Not a Current Blocker
 
-## Design System & Reader Experience
+The Android notification does not always refresh to the next Now Playing track while the application is fully backgrounded because the current metadata polling is driven by React Native JavaScript.
 
-Established the visual identity of the application and refined the editorial reading experience.
+Playback itself remains uninterrupted and the notification catches up when the application becomes active.
 
-### Completed
+A future release may move Now Playing synchronisation into the native background playback layer.
 
-#### Design System
-
-- Shared colour system
-- Shared typography
-- Shared spacing
-- Shared radius
-- Shared shadows
-- Centralised design constants
-- Inter font integration
-- Lora font integration
-
-#### Reader Experience
-
-- Improved article hierarchy
-- HTML rendering refinements
-- Continue Reading
-- Native article sharing
-- Premium editorial layouts
-
-#### Documentation
-
-- Project documentation
-- Design System
-- Roadmap
-- Release documentation
-- Changelog
-
-### Git Milestone
-
-Release 0.7 – Design System & Reader Experience
-
-### Status
-
-✅ Completed
+This is intentionally **not part of the current Version 1 release-candidate scope**.
 
 ---
 
-# Release 0.8
+# Version 1 Scope — Locked
 
-## Persistent Playback Architecture
+## Listening
 
-Introduced the application's production playback architecture.
-
-### Completed
-
-#### Playback
-
-- Global Playback Provider
-- Shared Playback Context
-- Persistent playback state
+- Live radio
+- Persistent playback
 - Cross-screen playback
-- Background playback support
-- Play / Pause controls
+- Mini Player
+- Dynamic metadata
+- Dynamic artwork
 
-#### User Experience
+## Reading
 
-- Persistent Mini Player
-- LiveHero playback integration
-- Dynamic playback state
-- Shared playback controls
-- Continuous listening while navigating
+- Stories
+- Story Detail
+- Continue Reading
+- Native sharing
 
-#### Architecture
+## Content
 
-- Dedicated playback module
-- Playback state management
-- Reusable playback hooks
-- Screen-independent audio architecture
+- CMS-driven banners
+- Clickable banners
+- Featured Story
+- Latest Stories
 
-### Git Milestone
-
-Release 0.8 – Persistent Live Playback
-
-### Status
-
-✅ Completed
-
----
-
-# Release 0.9
-
-## More Screen
-
-Expanded the application structure with the More experience.
-
-### Completed
-
-#### More
+## Application
 
 - More screen
-- More screen navigation
-- Application information and utility content
-- Contact access
-- Meet the Team access
-- Website access
-- Privacy Policy access
-- Terms & Conditions access
-- Share App functionality
-- Version information
-- Persistent Mini Player integration
-
-#### Navigation
-
-- More integrated into the primary application navigation
-- Shared application structure preserved across Home, Stories and More
-
-### Git Milestone
-
-Release 0.9 – More Screen
-
-### Status
-
-✅ Completed
+- Firebase notifications
+- Production Android release
 
 ---
 
-# Release 0.9.5
+# Version 1.1
 
-## Firebase & Typography Foundation
+Intentionally deferred:
 
-Established the Firebase notification foundation and began the application-wide typography consistency migration.
+- Programme Schedule
+- Search
+- Bookmarks
+- Dark Mode
+- Sleep Timer
+- Favourite Stories
 
-### Completed
+# Version 1.2
 
-#### Firebase Cloud Messaging
+- Podcasts
+- Presenter Profiles
+- Events
+- Community Resources
 
-- Firebase Cloud Messaging integration
-- Existing Radio Africana Firebase project connection
-- Android Firebase application registration
-- FCM token generation
-- Firebase Console test notification delivery
-- Verified notification delivery to the new application installation
+# Long-Term Vision
 
-#### Notification Strategy
-
-- Preserved the client's existing Firebase notification workflow
-- Kept Firebase notification functionality independent of the Stories editorial system
-- Deliberately excluded Stories-specific article notification automation from the current implementation
-
-#### Typography Foundation
-
-- Shared `AppText` typography component
-- Centralised typography rendering
-- Inter font integration through the shared typography system
-- Lora font integration through the shared typography system
-- Established shared typography variants
-
-#### Shared Component Typography
-
-Typography migration was completed across the shared components worked on during this checkpoint, including:
-
-- Mini Player
-- LiveHero
-- Latest Story
-- Latest Stories
-- Stories Header
-- Stories Feed
-- Story Card
-- Banner Carousel
-- Section Header
-
-#### Banner Presentation
-
-- Banner Carousel typography migrated to the shared typography system
-- Existing Banner Card behaviour preserved
-
-### Changed
-
-- Replaced native interface text usage with `AppText` in migrated shared components.
-- Preserved existing playback behaviour while updating Mini Player and LiveHero typography.
-- Preserved existing Stories data, pagination and refresh behaviour while updating Stories typography.
-- Preserved existing Banner Carousel behaviour while updating its typography.
-- Preserved existing component APIs and navigation behaviour throughout the typography migration.
-
-### Fixed
-
-- Inconsistent native-font usage across migrated shared components.
-- Typography import/path issue in `SectionHeader`.
-- Shared component typography now follows the central typography system where migrated.
-
-### Technical
-
-- Established `AppText` as the shared typography rendering layer.
-- Retained the installed Inter and Lora font assets.
-- Verified Firebase notification delivery through Firebase Console.
-- Verified FCM token generation on Android.
-- Preserved the existing playback, Stories and API architecture during the typography work.
-
-### Git Milestone
-
-Release 0.9.5 – Firebase & Typography Foundation
-
-### Status
-
-✅ Completed
+- Android Auto
+- Apple CarPlay
+- Chromecast
+- Offline Reading
+- Offline Audio
+- User Accounts
+- Personalisation
+- AI-powered recommendations
 
 ---
 
-# Release 0.9.6
+# Roadmap Principles
 
-## App-Wide UI Consistency
+- Finish before expanding.
+- Build reusable solutions.
+- Every visible feature must work.
+- Keep releases small and testable.
+- Commit after completed milestones.
+- Update documentation after every milestone.
 
-Completed the application-wide visual consistency pass and verified the primary user interface experience.
-
-### Completed
-
-#### Home
-
-- Home pull-to-refresh
-- Home refresh integration with Now Playing
-- Home refresh support for CMS-driven content
-- Existing Home layout preserved
-
-#### More
-
-- More pull-to-refresh
-- More refresh integration with Now Playing
-- More screen typography migrated to `AppText`
-- Existing More navigation and utility links preserved
-
-#### Stories
-
-- Stories screen heading migrated to `AppText`
-- Existing Stories pull-to-refresh preserved
-- Stories interface typography verified
-
-#### Story Detail
-
-- Story Hero typography migrated to `AppText`
-- Story Body end-state typography migrated to `AppText`
-- Story Footer typography migrated to `AppText`
-- Continue Reading heading migrated to `AppText`
-- Continue Reading Card typography migrated to `AppText`
-- Existing article HTML typography preserved
-- Existing Story navigation and sharing behaviour preserved
-
-#### Application-Wide Typography
-
-- Completed the remaining application-level native `Text` migration.
-- Confirmed interface typography is routed through the shared `AppText` system.
-- Preserved Inter and Lora font usage.
-- Verified the repository contains no remaining unnecessary direct native `Text` usage under `src/`.
-
-#### Existing Components Verified
-
-The following components were audited and confirmed to already use the shared typography system correctly:
-
-- LiveHero
-- Mini Player
-- Banner Carousel
-- Bottom Navigation
-- Latest Story
-- Latest Stories
-- Stories Header
-- Stories Feed
-- Story Card
-- Section Header
-
-### Changed
-
-- Standardised application interface typography through `AppText`.
-- Added pull-to-refresh to Home.
-- Added pull-to-refresh to More.
-- Preserved existing Stories refresh behaviour.
-- Preserved existing playback architecture.
-- Preserved existing CMS and API architecture.
-- Preserved existing Firebase implementation.
-- Preserved existing navigation architecture.
-
-### Fixed
-
-- Remaining inconsistent native-font usage across the application interface.
-- Typography inconsistencies in Story Detail supporting elements.
-- Typography inconsistencies in Continue Reading.
-- Typography inconsistencies in Story Hero.
-- Typography inconsistencies in Story Footer.
-- Typography inconsistencies in the Story Body end state.
-- Missing Home pull-to-refresh behaviour.
-- Missing More pull-to-refresh behaviour.
-
-### Technical
-
-- Performed a repository-wide `.tsx` audit for direct React Native `Text` usage.
-- Confirmed the only remaining direct native `Text` implementation is the intentional wrapper inside `AppText.tsx`.
-- Kept networking and playback services unchanged.
-- Kept Firebase notification functionality unchanged.
-- Kept the existing Stories data architecture unchanged.
-
-### Verification
-
-- Home screen verified.
-- More screen verified.
-- Stories screen verified.
-- Story Detail verified.
-- Home pull-to-refresh verified.
-- More pull-to-refresh verified.
-- Existing Stories pull-to-refresh verified.
-- Application-wide typography visually verified.
-- Main player typography verified.
-- Mini Player typography verified.
-- Banner presentation typography verified.
-- Bottom navigation typography verified.
-
-### Git Milestone
-
-Release 0.9.6 – App-Wide UI Consistency
-
-### Status
-
-✅ Completed
-
----
-
-# Release Philosophy
-
-Every release must satisfy the following principles.
-
-- Deliver a clearly defined implementation milestone.
-- Improve architecture before adding unnecessary complexity.
-- Remain backwards compatible whenever practical.
-- Test completed functionality before declaring it complete.
-- End each formal milestone with a Git commit.
-- Update documentation immediately after the milestone.
-- Do not mark unfinished work as complete.
-- Preserve the client's existing operational workflows wherever practical.
-
----
-
-# Current Development Sequence
-
-## Release 0.9.7
-
-### Network & Playback Verification
-
-The next development milestone focuses on verifying network-dependent functionality and the existing playback architecture under stable network conditions.
-
-Planned verification includes:
-
-- Stories loading
-- Story pagination
-- Banner loading
-- Now Playing metadata
-- Live radio streaming
-- Buffering behaviour
-- Playback recovery
-- Background playback
-- Lock-screen behaviour
-- Resume after background
-
-No unnecessary networking or playback changes will be introduced until the existing functionality has been tested under a reliable network connection.
-
----
-
-# Historical Record
-
-The Releases document is a permanent historical record.
-
-Completed releases are not removed or rewritten.
-
-Development checkpoints may be documented when a substantial implementation boundary has been committed while follow-up work remains active.
-
-Future work belongs exclusively in **Roadmap.md**.
+**This document is the authoritative source for future development.**
