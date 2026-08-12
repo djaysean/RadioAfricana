@@ -10,6 +10,12 @@ import {
   onTokenRefresh,
 } from '@react-native-firebase/messaging';
 
+import notifee, {
+  AndroidImportance,
+} from '@notifee/react-native';
+
+const FOREGROUND_CHANNEL_ID = 'radio-africana-foreground';
+
 async function requestNotificationPermission(): Promise<boolean> {
   if (
     Platform.OS !== 'android' ||
@@ -27,6 +33,18 @@ async function requestNotificationPermission(): Promise<boolean> {
     result ===
     PermissionsAndroid.RESULTS.GRANTED
   );
+}
+
+async function createForegroundChannel(): Promise<void> {
+  if (Platform.OS !== 'android') {
+    return;
+  }
+
+  await notifee.createChannel({
+    id: FOREGROUND_CHANNEL_ID,
+    name: 'Radio Africana',
+    importance: AndroidImportance.DEFAULT,
+  });
 }
 
 export async function initializeNotifications(): Promise<
@@ -61,6 +79,8 @@ export async function initializeNotifications(): Promise<
     );
   }
 
+  await createForegroundChannel();
+
   const unsubscribeTokenRefresh =
     onTokenRefresh(
       messaging,
@@ -80,6 +100,25 @@ export async function initializeNotifications(): Promise<
           'Radio Africana foreground notification:',
           remoteMessage,
         );
+
+        const title =
+          remoteMessage.notification?.title ??
+          'Radio Africana';
+
+        const body =
+          remoteMessage.notification?.body ??
+          'You have a new notification.';
+
+        await notifee.displayNotification({
+          title,
+          body,
+          android: {
+            channelId: FOREGROUND_CHANNEL_ID,
+            pressAction: {
+              id: 'default',
+            },
+          },
+        });
       },
     );
 

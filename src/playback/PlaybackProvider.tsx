@@ -16,6 +16,7 @@ export default function PlaybackProvider({
   children,
 }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [playerKey, setPlayerKey] = useState(0);
   const [nowPlaying, setNowPlaying] = useState({
     artist: '',
     title: 'Radio Africana',
@@ -48,6 +49,7 @@ export default function PlaybackProvider({
   }, []);
 
   const play = () => {
+    setPlayerKey(current => current + 1);
     setIsPlaying(true);
   };
 
@@ -56,7 +58,13 @@ export default function PlaybackProvider({
   };
 
   const toggle = () => {
-    setIsPlaying(current => !current);
+    setIsPlaying(current => {
+      if (!current) {
+        setPlayerKey(key => key + 1);
+      }
+
+      return !current;
+    });
   };
 
   const value = useMemo(
@@ -74,6 +82,7 @@ export default function PlaybackProvider({
       {children}
 
       <Video
+        key={playerKey}
         source={{
           uri: STREAM_URL,
           metadata: {
