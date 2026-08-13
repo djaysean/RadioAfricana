@@ -1,4 +1,4 @@
-import { Routes } from './routes';
+import {Routes} from './routes';
 
 export type RootStackParamList = {
   [Routes.HOME]: undefined;
@@ -6,10 +6,12 @@ export type RootStackParamList = {
   [Routes.STORIES]: undefined;
 
   [Routes.STORY_DETAIL]: {
-  slug: string;
-};
+    slug: string;
+  };
 
   [Routes.MORE]: undefined;
+
+  [Routes.SUBSCRIBE_TO_SHOWS]: undefined;
 };
 
 export type RootRouteName =

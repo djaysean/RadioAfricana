@@ -8,6 +8,8 @@ import {
   getToken,
   onMessage,
   onTokenRefresh,
+  subscribeToTopic,
+  unsubscribeFromTopic,
 } from '@react-native-firebase/messaging';
 
 import notifee, {
@@ -126,4 +128,52 @@ export async function initializeNotifications(): Promise<
     unsubscribeTokenRefresh();
     unsubscribeMessage();
   };
+}
+
+export async function subscribeToShow(
+  topic: string,
+): Promise<void> {
+  const trimmedTopic = topic.trim();
+
+  if (!trimmedTopic) {
+    throw new Error(
+      'Cannot subscribe to an empty Firebase topic.',
+    );
+  }
+
+  const messaging =
+    getMessaging();
+
+  await subscribeToTopic(
+    messaging,
+    trimmedTopic,
+  );
+
+  console.log(
+    `Radio Africana subscribed to show topic: ${trimmedTopic}`,
+  );
+}
+
+export async function unsubscribeFromShow(
+  topic: string,
+): Promise<void> {
+  const trimmedTopic = topic.trim();
+
+  if (!trimmedTopic) {
+    throw new Error(
+      'Cannot unsubscribe from an empty Firebase topic.',
+    );
+  }
+
+  const messaging =
+    getMessaging();
+
+  await unsubscribeFromTopic(
+    messaging,
+    trimmedTopic,
+  );
+
+  console.log(
+    `Radio Africana unsubscribed from show topic: ${trimmedTopic}`,
+  );
 }

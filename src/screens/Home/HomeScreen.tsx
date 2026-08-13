@@ -18,7 +18,6 @@ import BannerCarousel from '../../components/banners/BannerCarousel';
 import LiveHero from '../../components/LiveHero';
 import MiniPlayer from '../../components/MiniPlayer';
 import RecentlyPlayedSection from '../../components/common/RecentlyPlayedSection';
-import UpNextSection from '../../components/common/UpNextSection';
 import LatestStory from '../../components/stories/LatestStory';
 
 import Colors from '../../constants/colors';
@@ -135,10 +134,6 @@ export default function HomeScreen() {
           <LiveHero
             key={`live-hero-${refreshKey}`}
             picture={nowPlaying.picture}
-          />
-
-          <UpNextSection
-            key={`up-next-${refreshKey}`}
           />
 
           <RecentlyPlayedSection

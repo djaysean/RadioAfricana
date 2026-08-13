@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   Image,
@@ -11,7 +11,12 @@ import {
 import Colors from '../constants/colors';
 import AppText from './ui/AppText';
 
-import { usePlayback } from '../playback/PlaybackContext';
+import {usePlayback} from '../playback/PlaybackContext';
+
+import {
+  fetchUpNext,
+  UpNext,
+} from '../services/upNext';
 
 type MiniPlayerProps = {
   title: string;
@@ -24,11 +29,45 @@ export default function MiniPlayer({
   artist,
   picture,
 }: MiniPlayerProps) {
-  const { isPlaying, toggle } = usePlayback();
+  const {isPlaying, toggle} =
+    usePlayback();
 
-  const artwork: ImageSourcePropType = picture
-    ? { uri: picture }
-    : require('../../assets/images/default_artwork.png');
+  const [upNext, setUpNext] =
+    useState<UpNext | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUpNext = async () => {
+      try {
+        const data =
+          await fetchUpNext();
+
+        if (mounted) {
+          setUpNext(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadUpNext();
+
+    const interval = setInterval(
+      loadUpNext,
+      15000,
+    );
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const artwork: ImageSourcePropType =
+    picture
+      ? {uri: picture}
+      : require('../../assets/images/default_artwork.png');
 
   return (
     <View style={styles.container}>
@@ -56,10 +95,33 @@ export default function MiniPlayer({
 
         <AppText
           variant="label"
+          numberOfLines={1}
           style={styles.status}
         >
           {isPlaying ? '● LIVE' : '● READY'}
         </AppText>
+
+        <View style={styles.upNextRow}>
+          <AppText
+            variant="meta"
+            numberOfLines={1}
+            style={styles.upNextLabel}
+          >
+            Up Next:
+          </AppText>
+
+          <AppText
+            variant="meta"
+            numberOfLines={1}
+            style={styles.upNextTrack}
+          >
+            {upNext &&
+            upNext.artist &&
+            upNext.title
+              ? ` ${upNext.artist} - ${upNext.title}`
+              : ' Loading...'}
+          </AppText>
+        </View>
       </View>
 
       <TouchableOpacity
@@ -83,9 +145,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 10,
     backgroundColor: Colors.white,
-    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopWidth:
+      StyleSheet.hairlineWidth,
     borderTopColor: '#E5E5E5',
   },
 
@@ -98,6 +161,7 @@ const styles = StyleSheet.create({
 
   info: {
     flex: 1,
+    minWidth: 0,
     marginLeft: 12,
   },
 
@@ -107,12 +171,31 @@ const styles = StyleSheet.create({
 
   artist: {
     color: Colors.textSecondary,
-    marginTop: 2,
+    marginTop: 1,
   },
 
   status: {
-    marginTop: 4,
+    marginTop: 2,
     color: Colors.live,
+  },
+
+  upNextRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: 0,
+    marginTop: 1,
+  },
+
+  upNextLabel: {
+    color: Colors.gold,
+    fontWeight: '700',
+  },
+
+  upNextTrack: {
+    flex: 1,
+    minWidth: 0,
+    color: Colors.textSecondary,
+    fontStyle: 'italic',
   },
 
   button: {

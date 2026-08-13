@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 
 import {
+  Bell,
   ChevronRight,
   Globe,
   Info,
@@ -26,6 +27,14 @@ import {
   Shield,
   Users,
 } from 'lucide-react-native';
+
+import {
+  useNavigation,
+} from '@react-navigation/native';
+
+import {
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 
 import Colors from '../../constants/colors';
 
@@ -37,8 +46,17 @@ import {
   NowPlaying,
 } from '../../services/nowPlaying';
 
+import {Routes} from '../../navigation/routes';
+import {RootStackParamList} from '../../navigation/types';
+
 const appVersion =
   require('../../../package.json').version;
+
+type MoreNavigationProp =
+  NativeStackNavigationProp<
+    RootStackParamList,
+    'More'
+  >;
 
 type MenuItemProps = {
   icon: React.ReactNode;
@@ -80,6 +98,9 @@ function MenuItem({
 }
 
 export default function MoreScreen() {
+  const navigation =
+    useNavigation<MoreNavigationProp>();
+
   const [nowPlaying, setNowPlaying] =
     useState<NowPlaying>({
       artist: '',
@@ -194,11 +215,65 @@ export default function MoreScreen() {
           </View>
 
           <View style={styles.body}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate(
+                  Routes.SUBSCRIBE_TO_SHOWS,
+                )
+              }
+              style={({pressed}) => [
+                styles.subscribeCard,
+                pressed &&
+                  styles.subscribeCardPressed,
+              ]}
+            >
+              <View
+                style={styles.subscribeIcon}
+              >
+                <Bell
+                  size={24}
+                  strokeWidth={2}
+                  color={Colors.gold}
+                />
+              </View>
+
+              <View
+                style={styles.subscribeContent}
+              >
+                <AppText
+                  variant="body"
+                  style={styles.subscribeTitle}
+                >
+                  Subscribe to Shows
+                </AppText>
+
+                <AppText
+                  variant="body"
+                  style={
+                    styles.subscribeDescription
+                  }
+                >
+                  Get notified when your
+                  favourite programmes begin.
+                </AppText>
+              </View>
+
+              <View
+                style={styles.subscribeArrow}
+              >
+                <ChevronRight
+                  size={22}
+                  strokeWidth={2}
+                  color={Colors.text}
+                />
+              </View>
+            </Pressable>
+
             <AppText
               variant="label"
-              style={styles.sectionTitle}
+              style={styles.groupTitle}
             >
-              MORE
+              EXPLORE
             </AppText>
 
             <View style={styles.menu}>
@@ -249,6 +324,27 @@ export default function MoreScreen() {
                   )
                 }
               />
+            </View>
+
+            <AppText
+              variant="label"
+              style={styles.groupTitle}
+            >
+              APP
+            </AppText>
+
+            <View style={styles.menu}>
+              <MenuItem
+                icon={
+                  <Share2
+                    size={21}
+                    strokeWidth={2}
+                    color={Colors.text}
+                  />
+                }
+                label="Share App"
+                onPress={shareApp}
+              />
 
               <MenuItem
                 icon={
@@ -264,18 +360,6 @@ export default function MoreScreen() {
                     'https://radioafricana.com/privacy-policy/',
                   )
                 }
-              />
-
-              <MenuItem
-                icon={
-                  <Share2
-                    size={21}
-                    strokeWidth={2}
-                    color={Colors.text}
-                  />
-                }
-                label="Share App"
-                onPress={shareApp}
               />
 
               <MenuItem
@@ -332,8 +416,61 @@ const styles = StyleSheet.create({
     paddingTop: 24,
   },
 
-  sectionTitle: {
-    marginBottom: 12,
+  subscribeCard: {
+    minHeight: 118,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.white,
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+    borderWidth: 1,
+    borderColor: Colors.gold,
+  },
+
+  subscribeCardPressed: {
+    opacity: 0.72,
+  },
+
+  subscribeIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.background,
+    marginRight: 16,
+  },
+
+  subscribeContent: {
+    flex: 1,
+    paddingRight: 10,
+  },
+
+  subscribeTitle: {
+    color: Colors.text,
+    marginBottom: 5,
+    fontFamily: 'Inter-SemiBold',
+    fontSize: 20,
+    lineHeight: 26,
+  },
+
+  subscribeDescription: {
+    color: Colors.text,
+    opacity: 0.7,
+    fontFamily: 'Inter-Regular',
+    fontSize: 16,
+    lineHeight: 22,
+  },
+
+  subscribeArrow: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  groupTitle: {
+    marginTop: 28,
+    marginBottom: 10,
     color: Colors.text,
     letterSpacing: 1,
   },
