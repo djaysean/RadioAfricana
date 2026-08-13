@@ -8,8 +8,8 @@ import {
   View,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 import Colors from '../../constants/colors';
 import AppText from '../ui/AppText';
@@ -23,28 +23,32 @@ import {
   Story,
 } from '../../services/stories';
 
-import { Routes } from '../../navigation/routes';
-import { RootStackParamList } from '../../navigation/types';
+import {Routes} from '../../navigation/routes';
+import {RootStackParamList} from '../../navigation/types';
 
 type NavigationProp =
   NativeStackNavigationProp<RootStackParamList>;
 
 export default function LatestStory() {
-  const navigation = useNavigation<NavigationProp>();
+  const navigation =
+    useNavigation<NavigationProp>();
 
-  const [story, setStory] = useState<Story>({
-    id: '',
-    title: '',
-    excerpt: '',
-    category: '',
-    slug: '',
-    image: require('../../../assets/images/logo.png'),
-  });
+  const [story, setStory] =
+    useState<Story>({
+      id: '',
+      title: '',
+      excerpt: '',
+      category: '',
+      slug: '',
+      image: require('../../../assets/images/logo.png'),
+    });
 
   useEffect(() => {
     const loadStory = async () => {
       try {
-        const latestStory = await fetchLatestStory();
+        const latestStory =
+          await fetchLatestStory();
+
         setStory(latestStory);
       } catch (error) {
         console.error(error);
@@ -73,7 +77,7 @@ export default function LatestStory() {
   return (
     <View style={styles.container}>
       <AppText
-        variant="label"
+        variant="heading3"
         style={styles.heading}
       >
         LATEST STORY
@@ -88,12 +92,11 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 28,
     paddingHorizontal: 24,
-    marginBottom: 24,
+    marginBottom: 4,
   },
 
   heading: {
     color: Colors.text,
-    marginBottom: 18,
-    letterSpacing: 0.5,
+    marginBottom: 14,
   },
 });

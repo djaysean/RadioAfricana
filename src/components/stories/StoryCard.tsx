@@ -30,7 +30,7 @@ export default function StoryCard({
 }: Props) {
   const imageSource: ImageSourcePropType =
     typeof story.image === 'string'
-      ? ({ uri: story.image } as ImageURISource)
+      ? ({uri: story.image} as ImageURISource)
       : story.image;
 
   return (
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 22,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 0,
   },
 
   image: {
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
 
   content: {
     padding: 18,
+    paddingBottom: 16,
   },
 
   category: {
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
   },
 
   readMore: {
-    marginTop: 16,
+    marginTop: 14,
     color: Colors.gold,
   },
 });

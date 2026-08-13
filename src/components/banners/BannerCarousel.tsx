@@ -1,5 +1,7 @@
 import React, {
+  useCallback,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 
@@ -28,6 +30,7 @@ const {width} = Dimensions.get('window');
 
 const CARD_WIDTH = width - 48;
 const SPACING = 16;
+const AUTO_SCROLL_INTERVAL = 7000;
 
 type BannerState = {
   loading: boolean;
@@ -44,10 +47,30 @@ export default function BannerCarousel() {
       error: false,
     });
 
-  useEffect(() => {
-    let mounted = true;
+  const listRef =
+    useRef<FlatList<Banner>>(null);
 
-    const loadBanners = async () => {
+  const activeIndexRef =
+    useRef(0);
+
+  const userInteractingRef =
+    useRef(false);
+
+  const resumeTimerRef =
+    useRef<ReturnType<typeof setTimeout> | null>(
+      null,
+    );
+
+  const setCurrentIndex = useCallback(
+    (index: number) => {
+      activeIndexRef.current = index;
+      setActiveIndex(index);
+    },
+    [],
+  );
+
+  const loadBanners = useCallback(
+    async () => {
       setState({
         loading: true,
         error: false,
@@ -56,12 +79,36 @@ export default function BannerCarousel() {
       try {
         const data = await fetchBanners();
 
+        setBanners(data);
+        setCurrentIndex(0);
+
+        setState({
+          loading: false,
+          error: false,
+        });
+      } catch {
+        setState({
+          loading: false,
+          error: true,
+        });
+      }
+    },
+    [setCurrentIndex],
+  );
+
+  useEffect(() => {
+    let mounted = true;
+
+    const load = async () => {
+      try {
+        const data = await fetchBanners();
+
         if (!mounted) {
           return;
         }
 
         setBanners(data);
-        setActiveIndex(0);
+        setCurrentIndex(0);
 
         setState({
           loading: false,
@@ -79,10 +126,53 @@ export default function BannerCarousel() {
       }
     };
 
-    loadBanners();
+    load();
 
     return () => {
       mounted = false;
+    };
+  }, [setCurrentIndex]);
+
+  useEffect(() => {
+    if (banners.length <= 1) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (userInteractingRef.current) {
+        return;
+      }
+
+      const currentIndex =
+        activeIndexRef.current;
+
+      const nextIndex =
+        currentIndex >= banners.length - 1
+          ? 0
+          : currentIndex + 1;
+
+      listRef.current?.scrollToOffset({
+        offset:
+          nextIndex *
+          (CARD_WIDTH + SPACING),
+        animated: true,
+      });
+
+      setCurrentIndex(nextIndex);
+    }, AUTO_SCROLL_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [banners.length, setCurrentIndex]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) {
+        clearTimeout(
+          resumeTimerRef.current,
+        );
+      }
     };
   }, []);
 
@@ -94,31 +184,32 @@ export default function BannerCarousel() {
         (CARD_WIDTH + SPACING),
     );
 
-    setActiveIndex(index);
+    const safeIndex = Math.max(
+      0,
+      Math.min(
+        index,
+        banners.length - 1,
+      ),
+    );
+
+    setCurrentIndex(safeIndex);
+
+    userInteractingRef.current = false;
+
+    if (resumeTimerRef.current) {
+      clearTimeout(
+        resumeTimerRef.current,
+      );
+    }
+
+    resumeTimerRef.current =
+      setTimeout(() => {
+        userInteractingRef.current = false;
+      }, AUTO_SCROLL_INTERVAL);
   };
 
   const retry = async () => {
-    setState({
-      loading: true,
-      error: false,
-    });
-
-    try {
-      const data = await fetchBanners();
-
-      setBanners(data);
-      setActiveIndex(0);
-
-      setState({
-        loading: false,
-        error: false,
-      });
-    } catch {
-      setState({
-        loading: false,
-        error: true,
-      });
-    }
+    await loadBanners();
   };
 
   const openBannerLink = async (
@@ -138,13 +229,6 @@ export default function BannerCarousel() {
   if (state.loading) {
     return (
       <View style={styles.container}>
-        <AppText
-          variant="label"
-          style={styles.heading}
-        >
-          BANNERS
-        </AppText>
-
         <View style={styles.statusContainer}>
           <ActivityIndicator
             color={Colors.gold}
@@ -158,13 +242,6 @@ export default function BannerCarousel() {
   if (state.error) {
     return (
       <View style={styles.container}>
-        <AppText
-          variant="label"
-          style={styles.heading}
-        >
-          BANNERS
-        </AppText>
-
         <View style={styles.statusContainer}>
           <AppText
             variant="bodySmall"
@@ -199,14 +276,8 @@ export default function BannerCarousel() {
 
   return (
     <View style={styles.container}>
-      <AppText
-        variant="label"
-        style={styles.heading}
-      >
-        BANNERS
-      </AppText>
-
       <FlatList
+        ref={listRef}
         horizontal
         data={banners}
         keyExtractor={item =>
@@ -222,6 +293,15 @@ export default function BannerCarousel() {
         onMomentumScrollEnd={
           onMomentumScrollEnd
         }
+        onScrollBeginDrag={() => {
+          userInteractingRef.current = true;
+
+          if (resumeTimerRef.current) {
+            clearTimeout(
+              resumeTimerRef.current,
+            );
+          }
+        }}
         contentContainerStyle={
           styles.content
         }
@@ -255,14 +335,7 @@ export default function BannerCarousel() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
-  },
-
-  heading: {
-    paddingHorizontal: 24,
-    marginBottom: 12,
-    color: Colors.text,
-    letterSpacing: 0.5,
+    marginTop: 0,
   },
 
   content: {
@@ -272,7 +345,7 @@ const styles = StyleSheet.create({
 
   card: {
     width: CARD_WIDTH,
-    height: 200,
+    height: 190,
     marginRight: SPACING,
     borderRadius: 22,
     overflow: 'hidden',
@@ -281,13 +354,13 @@ const styles = StyleSheet.create({
   indicators: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 8,
+    marginTop: 10,
     marginBottom: 6,
   },
 
   dot: {
-    width: 8,
-    height: 8,
+    width: 7,
+    height: 7,
     borderRadius: 4,
     backgroundColor: '#D9D9D9',
     marginHorizontal: 4,

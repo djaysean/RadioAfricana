@@ -17,6 +17,8 @@ import {
 import BannerCarousel from '../../components/banners/BannerCarousel';
 import LiveHero from '../../components/LiveHero';
 import MiniPlayer from '../../components/MiniPlayer';
+import RecentlyPlayedSection from '../../components/common/RecentlyPlayedSection';
+import UpNextSection from '../../components/common/UpNextSection';
 import LatestStory from '../../components/stories/LatestStory';
 
 import Colors from '../../constants/colors';
@@ -126,15 +128,21 @@ export default function HomeScreen() {
             />
           </View>
 
+          <BannerCarousel
+            key={`banners-${refreshKey}`}
+          />
+
           <LiveHero
             key={`live-hero-${refreshKey}`}
-            title={nowPlaying.title}
-            artist={nowPlaying.artist}
             picture={nowPlaying.picture}
           />
 
-          <BannerCarousel
-            key={`banners-${refreshKey}`}
+          <UpNextSection
+            key={`up-next-${refreshKey}`}
+          />
+
+          <RecentlyPlayedSection
+            key={`recently-played-${refreshKey}`}
           />
 
           <LatestStory

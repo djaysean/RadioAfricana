@@ -4,153 +4,82 @@ import {
   Image,
   ImageSourcePropType,
   StyleSheet,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
 import Colors from '../constants/colors';
-import AppText from './ui/AppText';
-
-import { usePlayback } from '../playback';
 
 type LiveHeroProps = {
-  title: string;
-  artist: string;
   picture?: string | null;
 };
 
 export default function LiveHero({
-  title,
-  artist,
   picture,
 }: LiveHeroProps) {
-  const { play, isPlaying } = usePlayback();
-
   const artwork: ImageSourcePropType = picture
-    ? { uri: picture }
+    ? {uri: picture}
     : require('../../assets/images/default_artwork.png');
 
   return (
     <View style={styles.container}>
-      <AppText
-        variant="label"
-        style={styles.heading}
-      >
-        NOW PLAYING
-      </AppText>
-
       <Image
         source={artwork}
         resizeMode="cover"
-        style={styles.artwork}
+        blurRadius={2}
+        style={styles.backgroundArtwork}
       />
 
-      <AppText
-        variant="heading3"
-        numberOfLines={2}
-        style={styles.title}
-      >
-        {title}
-      </AppText>
-
-      <AppText
-        variant="meta"
-        numberOfLines={1}
-        style={styles.artist}
-      >
-        {artist}
-      </AppText>
-
-      <View style={styles.liveContainer}>
-        <View style={styles.liveDot} />
-
-        <AppText
-          variant="label"
-          style={styles.liveText}
-        >
-          {isPlaying ? 'LIVE' : 'READY'}
-        </AppText>
+      <View style={styles.content}>
+        <View style={styles.artworkFrame}>
+          <Image
+            source={artwork}
+            resizeMode="cover"
+            style={styles.artwork}
+          />
+        </View>
       </View>
-
-      <TouchableOpacity
-        activeOpacity={0.9}
-        style={styles.button}
-        onPress={play}
-      >
-        <AppText
-          variant="button"
-          style={styles.buttonText}
-        >
-          {isPlaying ? 'Playing Live' : 'Listen Live'}
-        </AppText>
-      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    alignItems: 'center',
+    width: '100%',
+    height: 250,
+    marginTop: 8,
+    overflow: 'hidden',
+    position: 'relative',
+    backgroundColor: Colors.background,
   },
 
-  heading: {
-    alignSelf: 'flex-start',
-    marginBottom: 12,
-    color: Colors.text,
-    letterSpacing: 0.5,
+  backgroundArtwork: {
+    ...StyleSheet.absoluteFill,
+    opacity: 0.72,
+    transform: [
+      {
+        scale: 1.08,
+      },
+    ],
+  },
+
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  artworkFrame: {
+    width: 176,
+    height: 176,
+    borderRadius: 22,
+    padding: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.82)',
   },
 
   artwork: {
-    width: 230,
-    height: 230,
-    borderRadius: 22,
-    backgroundColor: '#EFEFEF',
-  },
-
-  title: {
-    marginTop: 14,
-    color: Colors.text,
-    textAlign: 'center',
-    paddingHorizontal: 12,
-  },
-
-  artist: {
-    marginTop: 2,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-  },
-
-  liveContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-
-  liveDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: Colors.live,
-    marginRight: 8,
-  },
-
-  liveText: {
-    color: Colors.live,
-    letterSpacing: 0.5,
-  },
-
-  button: {
-    marginTop: 14,
     width: '100%',
-    backgroundColor: Colors.gold,
+    height: '100%',
     borderRadius: 20,
-    paddingVertical: 13,
-    alignItems: 'center',
-  },
-
-  buttonText: {
-    color: Colors.buttonText,
+    backgroundColor: Colors.divider,
   },
 });
