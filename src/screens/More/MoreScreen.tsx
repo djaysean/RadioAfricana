@@ -1,14 +1,9 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React from 'react';
 
 import {
   Image,
   Linking,
   Pressable,
-  RefreshControl,
   SafeAreaView,
   ScrollView,
   Share,
@@ -39,23 +34,20 @@ import {
 import Colors from '../../constants/colors';
 
 import AppText from '../../components/ui/AppText';
-import MiniPlayer from '../../components/MiniPlayer';
-
-import {
-  fetchNowPlaying,
-  NowPlaying,
-} from '../../services/nowPlaying';
 
 import {Routes} from '../../navigation/routes';
-import {RootStackParamList} from '../../navigation/types';
+
+import {
+  MoreStackParamList,
+} from '../../navigation/types';
 
 const appVersion =
   require('../../../package.json').version;
 
 type MoreNavigationProp =
   NativeStackNavigationProp<
-    RootStackParamList,
-    'More'
+    MoreStackParamList,
+    typeof Routes.MORE
   >;
 
 type MenuItemProps = {
@@ -74,7 +66,8 @@ function MenuItem({
       onPress={onPress}
       style={({pressed}) => [
         styles.menuItem,
-        pressed && styles.menuItemPressed,
+        pressed &&
+          styles.menuItemPressed,
       ]}
     >
       <View style={styles.menuIcon}>
@@ -101,91 +94,43 @@ export default function MoreScreen() {
   const navigation =
     useNavigation<MoreNavigationProp>();
 
-  const [nowPlaying, setNowPlaying] =
-    useState<NowPlaying>({
-      artist: '',
-      title: 'Loading...',
-      picture: null,
-    });
-
-  const [refreshing, setRefreshing] =
-    useState(false);
-
-  const loadNowPlaying = useCallback(
+  const openWebsite =
     async () => {
       try {
-        const data =
-          await fetchNowPlaying();
-
-        setNowPlaying(data);
+        await Linking.openURL(
+          'https://radioafricana.com/',
+        );
       } catch (error) {
-        console.log(error);
-      }
-    },
-    [],
-  );
-
-  useEffect(() => {
-    let mounted = true;
-
-    const load = async () => {
-      try {
-        const data =
-          await fetchNowPlaying();
-
-        if (mounted) {
-          setNowPlaying(data);
-        }
-      } catch (error) {
-        console.log(error);
+        console.error(
+          'Failed to open Radio Africana website:',
+          error,
+        );
       }
     };
 
-    load();
-
-    const interval = setInterval(
-      load,
-      5000,
-    );
-
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
-  const refreshMore = async () => {
-    if (refreshing) {
-      return;
-    }
-
-    setRefreshing(true);
-
-    await loadNowPlaying();
-
-    setRefreshing(false);
-  };
-
-  const openUrl = async (
-    url: string,
+  const openPage = (
+    slug: string,
   ) => {
-    try {
-      await Linking.openURL(url);
-    } catch (error) {
-      console.log(error);
-    }
+    navigation.navigate(
+      Routes.PAGE,
+      {slug},
+    );
   };
 
-  const shareApp = async () => {
-    try {
-      await Share.share({
-        message:
-          'Listen to Radio Africana — your home for African music, culture and stories.\n\nhttps://radioafricana.com/',
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const shareApp =
+    async () => {
+      try {
+        await Share.share({
+          message:
+            'Listen to Radio Africana — your home for African music, culture and stories.\n\nhttps://radioafricana.com/',
+        });
+      } catch (error) {
+        console.error(
+          'Failed to share Radio Africana:',
+          error,
+        );
+      }
+    };
 
   return (
     <>
@@ -194,21 +139,22 @@ export default function MoreScreen() {
         barStyle="dark-content"
       />
 
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+      >
         <ScrollView
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={refreshMore}
-              tintColor={Colors.gold}
-            />
+          contentContainerStyle={
+            styles.content
+          }
+          showsVerticalScrollIndicator={
+            false
           }
         >
           <View style={styles.header}>
             <Image
-              source={require('../../../assets/images/logo.png')}
+              source={require(
+                '../../../assets/images/logo.png',
+              )}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -242,7 +188,9 @@ export default function MoreScreen() {
               >
                 <AppText
                   variant="body"
-                  style={styles.subscribeTitle}
+                  style={
+                    styles.subscribeTitle
+                  }
                 >
                   Subscribe to Shows
                 </AppText>
@@ -254,7 +202,8 @@ export default function MoreScreen() {
                   }
                 >
                   Get notified when your
-                  favourite programmes begin.
+                  favourite programmes
+                  begin.
                 </AppText>
               </View>
 
@@ -287,9 +236,7 @@ export default function MoreScreen() {
                 }
                 label="Contact Us"
                 onPress={() =>
-                  openUrl(
-                    'https://radioafricana.com/contacts/',
-                  )
+                  openPage('contacts')
                 }
               />
 
@@ -303,8 +250,8 @@ export default function MoreScreen() {
                 }
                 label="Meet the Team"
                 onPress={() =>
-                  openUrl(
-                    'https://radioafricana.com/team-members/',
+                  openPage(
+                    'team-members',
                   )
                 }
               />
@@ -318,11 +265,7 @@ export default function MoreScreen() {
                   />
                 }
                 label="Visit Website"
-                onPress={() =>
-                  openUrl(
-                    'https://radioafricana.com/',
-                  )
-                }
+                onPress={openWebsite}
               />
             </View>
 
@@ -356,8 +299,8 @@ export default function MoreScreen() {
                 }
                 label="Privacy Policy"
                 onPress={() =>
-                  openUrl(
-                    'https://radioafricana.com/privacy-policy/',
+                  openPage(
+                    'privacy-policy',
                   )
                 }
               />
@@ -375,12 +318,6 @@ export default function MoreScreen() {
             </View>
           </View>
         </ScrollView>
-
-        <MiniPlayer
-          title={nowPlaying.title}
-          artist={nowPlaying.artist}
-          picture={nowPlaying.picture}
-        />
       </SafeAreaView>
     </>
   );
@@ -389,7 +326,8 @@ export default function MoreScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor:
+      Colors.background,
   },
 
   content: {
@@ -398,7 +336,8 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: Colors.white,
+    backgroundColor:
+      Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 18,
@@ -420,7 +359,8 @@ const styles = StyleSheet.create({
     minHeight: 118,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.white,
+    backgroundColor:
+      Colors.white,
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 18,
@@ -438,7 +378,8 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor:
+      Colors.background,
     marginRight: 16,
   },
 
@@ -450,7 +391,8 @@ const styles = StyleSheet.create({
   subscribeTitle: {
     color: Colors.text,
     marginBottom: 5,
-    fontFamily: 'Inter-SemiBold',
+    fontFamily:
+      'Inter-SemiBold',
     fontSize: 20,
     lineHeight: 26,
   },
@@ -458,7 +400,8 @@ const styles = StyleSheet.create({
   subscribeDescription: {
     color: Colors.text,
     opacity: 0.7,
-    fontFamily: 'Inter-Regular',
+    fontFamily:
+      'Inter-Regular',
     fontSize: 16,
     lineHeight: 22,
   },
@@ -476,7 +419,8 @@ const styles = StyleSheet.create({
   },
 
   menu: {
-    backgroundColor: Colors.white,
+    backgroundColor:
+      Colors.white,
     borderRadius: 18,
     overflow: 'hidden',
   },
@@ -486,8 +430,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 18,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.background,
+    borderBottomWidth:
+      StyleSheet.hairlineWidth,
+    borderBottomColor:
+      Colors.background,
   },
 
   menuItemPressed: {

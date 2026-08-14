@@ -8,10 +8,16 @@ import {
   View,
 } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {
+  useNavigation,
+} from '@react-navigation/native';
+
+import {
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 
 import Colors from '../../constants/colors';
+
 import AppText from '../ui/AppText';
 
 import StoryCard, {
@@ -24,10 +30,15 @@ import {
 } from '../../services/stories';
 
 import {Routes} from '../../navigation/routes';
-import {RootStackParamList} from '../../navigation/types';
+
+import {
+  StoryStackParamList,
+} from '../../navigation/types';
 
 type NavigationProp =
-  NativeStackNavigationProp<RootStackParamList>;
+  NativeStackNavigationProp<
+    StoryStackParamList
+  >;
 
 export default function LatestStory() {
   const navigation =
@@ -40,20 +51,23 @@ export default function LatestStory() {
       excerpt: '',
       category: '',
       slug: '',
-      image: require('../../../assets/images/logo.png'),
+      image: require(
+        '../../../assets/images/logo.png',
+      ),
     });
 
   useEffect(() => {
-    const loadStory = async () => {
-      try {
-        const latestStory =
-          await fetchLatestStory();
+    const loadStory =
+      async () => {
+        try {
+          const latestStory =
+            await fetchLatestStory();
 
-        setStory(latestStory);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+          setStory(latestStory);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     loadStory();
   }, []);
@@ -64,6 +78,7 @@ export default function LatestStory() {
     excerpt: story.excerpt,
     category: story.category,
     image: story.image,
+
     onPress: () => {
       navigation.navigate(
         Routes.STORY_DETAIL,
@@ -83,7 +98,9 @@ export default function LatestStory() {
         LATEST STORY
       </AppText>
 
-      <StoryCard story={storyCard} />
+      <StoryCard
+        story={storyCard}
+      />
     </View>
   );
 }

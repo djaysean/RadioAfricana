@@ -10,15 +10,7 @@ import {
 import Typography from '../../constants/typography';
 
 type TypographyVariant =
-  | 'display'
-  | 'heading1'
-  | 'heading2'
-  | 'heading3'
-  | 'body'
-  | 'bodySmall'
-  | 'label'
-  | 'meta'
-  | 'button';
+  keyof typeof Typography;
 
 type AppTextProps = TextProps & {
   variant?: TypographyVariant;

@@ -16,7 +16,8 @@ import notifee, {
   AndroidImportance,
 } from '@notifee/react-native';
 
-const FOREGROUND_CHANNEL_ID = 'radio-africana-foreground';
+const FOREGROUND_CHANNEL_ID =
+  'radio-africana-foreground';
 
 async function requestNotificationPermission(): Promise<boolean> {
   if (
@@ -56,10 +57,6 @@ export async function initializeNotifications(): Promise<
     await requestNotificationPermission();
 
   if (!permissionGranted) {
-    console.log(
-      'Radio Africana notifications permission denied.',
-    );
-
     return () => {};
   }
 
@@ -67,13 +64,7 @@ export async function initializeNotifications(): Promise<
     getMessaging();
 
   try {
-    const token =
-      await getToken(messaging);
-
-    console.log(
-      'Radio Africana FCM token:',
-      token,
-    );
+    await getToken(messaging);
   } catch (error) {
     console.error(
       'Failed to get Radio Africana FCM token:',
@@ -86,23 +77,13 @@ export async function initializeNotifications(): Promise<
   const unsubscribeTokenRefresh =
     onTokenRefresh(
       messaging,
-      (token: string) => {
-        console.log(
-          'Radio Africana FCM token refreshed:',
-          token,
-        );
-      },
+      (_token: string) => {},
     );
 
   const unsubscribeMessage =
     onMessage(
       messaging,
       async remoteMessage => {
-        console.log(
-          'Radio Africana foreground notification:',
-          remoteMessage,
-        );
-
         const title =
           remoteMessage.notification?.title ??
           'Radio Africana';
@@ -115,7 +96,8 @@ export async function initializeNotifications(): Promise<
           title,
           body,
           android: {
-            channelId: FOREGROUND_CHANNEL_ID,
+            channelId:
+              FOREGROUND_CHANNEL_ID,
             pressAction: {
               id: 'default',
             },
@@ -148,10 +130,6 @@ export async function subscribeToShow(
     messaging,
     trimmedTopic,
   );
-
-  console.log(
-    `Radio Africana subscribed to show topic: ${trimmedTopic}`,
-  );
 }
 
 export async function unsubscribeFromShow(
@@ -171,9 +149,5 @@ export async function unsubscribeFromShow(
   await unsubscribeFromTopic(
     messaging,
     trimmedTopic,
-  );
-
-  console.log(
-    `Radio Africana unsubscribed from show topic: ${trimmedTopic}`,
   );
 }

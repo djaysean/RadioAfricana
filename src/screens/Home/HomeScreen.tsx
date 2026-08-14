@@ -1,6 +1,4 @@
 import React, {
-  useCallback,
-  useEffect,
   useState,
 } from 'react';
 
@@ -16,24 +14,19 @@ import {
 
 import BannerCarousel from '../../components/banners/BannerCarousel';
 import LiveHero from '../../components/LiveHero';
-import MiniPlayer from '../../components/MiniPlayer';
 import RecentlyPlayedSection from '../../components/common/RecentlyPlayedSection';
 import LatestStory from '../../components/stories/LatestStory';
 
 import Colors from '../../constants/colors';
 
 import {
-  fetchNowPlaying,
-  NowPlaying,
-} from '../../services/nowPlaying';
+  usePlayback,
+} from '../../playback/PlaybackContext';
 
 export default function HomeScreen() {
-  const [nowPlaying, setNowPlaying] =
-    useState<NowPlaying>({
-      artist: '',
-      title: 'Loading...',
-      picture: null,
-    });
+  const {
+    nowPlaying,
+  } = usePlayback();
 
   const [refreshing, setRefreshing] =
     useState(false);
@@ -41,64 +34,20 @@ export default function HomeScreen() {
   const [refreshKey, setRefreshKey] =
     useState(0);
 
-  const loadNowPlaying = useCallback(
+  const refreshHome =
     async () => {
-      try {
-        const data =
-          await fetchNowPlaying();
-
-        setNowPlaying(data);
-      } catch (error) {
-        console.log(error);
+      if (refreshing) {
+        return;
       }
-    },
-    [],
-  );
 
-  useEffect(() => {
-    let mounted = true;
+      setRefreshing(true);
 
-    const load = async () => {
-      try {
-        const data =
-          await fetchNowPlaying();
+      setRefreshKey(
+        current => current + 1,
+      );
 
-        if (mounted) {
-          setNowPlaying(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      setRefreshing(false);
     };
-
-    load();
-
-    const interval = setInterval(
-      load,
-      5000,
-    );
-
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
-  const refreshHome = async () => {
-    if (refreshing) {
-      return;
-    }
-
-    setRefreshing(true);
-
-    setRefreshKey(
-      current => current + 1,
-    );
-
-    await loadNowPlaying();
-
-    setRefreshing(false);
-  };
 
   return (
     <>
@@ -107,10 +56,16 @@ export default function HomeScreen() {
         barStyle="dark-content"
       />
 
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={styles.container}
+      >
         <ScrollView
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}
+          contentContainerStyle={
+            styles.content
+          }
+          showsVerticalScrollIndicator={
+            false
+          }
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -121,7 +76,9 @@ export default function HomeScreen() {
         >
           <View style={styles.header}>
             <Image
-              source={require('../../../assets/images/logo.png')}
+              source={require(
+                '../../../assets/images/logo.png',
+              )}
               style={styles.logo}
               resizeMode="contain"
             />
@@ -144,12 +101,6 @@ export default function HomeScreen() {
             key={`latest-story-${refreshKey}`}
           />
         </ScrollView>
-
-        <MiniPlayer
-          title={nowPlaying.title}
-          artist={nowPlaying.artist}
-          picture={nowPlaying.picture}
-        />
       </SafeAreaView>
     </>
   );
@@ -158,7 +109,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor:
+      Colors.background,
   },
 
   content: {
@@ -166,7 +118,8 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    backgroundColor: Colors.white,
+    backgroundColor:
+      Colors.white,
     alignItems: 'center',
     justifyContent: 'center',
     paddingTop: 18,

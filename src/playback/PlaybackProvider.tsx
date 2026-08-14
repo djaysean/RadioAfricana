@@ -1,12 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import {StyleSheet} from 'react-native';
+
 import Video from 'react-native-video';
 
 import PlaybackContext from './PlaybackContext';
 
-import { fetchNowPlaying } from '../services/nowPlaying';
+import {
+  fetchNowPlaying,
+} from '../services/nowPlaying';
 
-const STREAM_URL = 'https://radioafricana.radioca.st/stream';
+const STREAM_URL =
+  'https://radioafricana.radioca.st/stream';
 
 type Props = {
   children: React.ReactNode;
@@ -15,32 +24,46 @@ type Props = {
 export default function PlaybackProvider({
   children,
 }: Props) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [playerKey, setPlayerKey] = useState(0);
-  const [nowPlaying, setNowPlaying] = useState({
-    artist: '',
-    title: 'Radio Africana',
-    picture: null as string | null,
-  });
+  const [isPlaying, setIsPlaying] =
+    useState(false);
+
+  const [playerKey, setPlayerKey] =
+    useState(0);
+
+  const [nowPlaying, setNowPlaying] =
+    useState({
+      artist: '',
+      title: 'Radio Africana',
+      picture: null as string | null,
+    });
 
   useEffect(() => {
     let mounted = true;
 
-    const loadNowPlaying = async () => {
-      try {
-        const data = await fetchNowPlaying();
+    const loadNowPlaying =
+      async () => {
+        try {
+          const data =
+            await fetchNowPlaying();
 
-        if (mounted) {
-          setNowPlaying(data);
+          if (mounted) {
+            setNowPlaying(data);
+          }
+        } catch (error) {
+          console.error(
+            'Now Playing Error:',
+            error,
+          );
         }
-      } catch (error) {
-        console.log('Now Playing Error:', error);
-      }
-    };
+      };
 
     loadNowPlaying();
 
-    const interval = setInterval(loadNowPlaying, 5000);
+    const interval =
+      setInterval(
+        loadNowPlaying,
+        5000,
+      );
 
     return () => {
       mounted = false;
@@ -49,7 +72,11 @@ export default function PlaybackProvider({
   }, []);
 
   const play = () => {
-    setPlayerKey(current => current + 1);
+    setPlayerKey(
+      current =>
+        current + 1,
+    );
+
     setIsPlaying(true);
   };
 
@@ -60,7 +87,9 @@ export default function PlaybackProvider({
   const toggle = () => {
     setIsPlaying(current => {
       if (!current) {
-        setPlayerKey(key => key + 1);
+        setPlayerKey(
+          key => key + 1,
+        );
       }
 
       return !current;
@@ -70,29 +99,48 @@ export default function PlaybackProvider({
   const value = useMemo(
     () => ({
       isPlaying,
+      nowPlaying,
       play,
       pause,
       toggle,
     }),
-    [isPlaying],
+    [
+      isPlaying,
+      nowPlaying,
+    ],
   );
 
   return (
-    <PlaybackContext.Provider value={value}>
+    <PlaybackContext.Provider
+      value={value}
+    >
       {children}
 
       <Video
         key={playerKey}
         source={{
           uri: STREAM_URL,
+
           metadata: {
-            title: nowPlaying.title || 'Radio Africana',
-            subtitle: 'Radio Africana',
-            artist: nowPlaying.artist || 'Radio Africana',
-            description: nowPlaying.artist
-              ? `${nowPlaying.artist} • Radio Africana`
-              : 'Live Radio',
-            imageUri: nowPlaying.picture ?? undefined,
+            title:
+              nowPlaying.title ||
+              'Radio Africana',
+
+            subtitle:
+              'Radio Africana',
+
+            artist:
+              nowPlaying.artist ||
+              'Radio Africana',
+
+            description:
+              nowPlaying.artist
+                ? `${nowPlaying.artist} • Radio Africana`
+                : 'Live Radio',
+
+            imageUri:
+              nowPlaying.picture ??
+              undefined,
           },
         }}
         paused={!isPlaying}
@@ -101,18 +149,12 @@ export default function PlaybackProvider({
         showNotificationControls
         ignoreSilentSwitch="ignore"
         onError={error => {
-          console.log('Playback Error:', error);
-          setIsPlaying(false);
-        }}
-        onLoad={() => {
-          console.log('Radio stream connected');
-        }}
-        onBuffer={({ isBuffering }) => {
-          console.log(
-            isBuffering
-              ? 'Radio buffering...'
-              : 'Radio buffer complete',
+          console.error(
+            'Playback Error:',
+            error,
           );
+
+          setIsPlaying(false);
         }}
         style={styles.hiddenPlayer}
       />
@@ -120,9 +162,10 @@ export default function PlaybackProvider({
   );
 }
 
-const styles = StyleSheet.create({
-  hiddenPlayer: {
-    width: 0,
-    height: 0,
-  },
-});
+const styles =
+  StyleSheet.create({
+    hiddenPlayer: {
+      width: 0,
+      height: 0,
+    },
+  });

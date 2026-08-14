@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import {
   Image,
@@ -11,52 +11,10 @@ import {
 import AppText from '../../components/ui/AppText';
 import StoriesHeader from '../../components/stories/StoriesHeader';
 import StoriesFeed from '../../components/stories/StoriesFeed';
-import MiniPlayer from '../../components/MiniPlayer';
 
 import Colors from '../../constants/colors';
 
-import {
-  fetchNowPlaying,
-  NowPlaying,
-} from '../../services/nowPlaying';
-
 export default function StoriesScreen() {
-  const [nowPlaying, setNowPlaying] =
-    useState<NowPlaying>({
-      artist: '',
-      title: 'Loading...',
-      picture: null,
-    });
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadNowPlaying = async () => {
-      try {
-        const data =
-          await fetchNowPlaying();
-
-        if (mounted) {
-          setNowPlaying(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    loadNowPlaying();
-
-    const interval = setInterval(
-      loadNowPlaying,
-      5000,
-    );
-
-    return () => {
-      mounted = false;
-      clearInterval(interval);
-    };
-  }, []);
-
   return (
     <>
       <StatusBar
@@ -87,12 +45,6 @@ export default function StoriesScreen() {
             <StoriesFeed />
           </View>
         </View>
-
-        <MiniPlayer
-          title={nowPlaying.title}
-          artist={nowPlaying.artist}
-          picture={nowPlaying.picture}
-        />
       </SafeAreaView>
     </>
   );

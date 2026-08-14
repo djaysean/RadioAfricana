@@ -4,7 +4,5 @@ export const Routes = {
   STORY_DETAIL: 'StoryDetail',
   MORE: 'More',
   SUBSCRIBE_TO_SHOWS: 'SubscribeToShows',
+  PAGE: 'Page',
 } as const;
-
-export type RouteName =
-  (typeof Routes)[keyof typeof Routes];

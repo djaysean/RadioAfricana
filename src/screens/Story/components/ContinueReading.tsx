@@ -13,6 +13,10 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 
+import {
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
+
 import Colors from '../../../constants/colors';
 import AppText from '../../../components/ui/AppText';
 
@@ -21,9 +25,18 @@ import {
   Story,
 } from '../../../services/stories';
 
-import { Routes } from '../../../navigation/routes';
+import {Routes} from '../../../navigation/routes';
+
+import {
+  StoryStackParamList,
+} from '../../../navigation/types';
 
 import ContinueReadingCard from './ContinueReadingCard';
+
+type NavigationProp =
+  NativeStackNavigationProp<
+    StoryStackParamList
+  >;
 
 type Props = {
   currentSlug: string;
@@ -32,7 +45,8 @@ type Props = {
 export default function ContinueReading({
   currentSlug,
 }: Props) {
-  const navigation = useNavigation<any>();
+  const navigation =
+    useNavigation<NavigationProp>();
 
   const [stories, setStories] =
     useState<Story[]>([]);
@@ -46,12 +60,14 @@ export default function ContinueReading({
         const latest =
           await fetchLatestStories();
 
-        const filtered = latest
-          .filter(
-            story =>
-              story.slug !== currentSlug,
-          )
-          .slice(0, 3);
+        const filtered =
+          latest
+            .filter(
+              story =>
+                story.slug !==
+                currentSlug,
+            )
+            .slice(0, 3);
 
         setStories(filtered);
       } catch (error) {

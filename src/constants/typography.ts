@@ -1,9 +1,6 @@
-import { TextStyle } from 'react-native';
+import {TextStyle} from 'react-native';
 
-export const Typography: Record<
-  string,
-  TextStyle
-> = {
+export const Typography = {
   display: {
     fontFamily: 'Lora-Bold',
     fontSize: 38,
@@ -56,6 +53,9 @@ export const Typography: Record<
     fontFamily: 'Inter-SemiBold',
     fontSize: 16,
   },
-};
+} satisfies Record<
+  string,
+  TextStyle
+>;
 
 export default Typography;

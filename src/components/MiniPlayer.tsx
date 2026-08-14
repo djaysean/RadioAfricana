@@ -1,4 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   Image,
@@ -11,26 +14,21 @@ import {
 import Colors from '../constants/colors';
 import AppText from './ui/AppText';
 
-import {usePlayback} from '../playback/PlaybackContext';
+import {
+  usePlayback,
+} from '../playback/PlaybackContext';
 
 import {
   fetchUpNext,
   UpNext,
 } from '../services/upNext';
 
-type MiniPlayerProps = {
-  title: string;
-  artist: string;
-  picture?: string | null;
-};
-
-export default function MiniPlayer({
-  title,
-  artist,
-  picture,
-}: MiniPlayerProps) {
-  const {isPlaying, toggle} =
-    usePlayback();
+export default function MiniPlayer() {
+  const {
+    isPlaying,
+    nowPlaying,
+    toggle,
+  } = usePlayback();
 
   const [upNext, setUpNext] =
     useState<UpNext | null>(null);
@@ -47,7 +45,10 @@ export default function MiniPlayer({
           setUpNext(data);
         }
       } catch (error) {
-        console.log(error);
+        console.error(
+          'Failed to load Up Next:',
+          error,
+        );
       }
     };
 
@@ -65,8 +66,8 @@ export default function MiniPlayer({
   }, []);
 
   const artwork: ImageSourcePropType =
-    picture
-      ? {uri: picture}
+    nowPlaying.picture
+      ? {uri: nowPlaying.picture}
       : require('../../assets/images/default_artwork.png');
 
   return (
@@ -82,7 +83,7 @@ export default function MiniPlayer({
           numberOfLines={1}
           style={styles.title}
         >
-          {title}
+          {nowPlaying.title}
         </AppText>
 
         <AppText
@@ -90,7 +91,7 @@ export default function MiniPlayer({
           numberOfLines={1}
           style={styles.artist}
         >
-          {artist}
+          {nowPlaying.artist}
         </AppText>
 
         <AppText

@@ -1,4 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   ActivityIndicator,
@@ -34,7 +37,10 @@ export default function UpNextSection() {
           setTrack(data);
         }
       } catch (error) {
-        console.log(error);
+        console.error(
+          'Failed to load Up Next:',
+          error,
+        );
       } finally {
         if (mounted) {
           setLoading(false);

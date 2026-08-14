@@ -26,10 +26,10 @@ export default function StoryFooter({
         message: `I'm reading "${title}" on Radio Africana.\n\n${url}\n\nDiscover more stories on Radio Africana.`,
       });
     } catch (error) {
-      console.warn(
-        'Share failed',
-        error,
-      );
+      console.error(
+  'Share failed:',
+  error,
+);
     }
   }
 

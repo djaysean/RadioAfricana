@@ -1,4 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 import {
   ActivityIndicator,
@@ -45,7 +48,10 @@ export default function RecentlyPlayedSection() {
           setTracks(data.slice(0, 5));
         }
       } catch (error) {
-        console.log(error);
+        console.error(
+          'Failed to load recently played tracks:',
+          error,
+        );
       } finally {
         if (mounted) {
           setLoading(false);
@@ -135,9 +141,7 @@ export default function RecentlyPlayedSection() {
           }
         />
       ) : (
-        <View style={styles.status}>
-          <View style={styles.emptyContent} />
-        </View>
+        <View style={styles.status} />
       )}
     </View>
   );
@@ -184,9 +188,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-
-  emptyContent: {
-    minHeight: 1,
   },
 });

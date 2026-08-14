@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 
 import AppText from '../ui/AppText';
+import Colors from '../../constants/colors';
 
 interface SectionHeaderProps {
   title: string;
@@ -45,11 +46,11 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color: '#111111',
+    color: Colors.text,
   },
 
   subtitle: {
     marginTop: 6,
-    color: '#666666',
+    color: Colors.textSecondary,
   },
 });

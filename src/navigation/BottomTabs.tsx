@@ -1,24 +1,60 @@
 import React from 'react';
 
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
+
+import {
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+
 import {
   House,
   Menu,
   Newspaper,
 } from 'lucide-react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+import {
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
 import Colors from '../constants/colors';
 
 import HomeScreen from '../screens/Home/HomeScreen';
 import MoreScreen from '../screens/More/MoreScreen';
 import StoriesScreen from '../screens/Stories/StoriesScreen';
+import StoryScreen from '../screens/Story/StoryScreen';
+import SubscribeToShowsScreen from '../screens/Subscribe/SubscribeToShowsScreen';
+import PageScreen from '../screens/Page/PageScreen';
 
 import {Routes} from './routes';
 
-const Tab = createBottomTabNavigator();
+import {
+  HomeStackParamList,
+  MoreStackParamList,
+  StoriesStackParamList,
+} from './types';
 
-const TAB_BAR_HEIGHT = 68;
+const Tab =
+  createBottomTabNavigator();
+
+const HomeStack =
+  createNativeStackNavigator<
+    HomeStackParamList
+  >();
+
+const StoriesStack =
+  createNativeStackNavigator<
+    StoriesStackParamList
+  >();
+
+const MoreStack =
+  createNativeStackNavigator<
+    MoreStackParamList
+  >();
+
+export const TAB_BAR_HEIGHT = 68;
+
 const TAB_BAR_TOP_PADDING = 8;
 const TAB_BAR_BOTTOM_PADDING = 8;
 
@@ -62,51 +98,157 @@ function getTabIcon(
   }
 }
 
-export default function BottomTabs() {
-  const insets = useSafeAreaInsets();
+function HomeStackNavigator() {
+  return (
+    <HomeStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation:
+          'slide_from_right',
+      }}
+    >
+      <HomeStack.Screen
+        name={Routes.HOME}
+        component={HomeScreen}
+      />
 
-  const bottomInset = insets.bottom;
+      <HomeStack.Screen
+        name={
+          Routes.STORY_DETAIL
+        }
+        component={StoryScreen}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+function StoriesStackNavigator() {
+  return (
+    <StoriesStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation:
+          'slide_from_right',
+      }}
+    >
+      <StoriesStack.Screen
+        name={Routes.STORIES}
+        component={StoriesScreen}
+      />
+
+      <StoriesStack.Screen
+        name={
+          Routes.STORY_DETAIL
+        }
+        component={StoryScreen}
+      />
+    </StoriesStack.Navigator>
+  );
+}
+
+function MoreStackNavigator() {
+  return (
+    <MoreStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        animation:
+          'slide_from_right',
+      }}
+    >
+      <MoreStack.Screen
+        name={Routes.MORE}
+        component={MoreScreen}
+      />
+
+      <MoreStack.Screen
+        name={Routes.SUBSCRIBE_TO_SHOWS}
+        component={
+          SubscribeToShowsScreen
+        }
+      />
+
+      <MoreStack.Screen
+        name={Routes.PAGE}
+        component={PageScreen}
+      />
+    </MoreStack.Navigator>
+  );
+}
+
+export default function BottomTabs() {
+  const insets =
+    useSafeAreaInsets();
+
+  const bottomInset =
+    insets.bottom;
 
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
         headerShown: false,
 
-        tabBarActiveTintColor: Colors.gold,
-        tabBarInactiveTintColor: '#8C8C8C',
+        tabBarActiveTintColor:
+          Colors.gold,
+
+        tabBarInactiveTintColor:
+          '#8C8C8C',
 
         tabBarStyle: {
-          height: TAB_BAR_HEIGHT + bottomInset,
-          paddingTop: TAB_BAR_TOP_PADDING,
-          paddingBottom: TAB_BAR_BOTTOM_PADDING + bottomInset,
-          backgroundColor: Colors.white,
+          height:
+            TAB_BAR_HEIGHT +
+            bottomInset,
+
+          paddingTop:
+            TAB_BAR_TOP_PADDING,
+
+          paddingBottom:
+            TAB_BAR_BOTTOM_PADDING +
+            bottomInset,
+
+          backgroundColor:
+            Colors.white,
+
           borderTopWidth: 1,
-          borderTopColor: '#ECECEC',
+
+          borderTopColor:
+            '#ECECEC',
         },
 
         tabBarLabelStyle: {
-          fontFamily: 'Inter-SemiBold',
+          fontFamily:
+            'Inter-SemiBold',
+
           fontSize: 11,
+
           marginBottom: 2,
         },
 
         tabBarIcon: ({color}) =>
-          getTabIcon(route.name, color),
+          getTabIcon(
+            route.name,
+            color,
+          ),
       })}
     >
       <Tab.Screen
         name={Routes.HOME}
-        component={HomeScreen}
+        component={
+          HomeStackNavigator
+        }
       />
 
       <Tab.Screen
         name={Routes.STORIES}
-        component={StoriesScreen}
+        component={
+          StoriesStackNavigator
+        }
       />
 
       <Tab.Screen
         name={Routes.MORE}
-        component={MoreScreen}
+        component={
+          MoreStackNavigator
+        }
       />
     </Tab.Navigator>
   );

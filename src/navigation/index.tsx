@@ -1,48 +1,77 @@
 import React from 'react';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {
+  NavigationContainer,
+} from '@react-navigation/native';
 
-import BottomTabs from './BottomTabs';
+import {
+  StyleSheet,
+  View,
+} from 'react-native';
 
-import StoryScreen from '../screens/Story/StoryScreen';
-import SubscribeToShowsScreen from '../screens/Subscribe/SubscribeToShowsScreen';
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 
-import {PlaybackProvider} from '../playback';
+import BottomTabs, {
+  TAB_BAR_HEIGHT,
+} from './BottomTabs';
 
-import {Routes} from './routes';
-import {RootStackParamList} from './types';
+import MiniPlayer from '../components/MiniPlayer';
 
-const Stack =
-  createNativeStackNavigator<RootStackParamList>();
+import {
+  PlaybackProvider,
+} from '../playback';
+
+function AppShell() {
+  const insets =
+    useSafeAreaInsets();
+
+  const bottomOffset =
+    TAB_BAR_HEIGHT +
+    insets.bottom;
+
+  return (
+    <View style={styles.container}>
+      <NavigationContainer>
+        <BottomTabs />
+      </NavigationContainer>
+
+      <View
+        style={[
+          styles.miniPlayer,
+          {
+            bottom: bottomOffset,
+          },
+        ]}
+      >
+        <MiniPlayer />
+      </View>
+    </View>
+  );
+}
 
 export default function AppNavigator() {
   return (
     <PlaybackProvider>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName={Routes.HOME}
-          screenOptions={{
-            headerShown: false,
-            animation: 'slide_from_right',
-          }}
-        >
-          <Stack.Screen
-            name={Routes.HOME}
-            component={BottomTabs}
-          />
-
-          <Stack.Screen
-            name={Routes.STORY_DETAIL}
-            component={StoryScreen}
-          />
-
-          <Stack.Screen
-            name={Routes.SUBSCRIBE_TO_SHOWS}
-            component={SubscribeToShowsScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <AppShell />
+      </SafeAreaProvider>
     </PlaybackProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  miniPlayer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    zIndex: 100,
+    elevation: 100,
+  },
+});

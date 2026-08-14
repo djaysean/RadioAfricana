@@ -8,7 +8,14 @@ import {
   View,
 } from 'react-native';
 
-import {useNavigation} from '@react-navigation/native';
+import {
+  useNavigation,
+} from '@react-navigation/native';
+
+import {
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
+
 import {
   ArrowLeft,
   Share2,
@@ -16,6 +23,15 @@ import {
 
 import Colors from '../../../constants/colors';
 import AppText from '../../../components/ui/AppText';
+
+import {
+  StoryStackParamList,
+} from '../../../navigation/types';
+
+type NavigationProp =
+  NativeStackNavigationProp<
+    StoryStackParamList
+  >;
 
 type Props = {
   image: string;
@@ -33,7 +49,7 @@ export default function StoryHero({
   url,
 }: Props) {
   const navigation =
-    useNavigation();
+    useNavigation<NavigationProp>();
 
   async function handleShare() {
     try {
@@ -42,10 +58,10 @@ export default function StoryHero({
         message: `I'm reading "${title}" on Radio Africana.\n\n${url}\n\nDiscover more stories on Radio Africana.`,
       });
     } catch (error) {
-      console.warn(
-        'Share failed',
-        error,
-      );
+      console.error(
+  'Share failed:',
+  error,
+);
     }
   }
 

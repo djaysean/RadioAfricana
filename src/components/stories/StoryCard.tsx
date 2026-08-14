@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Image,
   ImageSourcePropType,
-  ImageURISource,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -30,7 +29,7 @@ export default function StoryCard({
 }: Props) {
   const imageSource: ImageSourcePropType =
     typeof story.image === 'string'
-      ? ({uri: story.image} as ImageURISource)
+      ? {uri: story.image}
       : story.image;
 
   return (

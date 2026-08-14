@@ -7,18 +7,20 @@ import React, {
 
 import {
   ActivityIndicator,
-  Dimensions,
   FlatList,
   Linking,
   NativeScrollEvent,
   NativeSyntheticEvent,
   Pressable,
   StyleSheet,
+  useWindowDimensions,
   View,
 } from 'react-native';
 
 import BannerCard from './BannerCard';
+
 import Colors from '../../constants/colors';
+
 import AppText from '../ui/AppText';
 
 import {
@@ -26,11 +28,9 @@ import {
   fetchBanners,
 } from '../../services/banners';
 
-const {width} = Dimensions.get('window');
-
-const CARD_WIDTH = width - 48;
-const SPACING = 16;
-const AUTO_SCROLL_INTERVAL = 7000;
+const HORIZONTAL_PADDING = 24;
+const SPACING = 24;
+const AUTO_SCROLL_INTERVAL = 10000;
 
 type BannerState = {
   loading: boolean;
@@ -38,8 +38,24 @@ type BannerState = {
 };
 
 export default function BannerCarousel() {
-  const [banners, setBanners] = useState<Banner[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const {width} =
+    useWindowDimensions();
+
+  const cardWidth =
+    Math.max(
+      width -
+        HORIZONTAL_PADDING * 2,
+      0,
+    );
+
+  const snapInterval =
+    cardWidth + SPACING;
+
+  const [banners, setBanners] =
+    useState<Banner[]>([]);
+
+  const [activeIndex, setActiveIndex] =
+    useState(0);
 
   const [state, setState] =
     useState<BannerState>({
@@ -56,28 +72,24 @@ export default function BannerCarousel() {
   const userInteractingRef =
     useRef(false);
 
-  const resumeTimerRef =
-    useRef<ReturnType<typeof setTimeout> | null>(
-      null,
-    );
+  const setCurrentIndex =
+    useCallback((index: number) => {
+      activeIndexRef.current =
+        index;
 
-  const setCurrentIndex = useCallback(
-    (index: number) => {
-      activeIndexRef.current = index;
       setActiveIndex(index);
-    },
-    [],
-  );
+    }, []);
 
-  const loadBanners = useCallback(
-    async () => {
+  const loadBanners =
+    useCallback(async () => {
       setState({
         loading: true,
         error: false,
       });
 
       try {
-        const data = await fetchBanners();
+        const data =
+          await fetchBanners();
 
         setBanners(data);
         setCurrentIndex(0);
@@ -92,144 +104,123 @@ export default function BannerCarousel() {
           error: true,
         });
       }
-    },
-    [setCurrentIndex],
-  );
+    }, [setCurrentIndex]);
 
   useEffect(() => {
-    let mounted = true;
-
-    const load = async () => {
-      try {
-        const data = await fetchBanners();
-
-        if (!mounted) {
-          return;
-        }
-
-        setBanners(data);
-        setCurrentIndex(0);
-
-        setState({
-          loading: false,
-          error: false,
-        });
-      } catch {
-        if (!mounted) {
-          return;
-        }
-
-        setState({
-          loading: false,
-          error: true,
-        });
-      }
-    };
-
-    load();
-
-    return () => {
-      mounted = false;
-    };
-  }, [setCurrentIndex]);
+    loadBanners();
+  }, [loadBanners]);
 
   useEffect(() => {
     if (banners.length <= 1) {
       return;
     }
 
-    const interval = setInterval(() => {
-      if (userInteractingRef.current) {
-        return;
-      }
+    const interval =
+      setInterval(() => {
+        if (
+          userInteractingRef.current
+        ) {
+          return;
+        }
 
-      const currentIndex =
-        activeIndexRef.current;
+        const currentIndex =
+          activeIndexRef.current;
 
-      const nextIndex =
-        currentIndex >= banners.length - 1
-          ? 0
-          : currentIndex + 1;
+        const nextIndex =
+          currentIndex >=
+          banners.length - 1
+            ? 0
+            : currentIndex + 1;
 
-      listRef.current?.scrollToOffset({
-        offset:
-          nextIndex *
-          (CARD_WIDTH + SPACING),
-        animated: true,
-      });
+        listRef.current?.scrollToOffset({
+          offset:
+            nextIndex * snapInterval,
+          animated: true,
+        });
 
-      setCurrentIndex(nextIndex);
-    }, AUTO_SCROLL_INTERVAL);
+        setCurrentIndex(
+          nextIndex,
+        );
+      }, AUTO_SCROLL_INTERVAL);
 
     return () => {
       clearInterval(interval);
     };
-  }, [banners.length, setCurrentIndex]);
+  }, [
+    banners.length,
+    setCurrentIndex,
+    snapInterval,
+  ]);
 
   useEffect(() => {
-    return () => {
-      if (resumeTimerRef.current) {
-        clearTimeout(
-          resumeTimerRef.current,
-        );
-      }
-    };
-  }, []);
+    if (banners.length === 0) {
+      return;
+    }
+
+    listRef.current?.scrollToOffset({
+      offset:
+        activeIndexRef.current *
+        snapInterval,
+      animated: false,
+    });
+  }, [
+    snapInterval,
+    banners.length,
+  ]);
 
   const onMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>,
   ) => {
-    const index = Math.round(
-      event.nativeEvent.contentOffset.x /
-        (CARD_WIDTH + SPACING),
-    );
-
-    const safeIndex = Math.max(
-      0,
-      Math.min(
-        index,
-        banners.length - 1,
-      ),
-    );
-
-    setCurrentIndex(safeIndex);
-
-    userInteractingRef.current = false;
-
-    if (resumeTimerRef.current) {
-      clearTimeout(
-        resumeTimerRef.current,
-      );
-    }
-
-    resumeTimerRef.current =
-      setTimeout(() => {
-        userInteractingRef.current = false;
-      }, AUTO_SCROLL_INTERVAL);
-  };
-
-  const retry = async () => {
-    await loadBanners();
-  };
-
-  const openBannerLink = async (
-    item: Banner,
-  ) => {
-    if (!item.hasLink || !item.link) {
+    if (banners.length === 0) {
       return;
     }
 
-    try {
-      await Linking.openURL(item.link);
-    } catch {
-      // External-link failures remain silent.
-    }
+    const index = Math.round(
+      event.nativeEvent.contentOffset.x /
+        snapInterval,
+    );
+
+    const safeIndex =
+      Math.max(
+        0,
+        Math.min(
+          index,
+          banners.length - 1,
+        ),
+      );
+
+    setCurrentIndex(
+      safeIndex,
+    );
+
+    userInteractingRef.current =
+      false;
   };
+
+  const openBannerLink =
+    async (item: Banner) => {
+      if (
+        !item.hasLink ||
+        !item.link
+      ) {
+        return;
+      }
+
+      try {
+        await Linking.openURL(
+          item.link,
+        );
+      } catch {
+        // External-link failures remain silent.
+      }
+    };
 
   if (state.loading) {
     return (
       <View style={styles.container}>
-        <View style={styles.statusContainer}>
+        <View
+          style={styles.statusContainer}
+        >
           <ActivityIndicator
             color={Colors.gold}
             size="small"
@@ -242,7 +233,9 @@ export default function BannerCarousel() {
   if (state.error) {
     return (
       <View style={styles.container}>
-        <View style={styles.statusContainer}>
+        <View
+          style={styles.statusContainer}
+        >
           <AppText
             variant="bodySmall"
             style={styles.statusText}
@@ -251,7 +244,7 @@ export default function BannerCarousel() {
           </AppText>
 
           <Pressable
-            onPress={retry}
+            onPress={loadBanners}
             style={({pressed}) => [
               styles.retryButton,
               pressed &&
@@ -283,30 +276,31 @@ export default function BannerCarousel() {
         keyExtractor={item =>
           item.id.toString()
         }
-        showsHorizontalScrollIndicator={false}
-        snapToInterval={
-          CARD_WIDTH + SPACING
+        showsHorizontalScrollIndicator={
+          false
         }
+        snapToInterval={snapInterval}
         decelerationRate="fast"
         disableIntervalMomentum
-        pagingEnabled={false}
         onMomentumScrollEnd={
           onMomentumScrollEnd
         }
         onScrollBeginDrag={() => {
-          userInteractingRef.current = true;
-
-          if (resumeTimerRef.current) {
-            clearTimeout(
-              resumeTimerRef.current,
-            );
-          }
+          userInteractingRef.current =
+            true;
         }}
         contentContainerStyle={
           styles.content
         }
         renderItem={({item}) => (
-          <View style={styles.card}>
+          <View
+            style={[
+              styles.card,
+              {
+                width: cardWidth,
+              },
+            ]}
+          >
             <BannerCard
               image={item.image}
               onPress={() =>
@@ -318,16 +312,19 @@ export default function BannerCarousel() {
       />
 
       <View style={styles.indicators}>
-        {banners.map((item, index) => (
-          <View
-            key={item.id}
-            style={[
-              styles.dot,
-              activeIndex === index &&
-                styles.activeDot,
-            ]}
-          />
-        ))}
+        {banners.map(
+          (item, index) => (
+            <View
+              key={item.id}
+              style={[
+                styles.dot,
+                activeIndex ===
+                  index &&
+                  styles.activeDot,
+              ]}
+            />
+          ),
+        )}
       </View>
     </View>
   );
@@ -339,12 +336,11 @@ const styles = StyleSheet.create({
   },
 
   content: {
-    paddingLeft: 24,
-    paddingRight: 8,
+    paddingHorizontal:
+      HORIZONTAL_PADDING,
   },
 
   card: {
-    width: CARD_WIDTH,
     height: 190,
     marginRight: SPACING,
     borderRadius: 22,

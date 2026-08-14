@@ -1,6 +1,6 @@
-import { decode } from 'he';
+import {decode} from 'he';
 
-import { api } from './api';
+import {api} from './api';
 
 export type Story = {
   id: string;
@@ -55,7 +55,9 @@ type WPPost = {
 
 const STORIES_PER_PAGE = 10;
 
-function cleanExcerpt(html: string) {
+function cleanExcerpt(
+  html: string,
+): string {
   return decode(
     html
       .replace(/<[^>]*>/g, '')
@@ -64,11 +66,34 @@ function cleanExcerpt(html: string) {
   );
 }
 
-function mapStory(post: WPPost): Story {
+function getCategory(
+  post: WPPost,
+): string {
+  return (
+    post._embedded?.['wp:term']?.[0]?.[0]
+      ?.name ?? 'Stories'
+  );
+}
+
+function getImage(
+  post: WPPost,
+): string {
+  return (
+    post._embedded?.[
+      'wp:featuredmedia'
+    ]?.[0]?.source_url ?? ''
+  );
+}
+
+function mapStory(
+  post: WPPost,
+): Story {
   return {
     id: String(post.id),
 
-    title: decode(post.title.rendered),
+    title: decode(
+      post.title.rendered,
+    ),
 
     excerpt: cleanExcerpt(
       post.excerpt.rendered,
@@ -76,13 +101,9 @@ function mapStory(post: WPPost): Story {
 
     slug: post.slug,
 
-    category:
-      post._embedded?.['wp:term']?.[0]?.[0]?.name ??
-      'Stories',
+    category: getCategory(post),
 
-    image:
-      post._embedded?.['wp:featuredmedia']?.[0]
-        ?.source_url ?? '',
+    image: getImage(post),
   };
 }
 
@@ -94,19 +115,17 @@ function mapStoryDetail(
 
     slug: post.slug,
 
-    title: decode(post.title.rendered),
+    title: decode(
+      post.title.rendered,
+    ),
 
     content: decode(
       post.content.rendered,
     ),
 
-    category:
-      post._embedded?.['wp:term']?.[0]?.[0]?.name ??
-      'Stories',
+    category: getCategory(post),
 
-    image:
-      post._embedded?.['wp:featuredmedia']?.[0]
-        ?.source_url ?? '',
+    image: getImage(post),
 
     publishedAt: post.date,
 
@@ -117,9 +136,10 @@ function mapStoryDetail(
 export async function fetchLatestStories(
   page: number = 1,
 ): Promise<Story[]> {
-  const posts = await api.get<WPPost[]>(
-    `/wp/v2/posts?_embed&per_page=${STORIES_PER_PAGE}&page=${page}`,
-  );
+  const posts =
+    await api.get<WPPost[]>(
+      `/wp/v2/posts?_embed&per_page=${STORIES_PER_PAGE}&page=${page}`,
+    );
 
   return posts.map(mapStory);
 }
@@ -128,15 +148,24 @@ export async function fetchLatestStory(): Promise<Story> {
   const stories =
     await fetchLatestStories(1);
 
+  if (stories.length === 0) {
+    throw new Error(
+      'No stories available.',
+    );
+  }
+
   return stories[0];
 }
 
 export async function fetchStoryBySlug(
   slug: string,
 ): Promise<StoryDetail> {
-  const posts = await api.get<WPPost[]>(
-    `/wp/v2/posts?_embed&slug=${slug}`,
-  );
+  const posts =
+    await api.get<WPPost[]>(
+      `/wp/v2/posts?_embed&slug=${encodeURIComponent(
+        slug,
+      )}`,
+    );
 
   if (posts.length === 0) {
     throw new Error(
@@ -144,5 +173,7 @@ export async function fetchStoryBySlug(
     );
   }
 
-  return mapStoryDetail(posts[0]);
+  return mapStoryDetail(
+    posts[0],
+  );
 }

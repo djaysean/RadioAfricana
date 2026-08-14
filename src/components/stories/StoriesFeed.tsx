@@ -23,6 +23,7 @@ import {
 } from '@react-navigation/native-stack';
 
 import Colors from '../../constants/colors';
+
 import AppText from '../ui/AppText';
 
 import StoryCard, {
@@ -34,23 +35,28 @@ import {
   Story,
 } from '../../services/stories';
 
-import { Routes } from '../../navigation/routes';
-import { RootStackParamList } from '../../navigation/types';
+import {Routes} from '../../navigation/routes';
+
+import {
+  StoryStackParamList,
+} from '../../navigation/types';
 
 const STORIES_PER_PAGE = 10;
 
 type NavigationProp =
-  NativeStackNavigationProp<RootStackParamList>;
+  NativeStackNavigationProp<
+    StoryStackParamList
+  >;
 
 export default function StoriesFeed() {
   const navigation =
     useNavigation<NavigationProp>();
 
-  const [stories, setStories] = useState<Story[]>(
-    [],
-  );
+  const [stories, setStories] =
+    useState<Story[]>([]);
 
-  const [page, setPage] = useState(1);
+  const [page, setPage] =
+    useState(1);
 
   const [loading, setLoading] =
     useState(false);
@@ -67,73 +73,77 @@ export default function StoriesFeed() {
   const [error, setError] =
     useState(false);
 
-  const [loadingMoreError, setLoadingMoreError] =
-    useState(false);
+  const [
+    loadingMoreError,
+    setLoadingMoreError,
+  ] = useState(false);
 
-  const loadingRef = useRef(false);
+  const loadingRef =
+    useRef(false);
 
-  const loadStories = useCallback(
-    async (
-      pageToLoad: number,
-      replace = false,
-    ) => {
-      if (loadingRef.current) {
-        return;
-      }
+  const loadStories =
+    useCallback(
+      async (
+        pageToLoad: number,
+        replace = false,
+      ) => {
+        if (loadingRef.current) {
+          return;
+        }
 
-      loadingRef.current = true;
-      setLoading(true);
-
-      if (replace) {
-        setError(false);
-      } else {
-        setLoadingMoreError(false);
-      }
-
-      try {
-        const newStories =
-          await fetchLatestStories(
-            pageToLoad,
-          );
+        loadingRef.current = true;
+        setLoading(true);
 
         if (replace) {
-          setStories(newStories);
+          setError(false);
         } else {
-          setStories(current => [
-            ...current,
-            ...newStories,
-          ]);
+          setLoadingMoreError(false);
         }
 
-        setHasMore(
-          newStories.length >=
-            STORIES_PER_PAGE,
-        );
+        try {
+          const newStories =
+            await fetchLatestStories(
+              pageToLoad,
+            );
 
-        setHasLoaded(true);
-      } catch (requestError) {
-        if (
-          requestError instanceof Error &&
-          requestError.message.includes(
-            'API request failed: 400',
-          )
-        ) {
-          setHasMore(false);
+          if (replace) {
+            setStories(newStories);
+          } else {
+            setStories(current => [
+              ...current,
+              ...newStories,
+            ]);
+          }
+
+          setHasMore(
+            newStories.length >=
+              STORIES_PER_PAGE,
+          );
+
           setHasLoaded(true);
-        } else if (replace) {
-          setError(true);
-          setHasLoaded(true);
-        } else {
-          setLoadingMoreError(true);
+        } catch (requestError) {
+          if (
+            requestError instanceof Error &&
+            requestError.message.includes(
+              'API request failed: 400',
+            )
+          ) {
+            setHasMore(false);
+            setHasLoaded(true);
+          } else if (replace) {
+            setError(true);
+            setHasLoaded(true);
+          } else {
+            setLoadingMoreError(true);
+          }
+        } finally {
+          loadingRef.current = false;
+          setLoading(false);
+          setRefreshing(false);
         }
-      } finally {
-        loadingRef.current = false;
-        setLoading(false);
-        setRefreshing(false);
-      }
-    },
-    [],
-  );
+      },
+      [],
+    );
 
   useEffect(() => {
     loadStories(1, true);
@@ -147,7 +157,8 @@ export default function StoriesFeed() {
       return;
     }
 
-    const nextPage = page + 1;
+    const nextPage =
+      page + 1;
 
     setPage(nextPage);
 
@@ -161,7 +172,11 @@ export default function StoriesFeed() {
 
     setPage(1);
     setHasMore(true);
-    loadStories(1, true);
+
+    loadStories(
+      1,
+      true,
+    );
   };
 
   const retryLoadMore = () => {
@@ -169,7 +184,8 @@ export default function StoriesFeed() {
       return;
     }
 
-    const nextPage = page + 1;
+    const nextPage =
+      page + 1;
 
     loadStories(nextPage);
   };
@@ -183,7 +199,10 @@ export default function StoriesFeed() {
     setHasMore(true);
     setPage(1);
 
-    loadStories(1, true);
+    loadStories(
+      1,
+      true,
+    );
   };
 
   const renderItem = ({
@@ -197,6 +216,7 @@ export default function StoriesFeed() {
       excerpt: item.excerpt,
       category: item.category,
       image: item.image,
+
       onPress: () => {
         navigation.navigate(
           Routes.STORY_DETAIL,
@@ -208,89 +228,118 @@ export default function StoriesFeed() {
     };
 
     return (
-      <StoryCard story={storyCard} />
+      <StoryCard
+        story={storyCard}
+      />
     );
   };
 
-  const renderEmptyState = () => {
-    if (!hasLoaded || loading) {
-      return (
-        <View
-          style={styles.emptyContainer}
-        >
-          <ActivityIndicator
-            color={Colors.gold}
-            size="small"
-          />
-        </View>
-      );
-    }
+  const renderEmptyState =
+    () => {
+      if (
+        !hasLoaded ||
+        loading
+      ) {
+        return (
+          <View
+            style={
+              styles.emptyContainer
+            }
+          >
+            <ActivityIndicator
+              color={Colors.gold}
+              size="small"
+            />
+          </View>
+        );
+      }
 
-    if (error) {
+      if (error) {
+        return (
+          <View
+            style={
+              styles.emptyContainer
+            }
+          >
+            <AppText
+              variant="heading3"
+              style={
+                styles.emptyTitle
+              }
+            >
+              Unable to load Stories
+            </AppText>
+
+            <AppText
+              variant="bodySmall"
+              style={
+                styles.emptyText
+              }
+            >
+              We couldn't load the
+              latest stories right
+              now. Please try again.
+            </AppText>
+
+            <Pressable
+              onPress={
+                retryInitialLoad
+              }
+              style={({
+                pressed,
+              }) => [
+                styles.retryButton,
+                pressed &&
+                  styles.retryButtonPressed,
+              ]}
+            >
+              <AppText
+                variant="label"
+                style={
+                  styles.retryText
+                }
+              >
+                Try Again
+              </AppText>
+            </Pressable>
+          </View>
+        );
+      }
+
       return (
         <View
-          style={styles.emptyContainer}
+          style={
+            styles.emptyContainer
+          }
         >
           <AppText
             variant="heading3"
-            style={styles.emptyTitle}
+            style={
+              styles.emptyTitle
+            }
           >
-            Unable to load Stories
+            No Stories Yet
           </AppText>
 
           <AppText
             variant="bodySmall"
-            style={styles.emptyText}
+            style={
+              styles.emptyText
+            }
           >
-            We couldn't load the latest
-            stories right now. Please try
-            again.
+            There are no stories
+            available right now.
+            Please check again later.
           </AppText>
-
-          <Pressable
-            onPress={retryInitialLoad}
-            style={({pressed}) => [
-              styles.retryButton,
-              pressed &&
-                styles.retryButtonPressed,
-            ]}
-          >
-            <AppText
-              variant="label"
-              style={styles.retryText}
-            >
-              Try Again
-            </AppText>
-          </Pressable>
         </View>
       );
-    }
-
-    return (
-      <View
-        style={styles.emptyContainer}
-      >
-        <AppText
-          variant="heading3"
-          style={styles.emptyTitle}
-        >
-          No Stories Yet
-        </AppText>
-
-        <AppText
-          variant="bodySmall"
-          style={styles.emptyText}
-        >
-          There are no stories available
-          right now. Please check again
-          later.
-        </AppText>
-      </View>
-    );
-  };
+    };
 
   const renderFooter = () => {
-    if (loading && stories.length > 0) {
+    if (
+      loading &&
+      stories.length > 0
+    ) {
       return (
         <ActivityIndicator
           color={Colors.gold}
@@ -303,18 +352,26 @@ export default function StoriesFeed() {
     if (loadingMoreError) {
       return (
         <View
-          style={styles.footerContainer}
+          style={
+            styles.footerContainer
+          }
         >
           <AppText
             variant="meta"
-            style={styles.footerText}
+            style={
+              styles.footerText
+            }
           >
             Couldn't load more stories.
           </AppText>
 
           <Pressable
-            onPress={retryLoadMore}
-            style={({pressed}) => [
+            onPress={
+              retryLoadMore
+            }
+            style={({
+              pressed,
+            }) => [
               styles.retryButton,
               pressed &&
                 styles.retryButtonPressed,
@@ -322,7 +379,9 @@ export default function StoriesFeed() {
           >
             <AppText
               variant="label"
-              style={styles.retryText}
+              style={
+                styles.retryText
+              }
             >
               Try Again
             </AppText>
@@ -337,14 +396,18 @@ export default function StoriesFeed() {
   return (
     <FlatList
       data={stories}
-      keyExtractor={item => item.id}
+      keyExtractor={item =>
+        item.id
+      }
       renderItem={renderItem}
       contentContainerStyle={[
         styles.content,
         stories.length === 0 &&
           styles.emptyContent,
       ]}
-      showsVerticalScrollIndicator={false}
+      showsVerticalScrollIndicator={
+        false
+      }
       onEndReached={loadMore}
       onEndReachedThreshold={0.3}
       refreshControl={

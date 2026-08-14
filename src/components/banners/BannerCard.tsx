@@ -1,8 +1,8 @@
 import React from 'react';
+
 import {
   Image,
   ImageSourcePropType,
-  ImageURISource,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
@@ -18,7 +18,7 @@ function BannerCard({
 }: BannerCardProps) {
   const imageSource: ImageSourcePropType =
     typeof image === 'string'
-      ? ({ uri: image } as ImageURISource)
+      ? {uri: image}
       : image;
 
   return (
