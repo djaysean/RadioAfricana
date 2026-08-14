@@ -108,15 +108,6 @@ export default function MoreScreen() {
       }
     };
 
-  const openPage = (
-    slug: string,
-  ) => {
-    navigation.navigate(
-      Routes.PAGE,
-      {slug},
-    );
-  };
-
   const shareApp =
     async () => {
       try {
@@ -236,7 +227,9 @@ export default function MoreScreen() {
                 }
                 label="Contact Us"
                 onPress={() =>
-                  openPage('contacts')
+                  navigation.navigate(
+                    Routes.CONTACT_US,
+                  )
                 }
               />
 
@@ -250,8 +243,8 @@ export default function MoreScreen() {
                 }
                 label="Meet the Team"
                 onPress={() =>
-                  openPage(
-                    'team-members',
+                  navigation.navigate(
+                    Routes.MEET_THE_TEAM,
                   )
                 }
               />
@@ -299,8 +292,8 @@ export default function MoreScreen() {
                 }
                 label="Privacy Policy"
                 onPress={() =>
-                  openPage(
-                    'privacy-policy',
+                  navigation.navigate(
+                    Routes.PRIVACY_POLICY,
                   )
                 }
               />

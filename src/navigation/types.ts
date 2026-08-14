@@ -27,6 +27,12 @@ export type MoreStackParamList = {
 
   [Routes.SUBSCRIBE_TO_SHOWS]: undefined;
 
+  [Routes.CONTACT_US]: undefined;
+
+  [Routes.MEET_THE_TEAM]: undefined;
+
+  [Routes.PRIVACY_POLICY]: undefined;
+
   [Routes.PAGE]: {
     slug: string;
   };

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
     paddingHorizontal: 20,
-    marginTop: 8,
+    marginTop: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.background,

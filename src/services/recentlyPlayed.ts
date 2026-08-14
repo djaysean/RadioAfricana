@@ -27,7 +27,22 @@ export async function fetchRecentlyPlayed(): Promise<
     );
   }
 
-  const json = await response.json();
+  const text =
+    await response.text();
+
+  if (!text.trim()) {
+    return [];
+  }
+
+  let json: unknown;
+
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(
+      'Invalid recently played response.',
+    );
+  }
 
   if (!Array.isArray(json)) {
     throw new Error(

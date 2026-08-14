@@ -170,11 +170,13 @@ function ProgramCard({
             value={subscribed}
             onValueChange={onToggle}
             trackColor={{
-              false: '#D9D9D9',
+              false: Colors.divider,
               true: Colors.gold,
             }}
             thumbColor={Colors.white}
-            ios_backgroundColor="#D9D9D9"
+            ios_backgroundColor={
+              Colors.divider
+            }
           />
         )}
       </View>
@@ -497,7 +499,7 @@ export default function SubscribeToShowsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: '#F7E7CE',
   },
 
   header: {
@@ -507,7 +509,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderBottomWidth:
       StyleSheet.hairlineWidth,
-    borderBottomColor: '#E5E5E5',
+    borderBottomColor: Colors.divider,
     position: 'relative',
   },
 
@@ -528,9 +530,11 @@ const styles = StyleSheet.create({
   },
 
   content: {
+    flexGrow: 1,
     paddingHorizontal: 20,
     paddingTop: 24,
     paddingBottom: 96,
+    backgroundColor: '#F7E7CE',
   },
 
   intro: {
@@ -586,17 +590,17 @@ const styles = StyleSheet.create({
   },
 
   programList: {
-    gap: 8,
+    gap: 10,
   },
 
   programCard: {
-    minHeight: 84,
+    minHeight: 92,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
     borderRadius: 18,
     paddingHorizontal: 16,
-    paddingVertical: 11,
+    paddingVertical: 14,
   },
 
   programIcon: {
@@ -617,9 +621,9 @@ const styles = StyleSheet.create({
   programName: {
     color: Colors.text,
     fontFamily: 'Inter-SemiBold',
-    fontSize: 16,
-    lineHeight: 21,
-    marginBottom: 3,
+    fontSize: 18,
+    lineHeight: 23,
+    marginBottom: 5,
   },
 
   scheduleRow: {

@@ -26,6 +26,9 @@ import StoriesScreen from '../screens/Stories/StoriesScreen';
 import StoryScreen from '../screens/Story/StoryScreen';
 import SubscribeToShowsScreen from '../screens/Subscribe/SubscribeToShowsScreen';
 import PageScreen from '../screens/Page/PageScreen';
+import ContactUsScreen from '../screens/ContactUs/ContactUsScreen';
+import MeetTheTeamScreen from '../screens/MeetTheTeam/MeetTheTeamScreen';
+import PrivacyPolicyScreen from '../screens/PrivacyPolicy/PrivacyPolicyScreen';
 
 import {Routes} from './routes';
 
@@ -164,6 +167,27 @@ function MoreStackNavigator() {
         name={Routes.SUBSCRIBE_TO_SHOWS}
         component={
           SubscribeToShowsScreen
+        }
+      />
+
+      <MoreStack.Screen
+        name={Routes.CONTACT_US}
+        component={
+          ContactUsScreen
+        }
+      />
+
+      <MoreStack.Screen
+        name={Routes.MEET_THE_TEAM}
+        component={
+          MeetTheTeamScreen
+        }
+      />
+
+      <MoreStack.Screen
+        name={Routes.PRIVACY_POLICY}
+        component={
+          PrivacyPolicyScreen
         }
       />
 
