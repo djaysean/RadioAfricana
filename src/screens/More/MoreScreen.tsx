@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Image,
   Linking,
   Pressable,
   SafeAreaView,
@@ -34,6 +33,7 @@ import {
 import Colors from '../../constants/colors';
 
 import AppText from '../../components/ui/AppText';
+import RadioHeader from '../../components/common/RadioHeader';
 
 import {Routes} from '../../navigation/routes';
 
@@ -142,13 +142,7 @@ export default function MoreScreen() {
           }
         >
           <View style={styles.header}>
-            <Image
-              source={require(
-                '../../../assets/images/logo.png',
-              )}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+            <RadioHeader />
           </View>
 
           <View style={styles.body}>
@@ -335,11 +329,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 18,
     paddingBottom: 18,
-  },
-
-  logo: {
-    width: 190,
-    height: 65,
   },
 
   body: {

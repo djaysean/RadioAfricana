@@ -29,6 +29,7 @@ import PageScreen from '../screens/Page/PageScreen';
 import ContactUsScreen from '../screens/ContactUs/ContactUsScreen';
 import MeetTheTeamScreen from '../screens/MeetTheTeam/MeetTheTeamScreen';
 import PrivacyPolicyScreen from '../screens/PrivacyPolicy/PrivacyPolicyScreen';
+import LiveVideoScreen from '../screens/LiveVideo/LiveVideoScreen';
 
 import {Routes} from './routes';
 
@@ -113,6 +114,11 @@ function HomeStackNavigator() {
       <HomeStack.Screen
         name={Routes.HOME}
         component={HomeScreen}
+      />
+
+      <HomeStack.Screen
+        name={Routes.LIVE_VIDEO}
+        component={LiveVideoScreen}
       />
 
       <HomeStack.Screen

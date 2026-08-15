@@ -17,4 +17,6 @@ export const Routes = {
     'PrivacyPolicy',
 
   PAGE: 'Page',
+
+  LIVE_VIDEO: 'LiveVideo',
 } as const;

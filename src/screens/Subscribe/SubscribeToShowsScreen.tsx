@@ -2,15 +2,18 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
 import {
   ActivityIndicator,
+  Animated,
+  Easing,
+  FlatList,
   Image,
   Pressable,
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Switch,
@@ -20,7 +23,6 @@ import {
 import {
   ChevronLeft,
   Bell,
-  Clock3,
   Radio,
 } from 'lucide-react-native';
 
@@ -29,12 +31,18 @@ import {
 } from '@react-navigation/native';
 
 import AppText from '../../components/ui/AppText';
+import RadioHeader from '../../components/common/RadioHeader';
 import Colors from '../../constants/colors';
 
 import {
   fetchPrograms,
   RadioProgram,
 } from '../../services/programs';
+
+import {
+  fetchProgramArtwork,
+  ProgramArtwork,
+} from '../../services/programArtwork';
 
 import {
   subscribeToShow,
@@ -51,62 +59,14 @@ type ProcessingState = Record<
   boolean
 >;
 
-const DAY_NAMES = [
-  'Sunday',
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-];
+const ARTWORK_SIZE = 170;
+const ARTWORK_SPACING = 12;
 
-function formatTime(hour: number): string {
-  const normalizedHour =
-    Math.max(0, Math.min(23, hour));
-
-  const period =
-    normalizedHour >= 12
-      ? 'PM'
-      : 'AM';
-
-  const displayHour =
-    normalizedHour % 12 || 12;
-
-  return `${displayHour}:00 ${period}`;
-}
-
-function formatDays(days: number[]): string {
-  const validDays = days
-    .filter(
-      day =>
-        Number.isInteger(day) &&
-        day >= 0 &&
-        day <= 6,
-    )
-    .sort((a, b) => a - b);
-
-  if (validDays.length === 0) {
-    return 'Schedule unavailable';
-  }
-
-  if (validDays.length === 7) {
-    return 'Every day';
-  }
-
-  if (
-    validDays.length === 5 &&
-    validDays.every(
-      (day, index) => day === index + 1,
-    )
-  ) {
-    return 'Monday – Friday';
-  }
-
-  return validDays
-    .map(day => DAY_NAMES[day].slice(0, 3))
-    .join(' · ');
-}
+/*
+ * Continuous marquee speed.
+ * Higher value = faster movement.
+ */
+const ARTWORK_SPEED = 42;
 
 function ProgramCard({
   program,
@@ -140,23 +100,6 @@ function ProgramCard({
         >
           {program.name}
         </AppText>
-
-        <View style={styles.scheduleRow}>
-          <Clock3
-            size={14}
-            strokeWidth={2}
-            color={Colors.text}
-          />
-
-          <AppText
-            variant="body"
-            style={styles.scheduleText}
-          >
-            {formatDays(program.days)}
-            {'  ·  '}
-            {formatTime(program.time)}
-          </AppText>
-        </View>
       </View>
 
       <View style={styles.switchContainer}>
@@ -184,11 +127,167 @@ function ProgramCard({
   );
 }
 
+function ArtworkCarousel({
+  artwork,
+}: {
+  artwork: ProgramArtwork[];
+}) {
+  const translateX =
+    useRef(new Animated.Value(0));
+
+  const animationRef =
+    useRef<Animated.CompositeAnimation | null>(
+      null,
+    );
+
+  const [containerWidth, setContainerWidth] =
+    useState(0);
+
+  useEffect(() => {
+    animationRef.current?.stop();
+
+    translateX.current.setValue(0);
+
+    if (
+      artwork.length === 0 ||
+      containerWidth === 0
+    ) {
+      return;
+    }
+
+    /*
+     * We render the artwork sequence twice.
+     *
+     * Once the first sequence has completely
+     * moved away, the second sequence is in
+     * exactly the same position as the first
+     * sequence was, allowing us to loop
+     * seamlessly.
+     */
+    const cycleWidth =
+      artwork.length *
+        (ARTWORK_SIZE + ARTWORK_SPACING);
+
+    const duration =
+      (cycleWidth / ARTWORK_SPEED) *
+      1000;
+
+    const animation =
+      Animated.loop(
+        Animated.timing(
+          translateX.current,
+          {
+            toValue: -cycleWidth,
+            duration,
+            easing: Easing.linear,
+            useNativeDriver: true,
+          },
+        ),
+        {
+          resetBeforeIteration: true,
+        },
+      );
+
+    animationRef.current = animation;
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [
+    artwork,
+    containerWidth,
+  ]);
+
+  if (artwork.length === 0) {
+    return null;
+  }
+
+  /*
+   * Duplicate the artwork sequence so that
+   * the transition from the final artwork back
+   * to the first artwork is completely seamless.
+   */
+  const marqueeArtwork = [
+    ...artwork,
+    ...artwork,
+  ];
+
+  return (
+    <View
+      style={styles.artworkSection}
+      onLayout={event => {
+        setContainerWidth(
+          event.nativeEvent.layout.width,
+        );
+      }}
+    >
+      <View
+        style={styles.artworkViewport}
+      >
+        <Animated.View
+          style={[
+            styles.artworkTrack,
+            {
+              transform: [
+                {
+                  translateX:
+                    translateX.current,
+                },
+              ],
+            },
+          ]}
+        >
+          {marqueeArtwork.map(
+            (item, index) => (
+              <View
+                key={`${item.id}-${index}`}
+                style={styles.artworkCard}
+              >
+                <Image
+                  source={{
+                    uri: item.image,
+                  }}
+                  style={styles.artworkImage}
+                  resizeMode="cover"
+                />
+              </View>
+            ),
+          )}
+        </Animated.View>
+      </View>
+    </View>
+  );
+}
+
+function ProgrammeFooter() {
+  return (
+    <AppText
+      variant="body"
+      style={styles.footerNote}
+    >
+      Manage your subscriptions anytime.
+    </AppText>
+  );
+}
+
+function ProgrammeSeparator() {
+  return (
+    <View
+      style={styles.itemSeparator}
+    />
+  );
+}
+
 export default function SubscribeToShowsScreen() {
   const navigation = useNavigation();
 
   const [programs, setPrograms] =
     useState<RadioProgram[]>([]);
+
+  const [artwork, setArtwork] =
+    useState<ProgramArtwork[]>([]);
 
   const [subscriptions, setSubscriptions] =
     useState<SubscriptionState>({});
@@ -208,10 +307,16 @@ export default function SubscribeToShowsScreen() {
       setError(null);
 
       try {
-        const data =
-          await fetchPrograms();
+        const [
+          programData,
+          artworkData,
+        ] = await Promise.all([
+          fetchPrograms(),
+          fetchProgramArtwork(),
+        ]);
 
-        setPrograms(data);
+        setPrograms(programData);
+        setArtwork(artworkData);
       } catch (loadError) {
         console.error(
           'Failed to load Radio Africana programmes:',
@@ -233,29 +338,10 @@ export default function SubscribeToShowsScreen() {
   const sortedPrograms =
     useMemo(() => {
       return [...programs].sort(
-        (a, b) => {
-          const aDay =
-            a.days.length > 0
-              ? Math.min(...a.days)
-              : 7;
-
-          const bDay =
-            b.days.length > 0
-              ? Math.min(...b.days)
-              : 7;
-
-          if (aDay !== bDay) {
-            return aDay - bDay;
-          }
-
-          if (a.time !== b.time) {
-            return a.time - b.time;
-          }
-
-          return a.name.localeCompare(
+        (a, b) =>
+          a.name.localeCompare(
             b.name,
-          );
-        },
+          ),
       );
     }, [programs]);
 
@@ -317,6 +403,8 @@ export default function SubscribeToShowsScreen() {
 
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
+          <RadioHeader />
+
           <Pressable
             onPress={() =>
               navigation.goBack()
@@ -330,167 +418,206 @@ export default function SubscribeToShowsScreen() {
               color={Colors.text}
             />
           </Pressable>
-
-          <Image
-            source={require(
-              '../../../assets/images/logo.png',
-            )}
-            style={styles.logo}
-            resizeMode="contain"
-          />
         </View>
 
-        <ScrollView
+        <FlatList
+          data={sortedPrograms}
+          keyExtractor={item =>
+            item.id
+          }
+          showsVerticalScrollIndicator={
+            false
+          }
           contentContainerStyle={
             styles.content
           }
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.intro}>
-            <View style={styles.introIcon}>
-              <Bell
-                size={25}
-                strokeWidth={2}
-                color={Colors.gold}
-              />
-            </View>
+          ListHeaderComponent={
+            <>
+              <View style={styles.intro}>
+                <View
+                  style={
+                    styles.introIcon
+                  }
+                >
+                  <Bell
+                    size={25}
+                    strokeWidth={2}
+                    color={Colors.gold}
+                  />
+                </View>
 
-            <AppText
-              variant="body"
-              style={styles.title}
-            >
-              Never miss your favourite
-              programmes
-            </AppText>
+                <AppText
+                  variant="body"
+                  style={styles.title}
+                >
+                  Subscribe to Shows
+                </AppText>
 
-            <AppText
-              variant="body"
-              style={styles.description}
-            >
-              Subscribe to your favourite
-              programmes and we'll notify
-              you when they begin.
-            </AppText>
-          </View>
+                <AppText
+                  variant="body"
+                  style={
+                    styles.description
+                  }
+                >
+                  Subscribe to your favourite
+                  programmes and we'll
+                  notify you when they begin.
+                </AppText>
+              </View>
 
-          <View style={styles.sectionHeader}>
-            <AppText
-              variant="body"
-              style={styles.sectionTitle}
-            >
-              PROGRAMMES
-            </AppText>
-          </View>
-
-          {loading ? (
-            <View
-              style={styles.stateContainer}
-            >
-              <ActivityIndicator
-                size="large"
-                color={Colors.gold}
+              <ArtworkCarousel
+                artwork={artwork}
               />
 
-              <AppText
-                variant="body"
-                style={styles.stateText}
-              >
-                Loading programmes...
-              </AppText>
-            </View>
-          ) : error ? (
-            <View style={styles.stateCard}>
-              <Radio
-                size={28}
-                strokeWidth={2}
-                color={Colors.gold}
-              />
-
-              <AppText
-                variant="body"
-                style={styles.stateTitle}
-              >
-                Something went wrong
-              </AppText>
-
-              <AppText
-                variant="body"
-                style={styles.stateDescription}
-              >
-                {error}
-              </AppText>
-
-              <Pressable
-                onPress={loadPrograms}
-                style={styles.retryButton}
+              <View
+                style={
+                  styles.sectionHeader
+                }
               >
                 <AppText
                   variant="body"
-                  style={styles.retryText}
+                  style={
+                    styles.sectionTitle
+                  }
                 >
-                  Try Again
+                  PROGRAMMES
                 </AppText>
-              </Pressable>
-            </View>
-          ) : sortedPrograms.length === 0 ? (
-            <View style={styles.stateCard}>
-              <Radio
-                size={28}
-                strokeWidth={2}
-                color={Colors.gold}
-              />
+              </View>
 
-              <AppText
-                variant="body"
-                style={styles.stateTitle}
-              >
-                No programmes available
-              </AppText>
-
-              <AppText
-                variant="body"
-                style={styles.stateDescription}
-              >
-                There are currently no
-                programmes available to
-                subscribe to.
-              </AppText>
-            </View>
-          ) : (
-            <View style={styles.programList}>
-              {sortedPrograms.map(
-                program => (
-                  <ProgramCard
-                    key={program.id}
-                    program={program}
-                    subscribed={
-                      subscriptions[
-                        program.id
-                      ] === true
-                    }
-                    processing={
-                      processing[
-                        program.id
-                      ] === true
-                    }
-                    onToggle={() =>
-                      handleToggle(
-                        program,
-                      )
-                    }
+              {loading && (
+                <View
+                  style={
+                    styles.stateContainer
+                  }
+                >
+                  <ActivityIndicator
+                    size="large"
+                    color={Colors.gold}
                   />
-                ),
-              )}
-            </View>
-          )}
 
-          <AppText
-            variant="body"
-            style={styles.footerNote}
-          >
-            Manage your subscriptions anytime.
-          </AppText>
-        </ScrollView>
+                  <AppText
+                    variant="body"
+                    style={styles.stateText}
+                  >
+                    Loading programmes...
+                  </AppText>
+                </View>
+              )}
+
+              {!loading &&
+                error && (
+                  <View
+                    style={
+                      styles.stateCard
+                    }
+                  >
+                    <Radio
+                      size={28}
+                      strokeWidth={2}
+                      color={Colors.gold}
+                    />
+
+                    <AppText
+                      variant="body"
+                      style={
+                        styles.stateTitle
+                      }
+                    >
+                      Something went wrong
+                    </AppText>
+
+                    <AppText
+                      variant="body"
+                      style={
+                        styles.stateDescription
+                      }
+                    >
+                      {error}
+                    </AppText>
+
+                    <Pressable
+                      onPress={
+                        loadPrograms
+                      }
+                      style={
+                        styles.retryButton
+                      }
+                    >
+                      <AppText
+                        variant="body"
+                        style={
+                          styles.retryText
+                        }
+                      >
+                        Try Again
+                      </AppText>
+                    </Pressable>
+                  </View>
+                )}
+
+              {!loading &&
+                !error &&
+                sortedPrograms.length ===
+                  0 && (
+                  <View
+                    style={
+                      styles.stateCard
+                    }
+                  >
+                    <Radio
+                      size={28}
+                      strokeWidth={2}
+                      color={Colors.gold}
+                    />
+
+                    <AppText
+                      variant="body"
+                      style={
+                        styles.stateTitle
+                      }
+                    >
+                      No programmes available
+                    </AppText>
+
+                    <AppText
+                      variant="body"
+                      style={
+                        styles.stateDescription
+                      }
+                    >
+                      There are currently no
+                      programmes available
+                      to subscribe to.
+                    </AppText>
+                  </View>
+                )}
+            </>
+          }
+          renderItem={({item}) => (
+            <ProgramCard
+              program={item}
+              subscribed={
+                subscriptions[item.id] ===
+                true
+              }
+              processing={
+                processing[item.id] ===
+                true
+              }
+              onToggle={() =>
+                handleToggle(item)
+              }
+            />
+          )}
+          ItemSeparatorComponent={
+            ProgrammeSeparator
+          }
+          ListFooterComponent={
+            sortedPrograms.length > 0
+              ? ProgrammeFooter
+              : null
+          }
+        />
       </SafeAreaView>
     </>
   );
@@ -521,12 +648,7 @@ const styles = StyleSheet.create({
     height: 42,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1,
-  },
-
-  logo: {
-    width: 190,
-    height: 65,
+    zIndex: 5,
   },
 
   content: {
@@ -540,7 +662,7 @@ const styles = StyleSheet.create({
   intro: {
     alignItems: 'center',
     paddingHorizontal: 16,
-    marginBottom: 30,
+    marginBottom: 22,
   },
 
   introIcon: {
@@ -574,6 +696,38 @@ const styles = StyleSheet.create({
     maxWidth: 340,
   },
 
+  artworkSection: {
+    marginHorizontal: -20,
+    marginBottom: 26,
+    overflow: 'hidden',
+  },
+
+  artworkViewport: {
+    width: '100%',
+    overflow: 'hidden',
+  },
+
+  artworkTrack: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  artworkCard: {
+    width: ARTWORK_SIZE,
+    height: ARTWORK_SIZE,
+    marginRight: ARTWORK_SPACING,
+    borderRadius: 20,
+    overflow: 'hidden',
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.gold,
+  },
+
+  artworkImage: {
+    width: '100%',
+    height: '100%',
+  },
+
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -589,18 +743,14 @@ const styles = StyleSheet.create({
     letterSpacing: 1.2,
   },
 
-  programList: {
-    gap: 10,
-  },
-
   programCard: {
-    minHeight: 92,
+    minHeight: 74,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.white,
     borderRadius: 18,
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
   },
 
   programIcon: {
@@ -623,27 +773,16 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-SemiBold',
     fontSize: 18,
     lineHeight: 23,
-    marginBottom: 5,
-  },
-
-  scheduleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  scheduleText: {
-    color: Colors.text,
-    opacity: 0.62,
-    fontFamily: 'Inter-Regular',
-    fontSize: 13,
-    lineHeight: 18,
-    marginLeft: 5,
   },
 
   switchContainer: {
     width: 48,
     alignItems: 'flex-end',
     justifyContent: 'center',
+  },
+
+  itemSeparator: {
+    height: 10,
   },
 
   stateContainer: {
@@ -653,6 +792,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 18,
     paddingHorizontal: 24,
+    marginBottom: 10,
   },
 
   stateText: {
@@ -669,6 +809,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     paddingHorizontal: 24,
     paddingVertical: 32,
+    marginBottom: 10,
   },
 
   stateTitle: {

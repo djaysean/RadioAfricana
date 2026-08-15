@@ -1,9 +1,9 @@
 import React, {
+  useEffect,
   useState,
 } from 'react';
 
 import {
-  Image,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -15,6 +15,7 @@ import {
 import BannerCarousel from '../../components/banners/BannerCarousel';
 import LiveHero from '../../components/LiveHero';
 import RecentlyPlayedSection from '../../components/common/RecentlyPlayedSection';
+import RadioHeader from '../../components/common/RadioHeader';
 import LatestStory from '../../components/stories/LatestStory';
 
 import Colors from '../../constants/colors';
@@ -23,16 +24,39 @@ import {
   usePlayback,
 } from '../../playback/PlaybackContext';
 
+import {
+  subscribeToLiveVideo,
+  LiveVideo,
+} from '../../services/liveVideo';
+
 export default function HomeScreen() {
   const {
     nowPlaying,
   } = usePlayback();
+
+  const [
+    liveVideo,
+    setLiveVideo,
+  ] = useState<LiveVideo | null>(
+    null,
+  );
 
   const [refreshing, setRefreshing] =
     useState(false);
 
   const [refreshKey, setRefreshKey] =
     useState(0);
+
+  useEffect(() => {
+    const unsubscribe =
+      subscribeToLiveVideo(
+        video => {
+          setLiveVideo(video);
+        },
+      );
+
+    return unsubscribe;
+  }, []);
 
   const refreshHome =
     async () => {
@@ -75,13 +99,7 @@ export default function HomeScreen() {
           }
         >
           <View style={styles.header}>
-            <Image
-              source={require(
-                '../../../assets/images/logo.png',
-              )}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+            <RadioHeader />
           </View>
 
           <BannerCarousel
@@ -91,6 +109,9 @@ export default function HomeScreen() {
           <LiveHero
             key={`live-hero-${refreshKey}`}
             picture={nowPlaying.picture}
+            videoUrl={
+              liveVideo?.link ?? null
+            }
           />
 
           <RecentlyPlayedSection
@@ -124,10 +145,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 18,
     paddingBottom: 18,
-  },
-
-  logo: {
-    width: 190,
-    height: 65,
   },
 });

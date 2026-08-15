@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Image,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -9,6 +8,7 @@ import {
 } from 'react-native';
 
 import AppText from '../../components/ui/AppText';
+import RadioHeader from '../../components/common/RadioHeader';
 import StoriesHeader from '../../components/stories/StoriesHeader';
 import StoriesFeed from '../../components/stories/StoriesFeed';
 
@@ -25,11 +25,7 @@ export default function StoriesScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <View style={styles.header}>
-            <Image
-              source={require('../../../assets/images/logo.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+            <RadioHeader />
           </View>
 
           <StoriesHeader />
@@ -66,11 +62,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 18,
     paddingBottom: 18,
-  },
-
-  logo: {
-    width: 190,
-    height: 65,
   },
 
   heading: {

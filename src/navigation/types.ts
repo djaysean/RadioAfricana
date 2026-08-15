@@ -12,6 +12,10 @@ export type HomeStackParamList = {
   [Routes.STORY_DETAIL]: {
     slug: string;
   };
+
+  [Routes.LIVE_VIDEO]: {
+    videoUrl: string;
+  };
 };
 
 export type StoriesStackParamList = {

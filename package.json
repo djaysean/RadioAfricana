@@ -13,6 +13,7 @@
   "dependencies": {
     "@notifee/react-native": "^9.1.8",
     "@react-native-firebase/app": "^26.1.0",
+    "@react-native-firebase/firestore": "^26.1.0",
     "@react-native-firebase/messaging": "^26.1.0",
     "@react-native/new-app-screen": "0.86.2",
     "@react-navigation/bottom-tabs": "^7.18.14",
@@ -30,7 +31,9 @@
     "react-native-screens": "^4.26.2",
     "react-native-svg": "^15.15.5",
     "react-native-video": "^6.19.2",
-    "react-native-worklets": "^0.11.3"
+    "react-native-webview": "^14.0.1",
+    "react-native-worklets": "^0.11.3",
+    "react-native-youtube-iframe": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
