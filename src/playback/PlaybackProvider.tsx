@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -71,30 +72,43 @@ export default function PlaybackProvider({
     };
   }, []);
 
-  const play = () => {
-    setPlayerKey(
-      current =>
-        current + 1,
-    );
+  /*
+   * --------------------------------------------------
+   * PLAYBACK CONTROLS
+   * --------------------------------------------------
+   *
+   * These callbacks are intentionally stable so that
+   * screens using usePlayback() can safely coordinate
+   * playback with navigation focus changes.
+   */
 
-    setIsPlaying(true);
-  };
+  const play =
+    useCallback(() => {
+      setPlayerKey(
+        current =>
+          current + 1,
+      );
 
-  const pause = () => {
-    setIsPlaying(false);
-  };
+      setIsPlaying(true);
+    }, []);
 
-  const toggle = () => {
-    setIsPlaying(current => {
-      if (!current) {
-        setPlayerKey(
-          key => key + 1,
-        );
-      }
+  const pause =
+    useCallback(() => {
+      setIsPlaying(false);
+    }, []);
 
-      return !current;
-    });
-  };
+  const toggle =
+    useCallback(() => {
+      setIsPlaying(current => {
+        if (!current) {
+          setPlayerKey(
+            key => key + 1,
+          );
+        }
+
+        return !current;
+      });
+    }, []);
 
   const value = useMemo(
     () => ({
@@ -107,6 +121,9 @@ export default function PlaybackProvider({
     [
       isPlaying,
       nowPlaying,
+      play,
+      pause,
+      toggle,
     ],
   );
 
