@@ -1,10 +1,339 @@
+diff --git a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java
+index e16ac96..fdcd0d8 100644
+--- a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java
++++ b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/ReactExoplayerView.java
+@@ -105,6 +105,7 @@ import androidx.media3.exoplayer.util.EventLogger;
+ import androidx.media3.extractor.metadata.emsg.EventMessage;
+ import androidx.media3.extractor.metadata.id3.Id3Frame;
+ import androidx.media3.extractor.metadata.id3.TextInformationFrame;
++import androidx.media3.extractor.metadata.icy.IcyInfo;
+ import androidx.media3.session.MediaSessionService;
+ 
+ import com.brentvatne.common.api.AdsProps;
+@@ -2002,31 +2003,257 @@ public class ReactExoplayerView extends FrameLayout implements
+         return C.INDEX_UNSET;
+     }
+ 
++    /**
++     * Parses the custom Radio Africana ICY StreamUrl metadata.
++     *
++     * Radio Africana sends StreamUrl in this form:
++     *
++     * &artist=Artist+Name&title=Song+Title&album=&duration=309185
++     * &songtype=S&overlay=no&buycd=&website=&picture=Artwork.jpg
++     *
++     * The picture value is a filename from the Radio Africana station
++     * pictures directory, so it is resolved against the same artwork base
++     * URL used by the application's Now Playing service.
++     */
++    @Nullable
++    private String getIcyParameter(String streamUrl, String parameter) {
++        if (streamUrl == null || streamUrl.trim().isEmpty()) {
++            return null;
++        }
++
++        try {
++            String query = streamUrl.trim();
++
++            // The station sends the parameter string beginning with '&'.
++            // Uri expects the query to follow a '?', so normalize it first.
++            if (query.startsWith("?")) {
++                query = query.substring(1);
++            } else if (query.startsWith("&")) {
++                query = query.substring(1);
++            }
++
++            Uri metadataUri = Uri.parse("https://radioafricana.com/?" + query);
++            String value = metadataUri.getQueryParameter(parameter);
++
++            if (value != null && !value.trim().isEmpty()) {
++                return value.trim();
++            }
++        } catch (Exception e) {
++            DebugLog.w(
++                    TAG,
++                    "Could not parse ICY parameter '" + parameter + "': "
++                            + e.getMessage()
++            );
++        }
++
++        return null;
++    }
++
++    @Nullable
++    private String buildIcyArtworkUrl(String picture) {
++        if (picture == null || picture.trim().isEmpty()) {
++            return null;
++        }
++
++        String cleanPicture = picture.trim();
++
++        // Match the artwork resolution used by the Radio Africana web/app
++        // services: /station/pictures/{filename}
++        return "https://radioafricana.com/station/pictures/"
++                + Uri.encode(cleanPicture);
++    }
++
++    private void updatePlaybackNotificationMetadata(
++            @Nullable String title,
++            @Nullable String artist,
++            @Nullable String artworkUrl
++    ) {
++        if (player == null) {
++            return;
++        }
++
++        MediaItem currentMediaItem = player.getCurrentMediaItem();
++
++        if (currentMediaItem == null) {
++            return;
++        }
++
++        MediaMetadata currentMetadata = currentMediaItem.mediaMetadata;
++        MediaMetadata.Builder metadataBuilder = currentMetadata.buildUpon();
++
++        if (title != null && !title.trim().isEmpty()) {
++            metadataBuilder.setTitle(title.trim());
++        }
++
++        if (artist != null && !artist.trim().isEmpty()) {
++            metadataBuilder.setArtist(artist.trim());
++        }
++
++        if (artworkUrl != null && !artworkUrl.trim().isEmpty()) {
++            metadataBuilder.setArtworkUri(Uri.parse(artworkUrl));
++        }
++
++        MediaMetadata updatedMetadata = metadataBuilder.build();
++
++        MediaItem updatedMediaItem = currentMediaItem.buildUpon()
++                .setMediaMetadata(updatedMetadata)
++                .build();
++
++        int currentMediaItemIndex = player.getCurrentMediaItemIndex();
++
++        if (currentMediaItemIndex != C.INDEX_UNSET) {
++            player.replaceMediaItem(
++                    currentMediaItemIndex,
++                    updatedMediaItem
++            );
++
++            if (playbackServiceBinder != null) {
++                try {
++                    playbackServiceBinder
++                            .getService()
++                            .refreshNotification(player);
++                } catch (Exception e) {
++                    DebugLog.w(
++                            TAG,
++                            "Could not refresh playback notification: "
++                                    + e.getMessage()
++                    );
++                }
++            }
++        }
++    }
++
+     @Override
+     public void onMetadata(@NonNull Metadata metadata) {
+         ArrayList<TimedMetadata> metadataArray = new ArrayList<>();
++
+         for (int i = 0; i < metadata.length(); i++) {
+             Metadata.Entry entry = metadata.get(i);
+ 
+-            if (entry instanceof Id3Frame) {
+-                Id3Frame frame = (Id3Frame) metadata.get(i);
++            if (entry instanceof IcyInfo) {
++                IcyInfo icyInfo = (IcyInfo) entry;
++
++                String streamTitle = icyInfo.title;
++                String streamUrl = icyInfo.url;
++
++                DebugLog.d(TAG, "ICY StreamTitle received: " + streamTitle);
++                DebugLog.d(TAG, "ICY StreamUrl received: " + streamUrl);
++
++                /*
++                 * Radio Africana places artist, title and artwork information
++                 * in StreamUrl rather than exposing them as separate
++                 * IcyInfo properties.
++                 */
++                String artist = getIcyParameter(streamUrl, "artist");
++                String title = getIcyParameter(streamUrl, "title");
++                String picture = getIcyParameter(streamUrl, "picture");
++
++                /*
++                 * Keep the existing StreamTitle as a fallback. This also
++                 * protects playback metadata if the station temporarily
++                 * omits one or more StreamUrl fields.
++                 */
++                if ((title == null || title.isEmpty())
++                        && streamTitle != null
++                        && !streamTitle.trim().isEmpty()) {
++                    title = streamTitle.trim();
++                }
++
++                if ((artist == null || artist.isEmpty())
++                        && streamTitle != null
++                        && streamTitle.contains(" - ")) {
++                    String[] titleParts = streamTitle.split(" - ", 2);
++
++                    if (titleParts.length == 2) {
++                        if (artist == null || artist.isEmpty()) {
++                            artist = titleParts[0].trim();
++                        }
++
++                        if (title == null || title.isEmpty()) {
++                            title = titleParts[1].trim();
++                        }
++                    }
++                }
++
++                String artworkUrl = buildIcyArtworkUrl(picture);
++
++                DebugLog.d(
++                        TAG,
++                        "ICY parsed metadata: artist=" + artist
++                                + ", title=" + title
++                                + ", picture=" + picture
++                                + ", artworkUrl=" + artworkUrl
++                );
++
++                /*
++                 * Update Android's MediaMetadata whenever any useful ICY
++                 * information arrives. This allows the notification to
++                 * change artist, title and artwork together for each track.
++                 */
++                if ((title != null && !title.isEmpty())
++                        || (artist != null && !artist.isEmpty())
++                        || artworkUrl != null) {
++                    updatePlaybackNotificationMetadata(
++                            title,
++                            artist,
++                            artworkUrl
++                    );
++                }
++
++                if (streamTitle != null && !streamTitle.trim().isEmpty()) {
++                    metadataArray.add(
++                            new TimedMetadata(
++                                    "ICY_TITLE",
++                                    streamTitle.trim()
++                            )
++                    );
++                }
++
++                if (streamUrl != null) {
++                    metadataArray.add(
++                            new TimedMetadata(
++                                    "ICY_URL",
++                                    streamUrl
++                            )
++                    );
++                }
++
++            } else if (entry instanceof Id3Frame) {
++                Id3Frame frame = (Id3Frame) entry;
+ 
+                 String value = "";
+ 
+                 if (frame instanceof TextInformationFrame) {
+-                    TextInformationFrame txxxFrame = (TextInformationFrame) frame;
++                    TextInformationFrame txxxFrame =
++                            (TextInformationFrame) frame;
+                     value = txxxFrame.value;
+                 }
+-                TimedMetadata timedMetadata = new TimedMetadata(frame.id, value);
++
++                TimedMetadata timedMetadata =
++                        new TimedMetadata(
++                                frame.id,
++                                value
++                        );
++
+                 metadataArray.add(timedMetadata);
++
+             } else if (entry instanceof EventMessage) {
+-                EventMessage eventMessage = (EventMessage) entry;
+-                TimedMetadata timedMetadata = new TimedMetadata(eventMessage.schemeIdUri, eventMessage.value);
++                EventMessage eventMessage =
++                        (EventMessage) entry;
++
++                TimedMetadata timedMetadata =
++                        new TimedMetadata(
++                                eventMessage.schemeIdUri,
++                                eventMessage.value
++                        );
++
+                 metadataArray.add(timedMetadata);
++
+             } else {
+                 DebugLog.d(TAG, "unhandled metadata " + entry);
+             }
+         }
++
+         eventEmitter.onTimedMetadata.invoke(metadataArray);
+     }
+ 
+@@ -2037,6 +2264,43 @@ public class ReactExoplayerView extends FrameLayout implements
+         }
+     }
+ 
++    private void updateCurrentMediaMetadata() {
++    if (player == null) {
++        return;
++    }
++
++    MediaMetadata customMetadata =
++            ConfigurationUtils.buildCustomMetadata(source.getMetadata());
++
++    if (customMetadata == null) {
++        return;
++    }
++
++    MediaItem currentMediaItem = player.getCurrentMediaItem();
++
++    if (currentMediaItem == null) {
++        return;
++    }
++
++    MediaItem updatedMediaItem = currentMediaItem.buildUpon()
++            .setMediaMetadata(customMetadata)
++            .build();
++
++    int currentMediaItemIndex = player.getCurrentMediaItemIndex();
++
++    if (currentMediaItemIndex != C.INDEX_UNSET) {
++        player.replaceMediaItem(currentMediaItemIndex, updatedMediaItem);
++
++        if (playbackServiceBinder != null) {
++            try {
++                playbackServiceBinder.getService().refreshNotification(player);
++            } catch (Exception e) {
++                DebugLog.w(TAG, "Could not refresh playback notification: " + e.getMessage());
++            }
++        }
++    }
++}
++
+     public void setSrc(Source source) {
+         if (source.getUri() != null || isDaiRequest(source)) {
+             clearResumePosition();
+@@ -2064,6 +2328,8 @@ public class ReactExoplayerView extends FrameLayout implements
+                 hasVideoEnded = false;
+                 playerNeedsSource = true;
+                 initializePlayer();
++            } else {
++                updateCurrentMediaMetadata();
+             }
+         } else {
+             clearSrc();
 diff --git a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackCallback.kt b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackCallback.kt
 index b10dfb5..2674050 100644
 --- a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackCallback.kt
 +++ b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackCallback.kt
 @@ -1,7 +1,6 @@
  package com.brentvatne.exoplayer
-
+ 
  import android.os.Bundle
 -import androidx.media3.common.Player
  import androidx.media3.session.MediaSession
@@ -28,13 +357,13 @@ index b10dfb5..2674050 100644
                  .build()
          } catch (e: Exception) {
 diff --git a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackService.kt b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackService.kt
-index 4760ea5..4d5d2c5 100644
+index 4760ea5..9ddf142 100644
 --- a/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackService.kt
 +++ b/node_modules/react-native-video/android/src/main/java/com/brentvatne/exoplayer/VideoPlaybackService.kt
 @@ -30,24 +30,6 @@ class VideoPlaybackService : MediaSessionService() {
      private var binder = PlaybackServiceBinder(this)
      private var sourceActivity: Class<Activity>? = null
-
+ 
 -    // Controls for Android 13+ - see buildNotification function
 -    private val commandSeekForward = SessionCommand(COMMAND.SEEK_FORWARD.stringValue, Bundle.EMPTY)
 -    private val commandSeekBackward = SessionCommand(COMMAND.SEEK_BACKWARD.stringValue, Bundle.EMPTY)
@@ -54,7 +383,7 @@ index 4760ea5..4d5d2c5 100644
 -        .build()
 -
      // Player Registry
-
+ 
      fun registerPlayer(player: ExoPlayer, from: Class<Activity>) {
 @@ -59,8 +41,7 @@ class VideoPlaybackService : MediaSessionService() {
          val mediaSession = MediaSession.Builder(this, player)
@@ -63,6 +392,18 @@ index 4760ea5..4d5d2c5 100644
 -            .setCustomLayout(immutableListOf(seekForwardBtn, seekBackwardBtn))
 -            .build()
 +                .build()
-
+ 
          mediaSessionsList[player] = mediaSession
          addSession(mediaSession)
+@@ -79,6 +60,11 @@ class VideoPlaybackService : MediaSessionService() {
+         }
+     }
+ 
++    fun refreshNotification(player: ExoPlayer) {
++        val session = mediaSessionsList[player] ?: return
++        createSessionNotification(session)
++    }
++
+     // Callbacks
+ 
+     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = null
