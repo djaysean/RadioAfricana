@@ -1,807 +1,193 @@
 # Radio Africana Mobile
 
-Radio Africana Mobile is the React Native mobile application for Radio
-Africana. It combines live radio playback, current-track information,
-promotional content, Radio Africana Stories, programme notifications,
-and native utility screens.
+Radio Africana Mobile is the cross-platform React Native application for
+Radio Africana, combining live radio playback, Now Playing information,
+programme discovery, Radio Africana Stories, notifications, contact and
+team utilities, and a Firestore-controlled live-video entry point.
 
-> **Current status:** Release Candidate / client final-test stage.\
-> The application is functionally complete for the current scope. The
-> next artifact is a final client test APK. Production/store release
-> work should begin only after client sign-off and the final
-> release-readiness pass.
+## Current release status
+
+**Stage: Client-approved test build / release preparation**
+
+The current feature scope has been approved by the client and is now
+feature-frozen for this release except for defect corrections,
+production-readiness work, or explicit client change requests.
+
+The latest standalone Android release/test APK has been built from the
+current source, installed and verified on a physical device, and
+supplied to the client. The Android media-notification regression has
+also been verified on that standalone build: title, artist, and artwork
+update automatically when the live radio track changes.
+
+### Release path
+
+1.  Documentation overhaul
+2.  Source/repository audit
+3.  Final QA
+4.  App icon
+5.  Splash/loading screen
+6.  Store screenshots and metadata
+7.  Android production configuration and AAB
+8.  iOS production configuration and archive/TestFlight
+9.  Production-device testing
+10. Google Play and Apple App Store submission
+
+The separate investigation into a more controllable
+Spotify-style/direct-stream artist-video architecture is deferred to a
+future update.
 
 ------------------------------------------------------------------------
 
-## Application Identity
+## Product scope
 
-  Property                     Current value
-  ---------------------------- -------------------------------------------
-  Application                  Radio Africana
-  Platform                     Android
-  Version                      `1.0.0`\*
-  Version Name                 `1.0`\*
-  Application ID               `com.radioafricana.radio.africana`\*
-  Framework                    React Native
-  Language                     TypeScript / TSX
-  Editorial/content platform   WordPress
-  Live stream                  `https://radioafricana.radioca.st/stream`
+The current application contains three primary areas:
 
-\*The supplied project documentation identifies these release values.
-The root `package.json` and Android Gradle metadata should be rechecked
-against the local working tree before the final build/tag is created.
+-   **Home**
+-   **Stories**
+-   **More**
 
-------------------------------------------------------------------------
+A persistent Mini Player sits above the bottom tab bar and provides
+global radio playback controls while the user navigates through the
+application.
 
-## Product Scope
-
-The application is organized around three primary navigation areas:
-
-``` text
-Home
-Stories
-More
-```
-
-A persistent Mini Player sits above the bottom navigation and keeps live
-playback controls available while navigating through the app.
-
-The current build includes:
+Current feature scope includes:
 
 -   Live radio playback
 -   Global playback state
--   Current Now Playing metadata and artwork
+-   Now Playing metadata and artwork
 -   Persistent Mini Player
 -   Android media notification controls
 -   Promotional banners
 -   Recently Played
+-   Up Next
 -   Radio Africana Stories
 -   Story Detail
 -   Continue Reading
--   Native Story sharing
+-   Native story sharing
 -   Firebase push notifications
+-   Programme subscriptions through Firebase topics
 -   Subscribe to Shows
 -   Native Contact Us
 -   Native Meet the Team
 -   Native Privacy Policy
+-   Generic WordPress Page support
 -   Visit Website
 -   Share App
 -   App version display
+-   Firestore-controlled YouTube Live Video entry point
 
 ------------------------------------------------------------------------
 
-# Home
+## Technology stack
 
-The Home screen is the primary live-radio entry point.
+### Application
 
-Current composition:
+-   React Native 0.86.2
+-   React 19.2.3
+-   TypeScript
+-   React Navigation 7
+-   React Native Reanimated 4
+-   React Native Gesture Handler
+-   React Native Safe Area Context
+-   React Native Screens
+-   React Native SVG
+-   React Native WebView
+-   React Native Render HTML
+-   Lucide React Native
 
-``` text
-Home
-├── Radio Africana logo
-├── Promotional Banner Carousel
-├── Live artwork / hero
-├── Recently Played
-└── Latest Story
-```
+### Media
 
-Home supports pull-to-refresh. Refreshing remounts the remotely loaded
-Home sections so current banners, artwork, Recently Played and the
-latest Story can be refreshed together.
+-   `react-native-video` 6.19.2
+-   `react-native-youtube-iframe` 2.4.1
 
-### Promotional Banners
+### Firebase and notifications
 
-Banners are loaded from the Radio Africana WordPress/API layer and may
-provide:
+-   `@react-native-firebase/app` 26.1.0
+-   `@react-native-firebase/firestore` 26.1.0
+-   `@react-native-firebase/messaging` 26.1.0
+-   `@notifee/react-native` 9.1.8
 
--   Image
--   Alt text
--   Title
--   Subtitle
--   Button text
--   Destination link
--   Link availability
+### Build and development
 
-### Live Artwork
-
-The Live Hero displays the current Now Playing artwork. If no artwork is
-available, the application uses the bundled default artwork.
-
-### Recently Played
-
-The Home screen retrieves the most recent tracks from the Radio Africana
-service and displays up to five tracks horizontally.
-
-### Latest Story
-
-The latest WordPress Story is displayed as part of the Home content.
+-   Kotlin 2.1.20
+-   Android compile/target SDK 36
+-   NDK 27.1.12297006
+-   Hermes enabled
+-   React Native New Architecture enabled
+-   `patch-package`
+-   Jest
+-   ESLint
 
 ------------------------------------------------------------------------
 
-# Live Radio and Playback
-
-Live playback is global and is provided through:
+## Architecture at a glance
 
 ``` text
-src/playback/
-├── PlaybackContext.ts
-├── PlaybackProvider.tsx
-└── index.ts
+App.tsx
+  │
+  ▼
+AppNavigator
+  │
+  ▼
+PlaybackProvider
+  │
+  ├── Global react-native-video instance
+  │
+  └── SafeAreaProvider
+        │
+        └── AppShell
+              ├── NavigationContainer
+              │     └── BottomTabs
+              │           ├── HomeStack
+              │           ├── StoriesStack
+              │           └── MoreStack
+              │
+              └── Global MiniPlayer
 ```
 
-The playback provider wraps the application navigation tree, allowing
-playback state to remain available across navigation.
-
-The public playback interface is:
-
-``` text
-isPlaying
-nowPlaying
-play()
-pause()
-toggle()
-```
-
-### Stream
-
-``` text
-https://radioafricana.radioca.st/stream
-```
-
-### Playback implementation
-
-The application uses `react-native-video` with:
-
--   Background playback
--   Playback while inactive
--   Android notification controls
--   Live metadata
--   Current artwork
-
-The video component is visually hidden because the application's own
-controls provide the visible playback interface.
-
-### Recovery behaviour
-
-A new player instance is created when playback is started/resumed. This
-is also used as the recovery mechanism after a stream error.
-
-``` text
-Play
-  ↓
-Live stream
-  ↓
-Temporary/network failure
-  ↓
-Playback stops
-  ↓
-Play again
-  ↓
-Fresh player instance
-  ↓
-Stream reconnects
-```
+Application data and integrations are separated into `src/services`.
 
 ------------------------------------------------------------------------
 
-# Now Playing
+## Application identity
 
-Current track information is retrieved from:
+  -------------------------------------------------------------------------------
+  Property                            Current source value / state
+  ----------------------------------- -------------------------------------------
+  Application                         Radio Africana
 
-``` text
-https://radioafricana.com/controllers/playing.php
-```
+  React Native                        0.86.2
 
-Artwork is resolved from:
+  React                               19.2.3
 
-``` text
-https://radioafricana.com/station/pictures/
-```
+  Android application ID              `com.radioafricana.radio.africana`
 
-The application model is:
+  Package version                     `1.0.0`
 
-``` text
-NowPlaying
-├── artist
-├── title
-└── picture
-```
+  Android version name                `1.0`
 
-The global playback provider refreshes Now Playing every five seconds
-while it is mounted.
+  Android version code                `1` in current source; must be reconciled
+                                      during production versioning
 
-Now Playing information is used by:
+  iOS marketing version               `1.0`
 
--   Live Hero
--   Mini Player
--   Playback metadata
--   Android media controls
+  iOS build number                    `1`
 
-------------------------------------------------------------------------
+  Live radio stream                   `https://radioafricana.radioca.st/stream`
 
-# Mini Player
+  WordPress API                       `https://radioafricana.com/wp-json`
+  -------------------------------------------------------------------------------
 
-The Mini Player is implemented in:
-
-``` text
-src/components/MiniPlayer.tsx
-```
-
-It is rendered globally by:
-
-``` text
-src/navigation/index.tsx
-```
-
-and positioned above the bottom tab bar.
-
-The Mini Player displays:
-
--   Current artwork
--   Current track title
--   Current artist
--   Live/Ready state
--   Up Next information
--   Play/Pause control
-
-The current UI refinement makes the artist name visually stronger
-through `Inter-SemiBold`, and the Up Next label is also semibold.
-
-The Mini Player retrieves Up Next information from:
-
-``` text
-https://radioafricana.com/controllers/queuesong.php
-```
-
-and refreshes it every 15 seconds.
-
-> **Pre-build audit note:** the current source styles the Up Next label
-> with `Colors.text` rather than `Colors.gold`. If the approved client
-> requirement is still "bold and champagne/gold," this should be
-> corrected before the final client APK. The source confirms the label
-> is bold, but not currently gold.
+The approved Android test APK used a higher Android version code during
+client testing. The source value must therefore be reconciled
+deliberately before production release.
 
 ------------------------------------------------------------------------
 
-# Stories
+## Development setup
 
-Stories are connected directly to the Radio Africana WordPress REST API.
-
-The Stories area provides:
-
--   Latest Stories
--   Featured images
--   Categories
--   Excerpts
--   Paginated loading
--   Pull-to-refresh
--   Empty states
--   Error/retry states
--   Story Detail navigation
-
-The current Story feed requests ten posts per API page.
-
-### Story Detail
-
-A Story Detail screen contains:
-
--   Back navigation
--   Share action
--   Featured image
--   Category
--   Title
--   Publication date
--   Rich article content
--   Continue Reading
--   Native sharing
--   Persistent Mini Player
-
-Article HTML is rendered natively using `react-native-render-html`.
-
-Supported article styling includes:
-
--   Paragraphs
--   H2/H3 headings
--   Strong text
--   Italic text
--   Ordered and unordered lists
--   Blockquotes
--   Links
--   Images
-
-### End of Story
-
-The `End of Story` marker belongs to the Story content layer:
-
-``` text
-src/screens/Story/components/StoryBody.tsx
-```
-
-It is not generated by WordPress Theme Builder and is not part of the
-Contact Us, Meet the Team or Privacy Policy screens.
-
-------------------------------------------------------------------------
-
-# More
-
-The More screen is now a native application menu.
-
-Current items:
-
-``` text
-Subscribe to Shows
-──────────────────
-EXPLORE
-Contact Us
-Meet the Team
-Visit Website
-──────────────────
-APP
-Share App
-Privacy Policy
-App Version
-```
-
-There is currently **no Terms & Conditions item**.
-
-The three utility pages that previously depended on the generic
-WordPress page route are now dedicated native screens:
-
-``` text
-Contact Us       → ContactUsScreen
-Meet the Team    → MeetTheTeamScreen
-Privacy Policy   → PrivacyPolicyScreen
-```
-
-The generic `PageScreen` remains in the source as a reusable
-WordPress-page fallback, but it is no longer used for those three More
-destinations.
-
-------------------------------------------------------------------------
-
-# Subscribe to Shows
-
-Subscribe to Shows is implemented as a native screen:
-
-``` text
-src/screens/Subscribe/SubscribeToShowsScreen.tsx
-```
-
-Programme data is loaded from:
-
-``` text
-https://radio-africana-dashboard.vercel.app/api/programs
-```
-
-Each programme provides:
-
-``` text
-id
-name
-days
-time
-topic
-```
-
-The screen:
-
--   Loads programmes remotely
--   Sorts programmes by day and time
--   Displays programme schedules
--   Allows topic subscription/unsubscription
--   Uses Firebase topic subscriptions
--   Shows per-programme processing states
--   Provides loading, empty and retry states
-
-Programme names use `Inter-SemiBold` in the current implementation.
-
-------------------------------------------------------------------------
-
-# Contact Us
-
-Contact Us is a fully native screen:
-
-``` text
-src/screens/ContactUs/ContactUsScreen.tsx
-```
-
-The form is backed by the existing WordPress Contact Form 7
-installation.
-
-Current CF7 form ID:
-
-``` text
-6452
-```
-
-The native app submits to:
-
-``` text
-https://radioafricana.com/wp-json/contact-form-7/v1/contact-forms/6452/feedback
-```
-
-The current form fields are:
-
--   Your Name --- required
--   Your Email Address --- required
--   Phone Number --- optional
--   Reason for Contact --- required
--   Subject --- required
--   Your Message --- required
--   Privacy consent --- required
-
-Reasons for contact:
-
-``` text
-General Enquiry
-Advertising
-Partnership
-News Tip
-Programme Feedback
-Technical Support
-Other
-```
-
-The app performs local validation before submission and also handles
-Contact Form 7 server-side validation responses.
-
-Successful submission produces a native success state.
-
-The current contact details exposed by the screen are:
-
-``` text
-Email:   info@radioafricana.com
-Phone:   +44 74 11 55 5771
-Address: M6 5FW, Manchester, United Kingdom
-Website: https://radioafricana.com/
-```
-
-------------------------------------------------------------------------
-
-# Meet the Team
-
-Meet the Team is a native, WordPress-driven directory:
-
-``` text
-src/screens/MeetTheTeam/MeetTheTeamScreen.tsx
-src/services/members.ts
-```
-
-The application retrieves members from the WordPress members REST
-resource.
-
-The app displays:
-
--   Member image
--   Member name
--   Member role
--   Member biography
-
-### Pagination
-
-The native screen displays **five members per page**.
-
-The service requests one additional record to determine whether a next
-page exists:
-
-``` text
-5 displayed members
-+
-1 look-ahead record
-=
-pagination state
-```
-
-The screen provides:
-
-``` text
-Previous
-Page number
-Next
-```
-
-### Role handling
-
-The service first checks embedded WordPress term data.
-
-If a usable role is not embedded, it reads the member's public WordPress
-profile page and resolves known role labels from that page.
-
-This was introduced because the site's member role information is not
-exposed through the assumed `/wp/v2/membertype` REST endpoint.
-
-The service no longer makes that failing REST request.
-
-------------------------------------------------------------------------
-
-# Privacy Policy
-
-Privacy Policy is a native screen:
-
-``` text
-src/screens/PrivacyPolicy/PrivacyPolicyScreen.tsx
-```
-
-It is not routed through the generic WordPress `PageScreen`.
-
-The current screen contains the Radio Africana privacy-policy content in
-a native, scrollable layout with:
-
--   Native header
--   Back navigation
--   Native typography
--   Section headings
--   Bullet lists
--   Website action where applicable
-
-The previous generic-page issues associated with the WordPress page
-rendering path are therefore no longer part of this screen.
-
-------------------------------------------------------------------------
-
-# Push Notifications
-
-Push notifications use:
-
--   React Native Firebase Messaging
--   Notifee for foreground Android presentation
-
-Implemented behaviour includes:
-
--   Android 13+ notification permission request
--   FCM token retrieval
--   Token refresh listener
--   Foreground message handling
--   Background notification delivery
--   Closed-app notification delivery
--   Foreground Android notification channel
-
-Foreground channel:
-
-``` text
-ID:   radio-africana-foreground
-Name: Radio Africana
-```
-
-Programme subscriptions use Firebase topics through:
-
-``` text
-subscribeToShow()
-unsubscribeFromShow()
-```
-
-------------------------------------------------------------------------
-
-# WordPress and External Services
-
-## WordPress REST API
-
-Base:
-
-``` text
-https://radioafricana.com/wp-json
-```
-
-Used for:
-
-``` text
-/wp/v2/posts
-/wp/v2/pages
-/wp/v2/members
-/radioafricana/v1/banners
-```
-
-## Now Playing
-
-``` text
-https://radioafricana.com/controllers/playing.php
-```
-
-## Recently Played
-
-``` text
-https://radioafricana.com/controllers/recentlyplayed.php
-```
-
-## Up Next
-
-``` text
-https://radioafricana.com/controllers/queuesong.php
-```
-
-## Programme API
-
-``` text
-https://radio-africana-dashboard.vercel.app/api/programs
-```
-
-## Live Stream
-
-``` text
-https://radioafricana.radioca.st/stream
-```
-
-------------------------------------------------------------------------
-
-# Navigation
-
-The primary navigation is:
-
-``` text
-Home
-Stories
-More
-```
-
-The More stack currently contains:
-
-``` text
-More
-├── SubscribeToShows
-├── ContactUs
-├── MeetTheTeam
-├── PrivacyPolicy
-└── Page
-```
-
-The generic `Page` route remains available for future WordPress pages
-requiring generic rendering.
-
-Story navigation uses:
-
-``` text
-StoryDetail
-```
-
-with:
-
-``` text
-slug: string
-```
-
-as its route parameter.
-
-------------------------------------------------------------------------
-
-# Design System
-
-The current source contains a deliberately small centralized design
-system:
-
-``` text
-src/constants/
-├── colors.ts
-└── typography.ts
-```
-
-### Colours
-
-``` text
-Gold:            #D4AF37
-White:           #FFFFFF
-Primary text:    #111111
-Secondary text:  #666666
-Border:          #E5E5E5
-Divider:         #EFEFEF
-Live status:     #D32F2F
-Button text:     #FFFFFF
-```
-
-### Typography
-
-Primary font families:
-
-``` text
-Lora-Bold
-Inter-Regular
-Inter-Medium
-Inter-SemiBold
-```
-
-The centralized typography variants include:
-
-``` text
-display
-heading1
-heading2
-heading3
-body
-bodySmall
-label
-meta
-button
-```
-
-------------------------------------------------------------------------
-
-# Source Structure
-
-The current supplied `src` tree is:
-
-``` text
-src/
-├── components/
-│   ├── banners/
-│   │   ├── BannerCard.tsx
-│   │   └── BannerCarousel.tsx
-│   ├── common/
-│   │   ├── RecentlyPlayedSection.tsx
-│   │   ├── SectionHeader.tsx
-│   │   ├── TrackRow.tsx
-│   │   └── UpNextSection.tsx
-│   ├── stories/
-│   │   ├── LatestStory.tsx
-│   │   ├── StoriesFeed.tsx
-│   │   ├── StoriesHeader.tsx
-│   │   └── StoryCard.tsx
-│   ├── ui/
-│   │   └── AppText.tsx
-│   ├── LiveHero.tsx
-│   └── MiniPlayer.tsx
-│
-├── constants/
-│   ├── colors.ts
-│   └── typography.ts
-│
-├── navigation/
-│   ├── BottomTabs.tsx
-│   ├── index.tsx
-│   ├── routes.ts
-│   └── types.ts
-│
-├── playback/
-│   ├── PlaybackContext.ts
-│   ├── PlaybackProvider.tsx
-│   └── index.ts
-│
-├── screens/
-│   ├── ContactUs/
-│   │   └── ContactUsScreen.tsx
-│   ├── Home/
-│   │   └── HomeScreen.tsx
-│   ├── MeetTheTeam/
-│   │   └── MeetTheTeamScreen.tsx
-│   ├── More/
-│   │   └── MoreScreen.tsx
-│   ├── Page/
-│   │   ├── components/
-│   │   │   └── PageBody.tsx
-│   │   └── PageScreen.tsx
-│   ├── PrivacyPolicy/
-│   │   └── PrivacyPolicyScreen.tsx
-│   ├── Stories/
-│   │   └── StoriesScreen.tsx
-│   ├── Story/
-│   │   ├── components/
-│   │   │   ├── ContinueReading.tsx
-│   │   │   ├── ContinueReadingCard.tsx
-│   │   │   ├── StoryBody.tsx
-│   │   │   ├── StoryFooter.tsx
-│   │   │   └── StoryHero.tsx
-│   │   └── StoryScreen.tsx
-│   └── Subscribe/
-│       └── SubscribeToShowsScreen.tsx
-│
-└── services/
-    ├── api.ts
-    ├── banners.ts
-    ├── members.ts
-    ├── notifications.ts
-    ├── nowPlaying.ts
-    ├── pages.ts
-    ├── programs.ts
-    ├── recentlyPlayed.ts
-    ├── stories.ts
-    └── upNext.ts
-```
-
-This tree supersedes the older documentation. In particular, the current
-project no longer has the previously documented `constants/index.ts`,
-`radius.ts`, `shadows.ts`, or `spacing.ts` files.
-
-------------------------------------------------------------------------
-
-# Development
+The project currently requires Node.js `>=22.11.0` according to
+`package.json`.
 
 Install dependencies:
 
@@ -812,150 +198,547 @@ npm install
 Start Metro:
 
 ``` bash
-npx react-native start
+npm start
 ```
 
-Run Android:
+Run the Android development build:
 
 ``` bash
-npx react-native run-android
+npm run android
 ```
 
-The Android project is contained in:
+Run the iOS development build on macOS:
+
+``` bash
+npm run ios
+```
+
+Run lint:
+
+``` bash
+npm run lint
+```
+
+Run tests:
+
+``` bash
+npm test
+```
+
+The project uses `patch-package` through the `postinstall` script.
+
+### Standalone Android test build
+
+For the current project workflow, the Android Gradle project is entered
+directly before running Gradle:
+
+``` powershell
+cd android
+.\gradlew assembleRelease
+```
+
+The resulting APK is generated under:
 
 ``` text
-android/
+android/app/build/outputs/apk/release/app-release.apk
 ```
+
+The current release/test APK is a standalone build and does not depend
+on Metro.
 
 ------------------------------------------------------------------------
 
-# Current Release Workflow
+## Navigation
 
-The project is currently at the **client final-test stage**, not yet the
-final store-publishing stage.
-
-The intended sequence is:
+Primary navigation:
 
 ``` text
-Current RC source
-      ↓
-Documentation updated
-      ↓
-Git working tree reviewed
-      ↓
-Commit current completed state
-      ↓
-Create final client test APK
-      ↓
-Install on physical Android device
-      ↓
-Full client regression test
-      ↓
-Client sign-off
-      ↓
-Final release-readiness checklist
-      ↓
-Store/release assets and production build
+Home
+Stories
+More
 ```
 
-The client test build should be treated as the final acceptance
-candidate for the current feature scope.
+Home stack:
+
+``` text
+Home
+├── LiveVideo
+└── StoryDetail
+```
+
+Stories stack:
+
+``` text
+Stories
+└── StoryDetail
+```
+
+More stack:
+
+``` text
+More
+├── SubscribeToShows
+├── ContactUs
+├── MeetTheTeam
+├── PrivacyPolicy
+└── Page
+```
+
+Route names are centralized in `src/navigation/routes.ts`, with route
+types in `src/navigation/types.ts`.
 
 ------------------------------------------------------------------------
 
-# Important Release Boundary
+## Playback
 
-No new feature work should be introduced between the final client test
-build and client sign-off unless a test reveals a defect or the client
-requests a change.
+Global playback is implemented in:
 
-After sign-off, remaining work should be limited to:
+``` text
+src/playback/
+├── PlaybackContext.ts
+├── PlaybackProvider.tsx
+└── index.ts
+```
 
--   Release-readiness verification
--   Required production configuration
--   Store metadata/assets
--   Signing/release configuration
--   Final build verification
--   Necessary defect fixes
--   Final documentation/version updates
+The provider exposes:
+
+``` text
+isPlaying
+nowPlaying
+play()
+pause()
+toggle()
+```
+
+The radio stream is:
+
+``` text
+https://radioafricana.radioca.st/stream
+```
+
+Playback uses `react-native-video` with background/inactive playback and
+Android media controls.
+
+The player is visually hidden because the application's Mini Player and
+Home controls provide the visible playback interface.
 
 ------------------------------------------------------------------------
 
-# Repository Hygiene
+## Android media notification
 
-Before the final client-test commit:
+The Android notification uses the native `react-native-video`
+media-session implementation.
 
-1.  Confirm TypeScript/ESLint is clean.
-2.  Confirm no temporary debugging files are tracked.
-3.  Confirm the final `src` tree matches this documentation.
-4.  Confirm root version metadata.
-5.  Review Git status.
-6.  Commit the completed application state.
-7.  Tag/version the client-test milestone if that is part of the
-    repository workflow.
-8.  Build the APK from the committed source.
+A project patch is maintained at:
+
+``` text
+patches/react-native-video+6.19.2.patch
+```
+
+The patch adds dynamic handling of ICY metadata from the Radio Africana
+stream.
+
+The live stream has been confirmed to provide ICY metadata. The
+implementation dynamically extracts:
+
+-   artist
+-   title
+-   picture
+
+from the stream's ICY metadata and constructs artwork URLs using:
+
+``` text
+https://radioafricana.com/station/pictures/
+```
+
+The resulting metadata is pushed into Android `MediaMetadata` and the
+notification is refreshed.
+
+### Verified behaviour
+
+The implementation has been tested on a physical device while the app is
+backgrounded.
+
+When the station changes tracks:
+
+-   the notification song title changes;
+-   the artist changes;
+-   the artwork changes;
+
+without reopening the app or manually reconnecting the stream.
+
+The same behaviour was verified again on the standalone Android
+release/test APK that was supplied to the client.
 
 ------------------------------------------------------------------------
 
-# Final Client-Test Scope
+## Now Playing
 
-The final client test should specifically cover:
+Implemented through the playback metadata service.
 
-### Playback
+Endpoint:
 
--   Start live radio
--   Pause
--   Resume
--   Mini Player persistence
--   Current artist/title
--   Current artwork
--   Up Next
--   Android media controls
--   Recovery after network interruption
+``` text
+https://radioafricana.com/controllers/playing.php
+```
 
-### Home
+Artwork base:
 
--   Banners
--   Live artwork
--   Recently Played
--   Latest Story
--   Pull-to-refresh
+``` text
+https://radioafricana.com/station/pictures/
+```
 
-### Stories
+The application model contains:
 
--   Story feed
--   Story pagination/loading
+``` text
+artist
+title
+picture
+```
+
+The playback provider refreshes Now Playing periodically while mounted.
+
+Now Playing feeds the Live Hero, Mini Player and playback metadata.
+
+------------------------------------------------------------------------
+
+## Home
+
+Implemented in:
+
+``` text
+src/screens/Home/HomeScreen.tsx
+```
+
+Current composition:
+
+``` text
+Home
+├── Radio Africana header
+├── Promotional Banner Carousel
+├── Live Hero
+├── Recently Played
+└── Latest Story
+```
+
+Home supports pull-to-refresh.
+
+### Promotional banners
+
+``` text
+src/components/banners/
+src/services/banners.ts
+```
+
+Endpoint:
+
+``` text
+https://radioafricana.com/wp-json/radioafricana/v1/banners
+```
+
+### Recently Played
+
+``` text
+src/services/recentlyPlayed.ts
+```
+
+Endpoint:
+
+``` text
+https://radioafricana.com/controllers/recentlyplayed.php
+```
+
+The Home section displays up to five recent tracks.
+
+### Up Next
+
+``` text
+src/services/upNext.ts
+```
+
+Endpoint:
+
+``` text
+https://radioafricana.com/controllers/queuesong.php
+```
+
+The UI polls periodically for the next track.
+
+------------------------------------------------------------------------
+
+## Live Video
+
+The approved Live Video implementation is Firestore-controlled and
+YouTube-based.
+
+Firestore document:
+
+``` text
+liveStream/youtube
+```
+
+Expected field:
+
+``` text
+link: string
+```
+
+Data flow:
+
+``` text
+Firestore
+   ↓
+Home subscription
+   ↓
+LiveHero
+   ↓
+WATCH LIVE
+   ↓
+LiveVideo route
+   ↓
+LiveVideoScreen
+   ↓
+YouTube player
+```
+
+Supported YouTube URL forms include standard watch URLs, `youtu.be`
+URLs, embed URLs and Shorts URLs.
+
+When entering the Live Video screen, the application pauses the radio if
+it was playing. On return, the radio resumes only when it was playing
+before the video screen was opened.
+
+The current approved implementation does not depend on guaranteed
+YouTube autoplay or application-forced native fullscreen. These remain
+constrained by the embedded YouTube player/environment.
+
+A future direct/native video architecture may be investigated
+separately.
+
+------------------------------------------------------------------------
+
+## Stories
+
+Primary areas:
+
+``` text
+src/screens/Stories/
+src/screens/Story/
+src/services/stories.ts
+src/components/stories/
+```
+
+Stories are WordPress-driven and support:
+
+-   feed
+-   pagination
 -   Story Detail
--   Rich article rendering
--   End of Story marker
+-   featured images
+-   categories
+-   published dates
+-   HTML content rendering
 -   Continue Reading
--   Share
+-   native sharing
 
-### More
+WordPress posts are retrieved with `_embed` so featured media and
+taxonomy data can be resolved.
+
+------------------------------------------------------------------------
+
+## Subscribe to Shows
+
+Implemented through:
+
+``` text
+src/screens/Subscribe/SubscribeToShowsScreen.tsx
+src/services/programs.ts
+src/services/programArtwork.ts
+src/services/notifications.ts
+```
+
+Programme API:
+
+``` text
+https://radio-africana-dashboard.vercel.app/api/programs
+```
+
+Artwork API:
+
+``` text
+https://radioafricana.com/controllers/programs.php
+```
+
+The screen provides programme information, artwork and Firebase topic
+subscription controls.
+
+------------------------------------------------------------------------
+
+## Push notifications
+
+Notifications use:
+
+-   `@react-native-firebase/messaging`
+-   `@notifee/react-native`
+
+The application handles Android notification permission, FCM token
+retrieval and refresh, foreground messages, and the foreground
+notification channel:
+
+``` text
+ID: radio-africana-foreground
+Name: Radio Africana
+```
+
+Programme subscriptions use Firebase topics.
+
+iOS Firebase/APNs release configuration remains part of the
+production-readiness work.
+
+------------------------------------------------------------------------
+
+## More
+
+The More section currently includes:
 
 -   Subscribe to Shows
 -   Contact Us
 -   Meet the Team
 -   Privacy Policy
--   Visit Website
+-   Generic WordPress pages
+-   Website action
 -   Share App
--   Version display
+-   App version display
 
-### Native utility screens
-
--   Contact form validation and successful submission
--   Team member loading
--   Team role display
--   Five-member pagination
--   Privacy Policy scrolling
--   Back navigation from all three screens
+The current More screen does not contain a Terms & Conditions item.
 
 ------------------------------------------------------------------------
 
-# Documentation Status
+## External services
 
-This README is intended to replace the earlier documentation that
-described an older source tree and older feature set.
+  -----------------------------------------------------------------------
+  Service                             Purpose
+  ----------------------------------- -----------------------------------
+  Radio Africana WordPress REST API   Banners, Stories, Pages, Members
 
-It should be updated again only when the application architecture,
-release state, or supported feature set materially changes.
+  Radio Africana controller endpoints Now Playing, Recently Played, Up
+                                      Next, programme artwork
+
+  RadioCast stream                    Live radio
+
+  Radio Africana Dashboard API        Programme data
+
+  Firebase Firestore                  Live Video configuration
+
+  Firebase Cloud Messaging            Push notifications and programme
+                                      topics
+
+  Notifee                             Android foreground notifications
+
+  YouTube                             Live Video playback
+
+  Contact Form 7 REST API             Contact submissions
+  -----------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## Design system
+
+Central constants:
+
+``` text
+src/constants/colors.ts
+src/constants/typography.ts
+```
+
+Brand palette:
+
+``` text
+Gold           #D4AF37
+White          #FFFFFF
+Primary text   #111111
+Secondary text #666666
+Border         #E5E5E5
+Divider        #EFEFEF
+Live           #D32F2F
+```
+
+Bundled fonts:
+
+``` text
+Inter-Regular
+Inter-Medium
+Inter-SemiBold
+Lora-Regular
+Lora-Bold
+```
+
+------------------------------------------------------------------------
+
+## Source structure
+
+``` text
+RadioAfricana/
+├── android/
+├── assets/
+├── ios/
+├── patches/
+├── src/
+├── wordpress/
+├── __tests__/
+├── App.tsx
+├── app.json
+├── babel.config.js
+├── Gemfile
+├── index.js
+├── jest.config.js
+├── metro.config.js
+├── package.json
+├── package-lock.json
+├── react-native.config.js
+├── tsconfig.json
+├── README.md
+└── PROJECT.md
+```
+
+Generated/dependency directories such as `node_modules` and platform
+build output are not application source.
+
+------------------------------------------------------------------------
+
+## Release preparation
+
+Before production release, the following must be completed deliberately:
+
+-   source/repository audit
+-   final QA
+-   production app icon
+-   production splash/loading treatment
+-   store screenshots
+-   store metadata
+-   Android production signing
+-   Android version reconciliation
+-   Android production AAB
+-   iOS production bundle identifier
+-   iOS signing/team configuration
+-   iOS Firebase/APNs configuration if required
+-   iOS archive/TestFlight build
+-   production-device testing
+-   store submission
+
+The current source is not yet production-signing ready.
+
+------------------------------------------------------------------------
+
+## Release boundary
+
+The client-approved functionality is the baseline for this release.
+
+No new feature work should enter the release unless it is required to
+correct a defect, satisfy production-readiness requirements, or
+implement an explicit client change request.
+
+The following remains deferred:
+
+**Spotify-style artist video / direct video-stream architecture.**
+
+That work should be designed and tested separately from this release.
