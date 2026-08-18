@@ -33,3 +33,38 @@ workflows:
     artifacts:
       - build/ios/simulator/**/*.app
       - /tmp/xcodebuild_logs/*.log
+
+  ios-device:
+    name: Radio Africana iOS Device Build
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+
+    environment:
+      xcode: latest
+      cocoapods: default
+      node: 22.11.0
+
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm ci
+
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios
+          pod install
+
+      - name: Build iOS device app
+        script: |
+          xcodebuild build \
+            -workspace "ios/RadioAfricana.xcworkspace" \
+            -scheme "RadioAfricana" \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath "build/ios/device" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO
+
+    artifacts:
+      - build/ios/device/**/*.app
+      - /tmp/xcodebuild_logs/*.log
