@@ -16,17 +16,17 @@ workflows:
 
       - name: Install CocoaPods dependencies
         script: |
-          cd ios
+          cd "$CM_BUILD_DIR/ios"
           pod install
 
       - name: Build iOS simulator app
         script: |
           xcodebuild build \
-            -workspace "ios/RadioAfricana.xcworkspace" \
+            -workspace "$CM_BUILD_DIR/ios/RadioAfricana.xcworkspace" \
             -scheme "RadioAfricana" \
             -sdk iphonesimulator \
             -configuration Release \
-            -derivedDataPath "build/ios/simulator" \
+            -derivedDataPath "$CM_BUILD_DIR/build/ios/simulator" \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO
 
@@ -34,12 +34,19 @@ workflows:
       - build/ios/simulator/**/*.app
       - /tmp/xcodebuild_logs/*.log
 
-  ios-device:
-    name: Radio Africana iOS Device Build
+  ios-app-store:
+    name: Radio Africana iOS App Store Build
     max_build_duration: 120
     instance_type: mac_mini_m2
 
+    integrations:
+      app_store_connect: Codemagic Radio Africana
+
     environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.radioafricana.radioafricana
+
       xcode: latest
       cocoapods: default
       node: 22.11.0
@@ -51,20 +58,19 @@ workflows:
 
       - name: Install CocoaPods dependencies
         script: |
-          cd ios
+          cd "$CM_BUILD_DIR/ios"
           pod install
 
-      - name: Build iOS device app
+      - name: Set up code signing settings on Xcode project
         script: |
-          xcodebuild build \
-            -workspace "ios/RadioAfricana.xcworkspace" \
-            -scheme "RadioAfricana" \
-            -sdk iphoneos \
-            -configuration Release \
-            -derivedDataPath "build/ios/device" \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
+          xcode-project use-profiles
+
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --workspace "$CM_BUILD_DIR/ios/RadioAfricana.xcworkspace" \
+            --scheme "RadioAfricana"
 
     artifacts:
-      - build/ios/device/**/*.app
+      - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
