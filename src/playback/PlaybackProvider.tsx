@@ -133,48 +133,50 @@ export default function PlaybackProvider({
     >
       {children}
 
-      <Video
-        key={playerKey}
-        source={{
-          uri: STREAM_URL,
+      {isPlaying && (
+        <Video
+          key={playerKey}
+          source={{
+            uri: STREAM_URL,
 
-          metadata: {
-            title:
-              nowPlaying.title ||
-              'Radio Africana',
+            metadata: {
+              title:
+                nowPlaying.title ||
+                'Radio Africana',
 
-            subtitle:
-              'Radio Africana',
+              subtitle:
+                'Radio Africana',
 
-            artist:
-              nowPlaying.artist ||
-              'Radio Africana',
+              artist:
+                nowPlaying.artist ||
+                'Radio Africana',
 
-            description:
-              nowPlaying.artist
-                ? `${nowPlaying.artist} • Radio Africana`
-                : 'Live Radio',
+              description:
+                nowPlaying.artist
+                  ? `${nowPlaying.artist} • Radio Africana`
+                  : 'Live Radio',
 
-            imageUri:
-              nowPlaying.picture ??
-              undefined,
-          },
-        }}
-        paused={!isPlaying}
-        playInBackground
-        playWhenInactive
-        showNotificationControls
-        ignoreSilentSwitch="ignore"
-        onError={error => {
-          console.error(
-            'Playback Error:',
-            error,
-          );
+              imageUri:
+                nowPlaying.picture ??
+                undefined,
+            },
+          }}
+          paused={!isPlaying}
+          playInBackground
+          playWhenInactive
+          showNotificationControls
+          ignoreSilentSwitch="ignore"
+          onError={error => {
+            console.error(
+              'Playback Error:',
+              error,
+            );
 
-          setIsPlaying(false);
-        }}
-        style={styles.hiddenPlayer}
-      />
+            setIsPlaying(false);
+          }}
+          style={styles.hiddenPlayer}
+        />
+      )}
     </PlaybackContext.Provider>
   );
 }
