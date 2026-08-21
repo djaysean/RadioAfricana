@@ -1,4 +1,8 @@
 import {
+  Platform,
+} from 'react-native';
+
+import {
   doc,
   getFirestore,
   onSnapshot,
@@ -22,6 +26,21 @@ export function subscribeToLiveVideo(
 ): () => void {
   const firestore =
     getFirestore();
+
+  /*
+   * Diagnostic:
+   *
+   * Android continues through the complete Firestore
+   * listener implementation below.
+   *
+   * On iOS, stop immediately after getFirestore().
+   * This isolates getFirestore() from doc()/onSnapshot()
+   * so we can determine which native Firestore operation
+   * is triggering the iOS crash.
+   */
+  if (Platform.OS === 'ios') {
+    return () => {};
+  }
 
   const youtubeDocument = doc(
     firestore,
