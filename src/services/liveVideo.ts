@@ -1,4 +1,8 @@
 import {
+  Platform,
+} from 'react-native';
+
+import {
   doc,
   getFirestore,
   onSnapshot,
@@ -20,6 +24,22 @@ export function subscribeToLiveVideo(
     video: LiveVideo | null,
   ) => void,
 ): () => void {
+  /*
+   * iOS Firestore initialization is intentionally
+   * disabled for this diagnostic build.
+   *
+   * Build 6.0.0 (4) continued to crash immediately
+   * after launch after Firebase Messaging initialization
+   * had already been disabled on iOS.
+   *
+   * HomeScreen is the only caller of this service.
+   * Returning a no-op unsubscribe prevents the native
+   * Firestore TurboModule from being invoked on iOS.
+   */
+  if (Platform.OS === 'ios') {
+    return () => {};
+  }
+
   const firestore =
     getFirestore();
 
