@@ -53,6 +53,22 @@ async function createForegroundChannel(): Promise<void> {
 export async function initializeNotifications(): Promise<
   () => void
 > {
+  /*
+   * iOS notification initialization is intentionally disabled
+   * for this diagnostic build.
+   *
+   * Build 6.0.0 (3) crashes immediately after launch through
+   * React Native's TurboModule invocation path. The application
+   * initializes Firebase Messaging from App.tsx at startup.
+   *
+   * Until the iOS Firebase Messaging / APNs configuration is
+   * properly implemented and verified, do not invoke the native
+   * Firebase Messaging module on iOS.
+   */
+  if (Platform.OS === 'ios') {
+    return () => {};
+  }
+
   const permissionGranted =
     await requestNotificationPermission();
 
@@ -123,6 +139,14 @@ export async function subscribeToShow(
     );
   }
 
+  /*
+   * iOS Firebase Messaging is intentionally disabled for
+   * this diagnostic build. Do not invoke the native module.
+   */
+  if (Platform.OS === 'ios') {
+    return;
+  }
+
   const messaging =
     getMessaging();
 
@@ -141,6 +165,14 @@ export async function unsubscribeFromShow(
     throw new Error(
       'Cannot unsubscribe from an empty Firebase topic.',
     );
+  }
+
+  /*
+   * iOS Firebase Messaging is intentionally disabled for
+   * this diagnostic build. Do not invoke the native module.
+   */
+  if (Platform.OS === 'ios') {
+    return;
   }
 
   const messaging =
