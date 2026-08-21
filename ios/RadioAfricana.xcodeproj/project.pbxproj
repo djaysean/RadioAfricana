@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B8E2F6419C3D7A05E1F6C2B9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C4A91D2E6F30B58C1A7D904 /* GoogleService-Info.plist */; };
 		0C80B921A6F3F58F76C31292 /* libPods-RadioAfricana.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-RadioAfricana.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7C4A91D2E6F30B58C1A7D904 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = GoogleService-Info.plist; path = RadioAfricana/GoogleService-Info.plist; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* RadioAfricana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RadioAfricana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RadioAfricana/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = RadioAfricana/Info.plist; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				7C4A91D2E6F30B58C1A7D904 /* GoogleService-Info.plist */,
 			);
 			name = RadioAfricana;
 			sourceTree = "<group>";
@@ -188,6 +191,7 @@
 				FFB5C8AD338045E2A55D50B9 /* Inter-SemiBold.ttf in Resources */,
 				8F2ECB3B8A4146479F196A79 /* Lora-Bold.ttf in Resources */,
 				DA715A987ABD47BEB9EE40F9 /* Lora-Regular.ttf in Resources */,
+				B8E2F6419C3D7A05E1F6C2B9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,7 +290,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = RadioAfricana/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
@@ -316,7 +320,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_FILE = RadioAfricana/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -502,3 +506,4 @@
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }
+

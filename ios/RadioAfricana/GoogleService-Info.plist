@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>753751112429-cpg288l00v6luifo0703kvav4q118u87.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.753751112429-cpg288l00v6luifo0703kvav4q118u87</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCFSS1_6gvaJFDvPhLNS066oBXB77o2QxU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>753751112429</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.radioafricana.radaf</string>
+	<key>PROJECT_ID</key>
+	<string>radio-africana</string>
+	<key>STORAGE_BUCKET</key>
+	<string>radio-africana.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:753751112429:ios:cfc2d848aaa47ae0</string>
+	<key>DATABASE_URL</key>
+	<string>https://radio-africana.firebaseio.com</string>
+</dict>
+</plist>
