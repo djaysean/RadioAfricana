@@ -1,3 +1,31 @@
+diff --git a/node_modules/react-native/React/CoreModules/RCTExceptionsManager.mm b/node_modules/react-native/React/CoreModules/RCTExceptionsManager.mm
+index cdaae3a..ec9bb26 100644
+--- a/node_modules/react-native/React/CoreModules/RCTExceptionsManager.mm
++++ b/node_modules/react-native/React/CoreModules/RCTExceptionsManager.mm
+@@ -157,6 +157,23 @@ RCT_EXPORT_METHOD(reportException : (JS::NativeExceptionsManager::ExceptionData
+   double exceptionId = [errorData[@"id"] doubleValue];
+ 
+   if ([errorData[@"isFatal"] boolValue]) {
++    RCTLogError(
++        @"[RadioAfricana Diagnostic] FATAL JS EXCEPTION\n"
++         "message: %@\n"
++         "originalMessage: %@\n"
++         "name: %@\n"
++         "componentStack: %@\n"
++         "stack: %@\n"
++         "exceptionId: %@\n"
++         "extraData: %@",
++        errorData[@"message"],
++        errorData[@"originalMessage"],
++        errorData[@"name"],
++        errorData[@"componentStack"],
++        errorData[@"stack"],
++        errorData[@"id"],
++        errorData[@"extraData"]);
++
+     [self reportFatal:message stack:stack exceptionId:exceptionId extraDataAsJSON:extraDataAsJSON];
+   } else {
+     [self reportSoft:message stack:stack exceptionId:exceptionId extraDataAsJSON:extraDataAsJSON];
 diff --git a/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm b/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm
 index 516ae35..4435863 100644
 --- a/node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios/ReactCommon/RCTTurboModule.mm
