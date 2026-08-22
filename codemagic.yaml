@@ -14,10 +14,18 @@ workflows:
         script: |
           npm ci
 
+      - name: Clean CocoaPods
+        script: |
+          rm -rf "$CM_BUILD_DIR/ios/Pods"
+
       - name: Install CocoaPods dependencies
         script: |
           cd "$CM_BUILD_DIR/ios"
           pod install
+
+      - name: Clean Xcode DerivedData
+        script: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
 
       - name: Build iOS simulator app
         script: |
@@ -56,10 +64,18 @@ workflows:
         script: |
           npm ci
 
+      - name: Clean CocoaPods
+        script: |
+          rm -rf "$CM_BUILD_DIR/ios/Pods"
+
       - name: Install CocoaPods dependencies
         script: |
           cd "$CM_BUILD_DIR/ios"
           pod install
+
+      - name: Clean Xcode DerivedData
+        script: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
 
       - name: Set up code signing settings on Xcode project
         script: |
