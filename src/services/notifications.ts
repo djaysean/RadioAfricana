@@ -54,16 +54,10 @@ export async function initializeNotifications(): Promise<
   () => void
 > {
   /*
-   * iOS notification initialization is intentionally disabled
-   * for this diagnostic build.
-   *
-   * Build 6.0.0 (3) crashes immediately after launch through
-   * React Native's TurboModule invocation path. The application
-   * initializes Firebase Messaging from App.tsx at startup.
-   *
-   * Until the iOS Firebase Messaging / APNs configuration is
-   * properly implemented and verified, do not invoke the native
-   * Firebase Messaging module on iOS.
+   * iOS Firebase Messaging initialization is currently
+   * disabled. Do not invoke the native Firebase Messaging
+   * module on iOS until iOS notification support is explicitly
+   * enabled and verified.
    */
   if (Platform.OS === 'ios') {
     return () => {};
@@ -140,8 +134,10 @@ export async function subscribeToShow(
   }
 
   /*
-   * iOS Firebase Messaging is intentionally disabled for
-   * this diagnostic build. Do not invoke the native module.
+   * iOS Firebase Messaging topic subscriptions are currently
+   * disabled. Do not invoke the native messaging module on iOS
+   * until iOS notification support is explicitly enabled and
+   * verified.
    */
   if (Platform.OS === 'ios') {
     return;
@@ -168,8 +164,10 @@ export async function unsubscribeFromShow(
   }
 
   /*
-   * iOS Firebase Messaging is intentionally disabled for
-   * this diagnostic build. Do not invoke the native module.
+   * iOS Firebase Messaging topic subscriptions are currently
+   * disabled. Do not invoke the native messaging module on iOS
+   * until iOS notification support is explicitly enabled and
+   * verified.
    */
   if (Platform.OS === 'ios') {
     return;
