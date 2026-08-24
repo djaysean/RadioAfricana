@@ -26,6 +26,7 @@ import AppText from '../ui/AppText';
 import {
   Banner,
   fetchBanners,
+  getCachedBanners,
 } from '../../services/banners';
 
 const HORIZONTAL_PADDING = 24;
@@ -80,13 +81,34 @@ export default function BannerCarousel() {
       setActiveIndex(index);
     }, []);
 
-  const loadBanners =
+  const restoreCachedBanners =
     useCallback(async () => {
-      setState({
-        loading: true,
-        error: false,
-      });
+      try {
+        const cached =
+          await getCachedBanners();
 
+        if (
+          cached &&
+          cached.length > 0
+        ) {
+          setBanners(cached);
+          setCurrentIndex(0);
+
+          setState({
+            loading: false,
+            error: false,
+          });
+        }
+      } catch (error) {
+        console.error(
+          'Cached Banners Error:',
+          error,
+        );
+      }
+    }, [setCurrentIndex]);
+
+  const refreshBanners =
+    useCallback(async () => {
       try {
         const data =
           await fetchBanners();
@@ -99,12 +121,34 @@ export default function BannerCarousel() {
           error: false,
         });
       } catch {
-        setState({
-          loading: false,
-          error: true,
+        setState(current => {
+          if (banners.length > 0) {
+            return {
+              ...current,
+              loading: false,
+              error: false,
+            };
+          }
+
+          return {
+            loading: false,
+            error: true,
+          };
         });
       }
-    }, [setCurrentIndex]);
+    }, [
+      banners.length,
+      setCurrentIndex,
+    ]);
+
+  const loadBanners =
+    useCallback(async () => {
+      await restoreCachedBanners();
+      await refreshBanners();
+    }, [
+      restoreCachedBanners,
+      refreshBanners,
+    ]);
 
   useEffect(() => {
     loadBanners();
@@ -215,7 +259,10 @@ export default function BannerCarousel() {
       }
     };
 
-  if (state.loading) {
+  if (
+    state.loading &&
+    banners.length === 0
+  ) {
     return (
       <View style={styles.container}>
         <View
@@ -230,7 +277,10 @@ export default function BannerCarousel() {
     );
   }
 
-  if (state.error) {
+  if (
+    state.error &&
+    banners.length === 0
+  ) {
     return (
       <View style={styles.container}>
         <View

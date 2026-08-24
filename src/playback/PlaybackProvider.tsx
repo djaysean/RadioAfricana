@@ -13,6 +13,7 @@ import PlaybackContext from './PlaybackContext';
 
 import {
   fetchNowPlaying,
+  getCachedNowPlaying,
 } from '../services/nowPlaying';
 
 const STREAM_URL =
@@ -41,6 +42,26 @@ export default function PlaybackProvider({
   useEffect(() => {
     let mounted = true;
 
+    const restoreCachedNowPlaying =
+      async () => {
+        try {
+          const cached =
+            await getCachedNowPlaying();
+
+          if (
+            mounted &&
+            cached
+          ) {
+            setNowPlaying(cached);
+          }
+        } catch (error) {
+          console.error(
+            'Cached Now Playing Error:',
+            error,
+          );
+        }
+      };
+
     const loadNowPlaying =
       async () => {
         try {
@@ -58,6 +79,7 @@ export default function PlaybackProvider({
         }
       };
 
+    restoreCachedNowPlaying();
     loadNowPlaying();
 
     const interval =

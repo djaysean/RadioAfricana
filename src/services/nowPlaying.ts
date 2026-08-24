@@ -1,7 +1,17 @@
+import {
+  getCachedJson,
+  setCachedJson,
+} from './cache';
+
 export type NowPlaying = {
   artist: string;
   title: string;
   picture: string | null;
+};
+
+type CachedNowPlaying = {
+  data: NowPlaying;
+  cachedAt: number;
 };
 
 const PLAYING_URL =
@@ -9,6 +19,9 @@ const PLAYING_URL =
 
 const PICTURE_BASE =
   'https://radioafricana.com/station/pictures/';
+
+export const NOW_PLAYING_CACHE_KEY =
+  'radioafricana.cache.nowPlaying';
 
 export async function fetchNowPlaying(): Promise<NowPlaying> {
   const response = await fetch(PLAYING_URL);
@@ -25,7 +38,7 @@ export async function fetchNowPlaying(): Promise<NowPlaying> {
 
   const current = json[0];
 
-  return {
+  const data: NowPlaying = {
     artist: current.artist ?? '',
     title: current.title ?? '',
     picture:
@@ -33,4 +46,32 @@ export async function fetchNowPlaying(): Promise<NowPlaying> {
         ? `${PICTURE_BASE}${encodeURIComponent(current.picture)}`
         : null,
   };
+
+  await setCachedJson<CachedNowPlaying>(
+    NOW_PLAYING_CACHE_KEY,
+    {
+      data,
+      cachedAt: Date.now(),
+    },
+  );
+
+  return data;
+}
+
+export async function getCachedNowPlaying(): Promise<NowPlaying | null> {
+  const cached =
+    await getCachedJson<CachedNowPlaying>(
+      NOW_PLAYING_CACHE_KEY,
+    );
+
+  if (
+    !cached ||
+    !cached.data ||
+    typeof cached.data.artist !== 'string' ||
+    typeof cached.data.title !== 'string'
+  ) {
+    return null;
+  }
+
+  return cached.data;
 }
