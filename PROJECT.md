@@ -1,148 +1,88 @@
-# Radio Africana Mobile — Technical Project Documentation
+# Radio Africana Mobile — Technical Documentation
 
-## 1. Purpose
+## Overview
 
-This document is the technical source of truth for the Radio Africana Mobile application.
+Radio Africana Mobile is a React Native application for Android and iOS. It brings live radio, programme information, editorial content, notifications, subscriptions and selected Radio Africana website services together in one mobile experience.
 
-It records the current architecture, integrations, platform-specific implementation, caching, playback, release configuration, verified behaviour, and remaining production-readiness work.
+This document is the technical reference for maintaining and extending the application.
 
-The project is currently at the **6.0.0 release-candidate stage**.
+## Technology Stack
 
-Feature development is frozen except for:
+- React Native 0.86.2
+- React 19
+- TypeScript
+- Hermes
+- React Native New Architecture
+- React Navigation 7
+- React Native Reanimated 4
+- React Native Gesture Handler
+- React Native Safe Area Context
+- React Native Screens
+- React Native SVG
+- React Native WebView
+- React Native Render HTML
+- Lucide React Native
+- react-native-video 6.19.2
+- react-native-youtube-iframe 2.4.1
+- Firebase
+- Notifee
 
-- genuine defects;
-- production-readiness requirements;
-- explicit client requests.
+Android is configured with compile SDK 36, target SDK 36, minimum SDK 24, Kotlin 2.1.20 and NDK 27.1.12297006.
 
-This document should describe the repository as it actually exists.
-
----
-
-# 2. Current Release State
-
-## 2.1 Application Identity
-
-| Property | Current State |
-|---|---|
-| Product | Radio Africana |
-| React Native | 0.86.2 |
-| React | 19.2.3 |
-| Android namespace | `com.radioafricana` |
-| Android application ID | `com.radioafricana.radio.africana` |
-| Android version | 6.0.0 |
-| Android version code | 600 |
-| iOS product | RadioAfricana |
-| iOS marketing version | 6.0.0 |
-| iOS build | 16 |
-| iOS bundle identifier | `com.radioafricana.radaf` |
-| Minimum iOS | 15.1 |
-| Live stream | `https://radioafricana.radioca.st/stream` |
-
-## 2.2 Verified RC State
-
-The current release candidate has been verified on Android and iOS.
-
-Verified:
-
-- Android standalone release build runs without Metro;
-- iOS release build runs without Metro;
-- startup caching works;
-- banners are available from cached startup state;
-- Live Hero artwork is available from cached startup state;
-- Now Playing data/artwork is cached;
-- Android media notification metadata updates dynamically;
-- iOS launch background is white;
-- startup experience is effectively immediate;
-- functional QA has passed.
-
-No artificial multi-second splash delay is used.
-
----
-
-# 3. Application Architecture
+## Application Structure
 
 ```text
-App.tsx
-  │
-  ▼
-Application / Navigation Shell
-  │
-  ├── PlaybackProvider
-  │     └── Global react-native-video instance
-  │
-  └── SafeAreaProvider
-        │
-        └── NavigationContainer
-              └── BottomTabs
-                    ├── Home
-                    ├── Stories
-                    └── More
-
-Global Mini Player is mounted above navigation content.
+src/
+├── components/
+│   ├── banners/
+│   ├── common/
+│   ├── stories/
+│   ├── ui/
+│   ├── LiveHero.tsx
+│   └── MiniPlayer.tsx
+├── constants/
+├── navigation/
+├── playback/
+├── screens/
+└── services/
 ```
 
-Application responsibilities are separated into:
+`App.tsx` is the application entry point.
 
-```text
-src/components/
-src/constants/
-src/navigation/
-src/playback/
-src/screens/
-src/services/
-```
+The native platform projects are contained in `android/` and `ios/`.
 
----
+## Navigation
 
-# 4. Navigation
+The primary navigation consists of three tabs:
 
-Primary tabs:
+- Home
+- Stories
+- More
 
-```text
-Home
-Stories
-More
-```
+### Home
 
-Home stack:
+The Home experience includes live radio, promotional content, Now Playing, Recently Played, Up Next and access to Live Video and stories.
 
-```text
-Home
-├── LiveVideo
-└── StoryDetail
-```
+### Stories
 
-Stories stack:
+The Stories section provides the Radio Africana editorial feed and individual story views.
 
-```text
-Stories
-└── StoryDetail
-```
+### More
 
-More stack:
+The More section provides:
 
-```text
-More
-├── SubscribeToShows
-├── ContactUs
-├── MeetTheTeam
-├── PrivacyPolicy
-└── Page
-```
+- Subscribe to Shows
+- Contact Us
+- Meet the Team
+- Privacy Policy
+- Website pages
+- Visit Website
+- Share App
+- App version
 
-Navigation definitions live under:
+## Playback
 
-```text
-src/navigation/
-```
-
-The Mini Player is global and remains available across navigation.
-
-The current More screen does **not** contain a Terms & Conditions item.
-
----
-
-# 5. Playback Architecture
+Radio playback is managed globally rather than by individual screens.
 
 Primary files:
 
@@ -152,15 +92,7 @@ src/playback/PlaybackProvider.tsx
 src/playback/index.ts
 ```
 
-Global state includes:
-
-```text
-isPlaying
-nowPlaying
-playerKey
-```
-
-Public context:
+The playback context provides:
 
 ```text
 isPlaying
@@ -170,402 +102,96 @@ pause()
 toggle()
 ```
 
-Stream:
+The playback system supports live stream playback, pause and resume, persistent playback across navigation, Mini Player controls, Now Playing metadata, artwork, background playback, Android media controls and playback recovery.
 
-```text
-https://radioafricana.radioca.st/stream
-```
+The Mini Player is mounted at application level so it remains available while navigating.
 
-The provider owns the global media player.
+## Now Playing
 
-The application uses `react-native-video`.
+Now Playing information is supplied by Radio Africana's broadcast metadata services.
 
-The visible playback experience is provided by the application's UI while the underlying media component handles the actual radio stream.
+The application uses the current metadata to update:
 
-When Live Video is entered:
+- Artist
+- Track title
+- Artwork
 
-```text
-Radio playing
-    ↓
-Pause radio
-    ↓
-Open Live Video
-```
+Android media notifications are updated with the current track information.
 
-On return:
+## Android Media Playback
 
-```text
-Live Video exits
-    ↓
-If radio was playing before entry
-    ↓
-Resume radio
-```
+Android playback uses `react-native-video` with the Android Media3 stack.
 
----
-
-# 6. Startup Cache Architecture
-
-## 6.1 Service
-
-```text
-src/services/cache.ts
-```
-
-Dependency:
-
-```text
-@react-native-async-storage/async-storage@3.1.1
-```
-
-The cache exists to provide fast startup from recently available content while allowing remote services to refresh the application state.
-
-## 6.2 Startup Flow
-
-```text
-Application launch
-      ↓
-Read cached state
-      ↓
-Render cached content
-      ↓
-Remote refresh
-      ↓
-Persist refreshed state
-```
-
-Verified cached content includes:
-
-- banners;
-- Live Hero artwork;
-- Now Playing information/artwork.
-
-## 6.3 Release Result
-
-The Android standalone release and iOS release build both demonstrated the intended startup behaviour.
-
-The app opens quickly and cached content is already available.
-
-Because this behaviour is already fast, no artificial splash delay was introduced.
-
----
-
-# 7. Now Playing
-
-Service:
-
-```text
-src/services/nowPlaying.ts
-```
-
-Endpoint:
-
-```text
-https://radioafricana.com/controllers/playing.php
-```
-
-Model:
-
-```text
-artist
-title
-picture
-```
-
-Now Playing data feeds:
-
-```text
-Live Hero
-Mini Player
-Playback metadata
-Startup cache
-```
-
-Artwork is resolved from the Radio Africana station picture directory.
-
----
-
-# 8. Android Media Notification
-
-## 8.1 Dependency
-
-```text
-react-native-video@6.19.2
-```
-
-Source-controlled patch:
+A maintained patch is included for the installed version:
 
 ```text
 patches/react-native-video+6.19.2.patch
 ```
 
-## 8.2 Metadata
+The patch is applied through the project's `patch-package` workflow.
 
-The Radio Africana stream provides ICY metadata.
+Changes to the media dependency should be tested against background playback, media controls and navigation.
 
-The implementation dynamically extracts:
+## Live Video
 
-```text
-artist
-title
-picture
-```
+Live Video is controlled through Firebase Firestore.
 
-No track-specific artist/title/artwork values are hardcoded.
-
-## 8.3 Flow
-
-```text
-Radio stream
-    ↓
-ICY metadata
-    ↓
-StreamUrl parsing
-    ↓
-artist / title / picture
-    ↓
-MediaMetadata
-    ↓
-Android notification refresh
-```
-
-## 8.4 Verification
-
-The standalone Android release was tested on a physical device.
-
-During background playback:
-
-- title changed correctly;
-- artist changed correctly;
-- artwork changed correctly.
-
-The notification remained synchronized without reopening the application.
-
-This is a verified release feature.
-
----
-
-# 9. Promotional Banners
-
-Files:
-
-```text
-src/components/banners/BannerCard.tsx
-src/components/banners/BannerCarousel.tsx
-src/services/banners.ts
-```
-
-Endpoint:
-
-```text
-https://radioafricana.com/wp-json/radioafricana/v1/banners
-```
-
-Model:
-
-```text
-id
-image
-alt
-title
-subtitle
-button
-link
-hasLink
-```
-
-Banner state participates in startup caching.
-
----
-
-# 10. Live Hero
-
-File:
-
-```text
-src/components/LiveHero.tsx
-```
-
-The Live Hero displays current station artwork and the animated Now Playing treatment.
-
-WATCH LIVE is displayed when a valid Firestore YouTube link exists.
-
-The Live Hero is an entry point to Live Video and does not itself play video.
-
----
-
-# 11. Firestore Live Video
-
-## 11.1 Data Model
-
-Document:
+Configuration document:
 
 ```text
 liveStream/youtube
 ```
 
-Field:
+Configuration field:
 
 ```text
-link: string
+link
 ```
 
-Behaviour:
+A valid YouTube link makes the Live Video entry available in the application.
 
-```text
-Empty/unavailable link
-        ↓
-WATCH LIVE unavailable
+When Live Video is opened:
 
-Valid YouTube URL
-        ↓
-WATCH LIVE available
-```
+1. Active radio playback is paused.
+2. The YouTube player is displayed.
+3. Radio playback resumes when the user returns if it was playing before the video screen was opened.
 
-## 11.2 Platform Difference
+### Android
 
-Android uses native:
+Android uses:
 
 ```text
 @react-native-firebase/firestore
 ```
 
-iOS uses the established Firestore REST/polling path.
+with a realtime listener for the Live Video configuration.
 
-This difference exists because the native iOS Firestore path previously caused an issue. The REST implementation is therefore intentional.
+### iOS
 
-Do not rewrite Android to REST merely for platform symmetry.
+iOS uses the Firestore REST API for this feature and periodically checks the configuration.
 
-Do not remove the Firestore dependency while Android continues to use it.
+The two implementations provide the same application behaviour while using platform-appropriate integration methods.
 
-## 11.3 Lifecycle
+## Stories
 
-```text
-WATCH LIVE
-    ↓
-Pause radio
-    ↓
-Live Video screen
-    ↓
-YouTube player
-    ↓
-Return
-    ↓
-Resume radio if appropriate
-```
+Story content is supplied by the Radio Africana WordPress content system.
 
-The current product does not depend on guaranteed external YouTube autoplay or forced native fullscreen.
-
----
-
-# 12. Recently Played
-
-Service:
+Relevant areas include:
 
 ```text
-src/services/recentlyPlayed.ts
-```
-
-Endpoint:
-
-```text
-https://radioafricana.com/controllers/recentlyplayed.php
-```
-
-The service retrieves recent station tracks and resolves their artwork.
-
----
-
-# 13. Up Next
-
-Service:
-
-```text
-src/services/upNext.ts
-```
-
-Endpoint:
-
-```text
-https://radioafricana.com/controllers/queuesong.php
-```
-
-The service polls for upcoming track information.
-
-The Up Next UI uses the approved gold/bold visual treatment.
-
----
-
-# 14. Stories
-
-Primary areas:
-
-```text
-src/services/stories.ts
 src/screens/Stories/
 src/screens/Story/
+src/services/stories.ts
 src/components/stories/
 ```
 
-Stories are retrieved through the Radio Africana WordPress API.
+The story system supports feeds, pagination, featured images, categories, publication dates, HTML content, story details, Continue Reading and native sharing.
 
-Mapped fields include:
+## Programme Subscriptions
 
-```text
-id
-slug
-title
-excerpt
-category
-image
-publishedAt
-link
-```
+Programme information and artwork are supplied through Radio Africana's content services.
 
-Story Detail renders WordPress HTML and supports external reading/sharing.
-
----
-
-# 15. WordPress Pages
-
-Service:
-
-```text
-src/services/pages.ts
-```
-
-Pages are retrieved by slug.
-
-Generic rendering is handled by the Page screen.
-
-Native More destinations include:
-
-```text
-Contact Us
-Meet the Team
-Privacy Policy
-```
-
----
-
-# 16. Meet the Team
-
-Files:
-
-```text
-src/services/members.ts
-src/screens/MeetTheTeam/
-```
-
-Member data is retrieved from the WordPress member API.
-
-Role resolution uses available member/term information and falls back to the Radio Africana Team label where necessary.
-
----
-
-# 17. Subscribe to Shows
-
-Files:
+Relevant files include:
 
 ```text
 src/screens/Subscribe/SubscribeToShowsScreen.tsx
@@ -574,94 +200,59 @@ src/services/programArtwork.ts
 src/services/notifications.ts
 ```
 
-Programme data is retrieved from the Radio Africana Dashboard API.
+Programme subscriptions use Firebase Cloud Messaging topics.
 
-Programme artwork is retrieved through the station artwork endpoint.
+## Notifications
 
-The screen provides:
+Push notifications use Firebase Cloud Messaging with Notifee for notification presentation.
 
-- programme names;
-- schedules;
-- artwork;
-- Firebase topic subscription controls.
+The implementation covers:
 
-Programme names use the approved stronger/bold presentation.
+- Notification permissions
+- FCM token registration
+- Token refresh
+- Foreground messages
+- Background messages
+- Notification interaction
+- Programme topic subscriptions
 
----
-
-# 18. Notifications
-
-Packages:
-
-```text
-@react-native-firebase/messaging
-@notifee/react-native
-```
-
-The notification system handles the application's Firebase topic and notification requirements.
-
-Android foreground channel:
+Android foreground playback notifications use:
 
 ```text
 ID: radio-africana-foreground
 Name: Radio Africana
-Importance: DEFAULT
 ```
 
-The Android media notification path is handled separately by the media-session implementation described in Section 8.
+## External Services
 
----
+| Service | Purpose |
+|---|---|
+| Radio Africana WordPress API | Stories, pages and website content |
+| Radio Africana broadcast/controller services | Live stream metadata and programme information |
+| RadioCast | Live radio stream |
+| Radio Africana Dashboard API | Programme information |
+| Firebase Firestore | Live Video configuration |
+| Firebase Cloud Messaging | Notifications and programme subscriptions |
+| Notifee | Android notifications |
+| YouTube | Live Video playback |
+| Contact Form 7 REST API | Contact submissions |
 
-# 19. Contact Us
-
-File:
+Service integrations are implemented primarily under:
 
 ```text
-src/screens/ContactUs/ContactUsScreen.tsx
+src/services/
 ```
 
-The screen validates input and submits through the Radio Africana Contact Form 7 REST endpoint.
+## Design System
 
-Success and error responses are handled by the screen.
-
----
-
-# 20. Privacy Policy
-
-File:
-
-```text
-src/screens/PrivacyPolicy/PrivacyPolicyScreen.tsx
-```
-
-The privacy policy is rendered natively.
-
-Legal/content changes should be treated separately from technical documentation changes.
-
----
-
-# 21. Design System
-
-Constants:
+Shared visual constants are maintained in:
 
 ```text
 src/constants/colors.ts
 src/constants/typography.ts
 ```
 
-Palette:
-
-```text
-Gold           #D4AF37
-White          #FFFFFF
-Black/Text     #111111
-Secondary      #666666
-Border         #E5E5E5
-Divider        #EFEFEF
-Live           #D32F2F
-```
-
-Fonts:
+Bundled fonts include:
 
 ```text
 Inter-Regular
@@ -671,414 +262,151 @@ Lora-Regular
 Lora-Bold
 ```
 
-Current UI refinements include:
-
-- stronger artist-name treatment in the Mini Player;
-- gold/bold Up Next treatment;
-- stronger programme-name treatment in Subscribe to Shows.
-
----
-
-# 22. Android Configuration
-
-Current configuration:
+Reusable interface components are located under:
 
 ```text
-compileSdk: 36
-targetSdk: 36
-minSdk: 24
-NDK: 27.1.12297006
-Kotlin: 2.1.20
-Hermes: enabled
-New Architecture: enabled
+src/components/
 ```
-
-Application ID:
-
-```text
-com.radioafricana.radio.africana
-```
-
-Version:
-
-```text
-versionName: 6.0.0
-versionCode: 600
-```
-
-## Release Signing
-
-The current release configuration uses the project's debug signing configuration.
-
-This is acceptable for the private/client test APK.
-
-It is not the final Google Play production signing arrangement.
-
-Before Play Store submission:
-
-- configure the production keystore;
-- configure release signing;
-- keep credentials outside source control;
-- produce the final signed AAB.
-
-## Release Minification
-
-Release minification is currently disabled.
-
-Any future decision to enable R8/ProGuard must be deliberate and followed by release validation.
-
----
-
-# 23. iOS Configuration
-
-Current verified release state:
-
-```text
-Marketing version: 6.0.0
-Build: 16
-Bundle identifier: com.radioafricana.radaf
-Minimum iOS: 15.1
-Distribution: App Store
-```
-
-Build 16 was successfully produced through Codemagic and uploaded to App Store Connect.
-
-## Launch Screen
-
-The iOS launch screen was corrected so that the launch background is white and visually continuous with the Radio Africana logo.
-
-The correction was verified in the release build.
-
----
-
-# 24. Codemagic
-
-iOS builds are produced through Codemagic because local development is performed on Windows.
-
-The relevant configured workflow is the iOS App Store workflow.
-
-The release process includes:
-
-```text
-Repository
-   ↓
-npm ci
-   ↓
-CocoaPods installation
-   ↓
-Signing/profile setup
-   ↓
-Xcode archive
-   ↓
-IPA
-   ↓
-App Store Connect
-```
-
-The current successful release artifact:
-
-```text
-RadioAfricana.ipa
-```
-
-was uploaded as:
-
-```text
-Version: 6.0.0
-Build: 16
-Bundle ID: com.radioafricana.radaf
-```
-
-A new iOS build should only be triggered when it has a defined testing or release purpose.
-
----
-
-# 25. Dependencies
-
-Important current versions include:
-
-```text
-@react-native-async-storage/async-storage 3.1.1
-@notifee/react-native 9.1.8
-@react-native-firebase/app 26.3.2
-@react-native-firebase/firestore 26.3.2
-@react-native-firebase/messaging 26.3.2
-react-native-video 6.19.2
-react-native-youtube-iframe 2.4.1
-```
-
-The project uses:
-
-```text
-patch-package
-```
-
-through the `postinstall` script.
-
-The source-controlled `react-native-video` patch must continue to apply successfully after clean installation.
-
----
-
-# 26. Testing and Quality
-
-Commands:
-
-```text
-npx tsc --noEmit
-npm run lint
-npm test -- --runInBand
-```
-
-Current RC result:
-
-```text
-TypeScript: PASS
-ESLint: PASS
-Jest: PASS
-```
-
-Jest currently contains:
-
-```text
-__tests__/App.test.tsx
-```
-
-The tests are a sanity check, not a substitute for physical-device QA.
-
----
-
-# 27. Standalone Android Build
-
-From:
-
-```text
-C:\Projects\RadioAfricana\android
-```
-
-run:
-
-```powershell
-.\gradlew.bat app:assembleRelease --no-daemon
-```
-
-Artifact:
-
-```text
-android/app/build/outputs/apk/release/app-release.apk
-```
-
-The release APK contains the JavaScript bundle and does not require Metro.
-
-The standalone Android release has been physically tested and is suitable for private/client testing.
-
-It is not the final Google Play AAB.
-
----
-
-# 28. iOS Release Build
-
-The iOS release is produced through Codemagic.
-
-Current RC:
-
-```text
-6.0.0
-Build 16
-com.radioafricana.radaf
-```
-
-The signed IPA successfully reached App Store Connect.
-
-The iOS release was physically tested for:
-
-- startup;
-- caching;
-- splash;
-- normal application operation.
-
----
-
-# 29. Release Boundary
-
-The current functionality is feature-frozen.
-
-New feature work should not enter the release unless it is:
-
-- a defect correction;
-- a production-readiness requirement;
-- an explicit client request.
-
-Deferred future architecture:
-
-```text
-Spotify-style artist video /
-direct video-stream architecture
-```
-
-This should be treated as a separate future project/update.
-
----
-
-# 30. Production Readiness
-
-The functional RC is complete.
-
-Remaining production work is operational rather than feature development.
 
 ## Android
 
-- production signing;
-- final AAB;
-- store identity/assets;
-- Google Play metadata;
-- Data Safety information;
-- final production-device verification.
+The Android project is located in:
+
+```text
+android/
+```
+
+Current Android release configuration:
+
+```text
+versionName "6.0.0"
+versionCode 601
+```
+
+The production Android application is distributed as an Android App Bundle.
+
+Build command:
+
+```powershell
+cd android
+.\gradlew bundleRelease
+```
+
+Output:
+
+```text
+android/app/build/outputs/bundle/release/app-release.aab
+```
+
+Release signing credentials are kept outside the source repository.
 
 ## iOS
 
-- final App Store metadata;
-- final screenshots/assets;
-- final production-device verification;
-- App Store review/privacy information.
+The iOS project is located in:
 
-## Both
+```text
+ios/
+```
 
-- final dependency audit;
-- native patch audit;
-- repository hygiene;
-- release notes;
-- final production build selection.
+Development and release builds use the standard React Native and Xcode workflow for the configured project.
 
----
+Native changes should remain within the iOS project rather than generated build directories.
 
-# 31. Repository Hygiene
+## Development Setup
 
-Generated output should not be treated as source.
+Install dependencies:
 
-Keep the repository free from:
+```bash
+npm install
+```
+
+Start Metro:
+
+```bash
+npm start
+```
+
+Run Android:
+
+```bash
+npm run android
+```
+
+Run iOS:
+
+```bash
+npm run ios
+```
+
+Installing dependencies applies the project's maintained `patch-package` changes.
+
+## Testing
+
+Run tests:
+
+```bash
+npm test
+```
+
+Run linting:
+
+```bash
+npm run lint
+```
+
+Before a release, verify the principal application flows, including playback, background audio, Now Playing, Mini Player, notifications, programme subscriptions, Stories, Live Video and navigation.
+
+## Repository Hygiene
+
+The repository should contain source code and project configuration required to build and maintain the application.
+
+The following should remain outside version control:
 
 ```text
 node_modules/
-Gradle build output
-Xcode build output
-temporary logs
-crash dumps
-diagnostic artifacts
+android/app/build/
+ios/build/
+*.jks
+*.keystore
+.env
 ```
 
-Intentional source-controlled native patches remain part of the project.
+Private signing credentials, passwords, service-account keys and other secrets must never be committed.
 
-Before final release:
+## Versioning
 
-```powershell
-git status
+Android release versions are maintained in:
+
+```text
+android/app/build.gradle
 ```
 
-must be clean.
+Current release:
 
----
+```text
+6.0.0
+```
 
-# 32. Final QA Status
+Android version code:
 
-## Playback
+```text
+601
+```
 
-- [x] Start radio
-- [x] Pause/resume
-- [x] Now Playing
-- [x] Artwork
-- [x] Mini Player
-- [x] Up Next
-- [x] Background/lock playback
-- [x] Android media notification metadata
+Future Android releases must use a higher `versionCode`.
 
-## Home
+## Maintenance
 
-- [x] Banners
-- [x] Live Hero
-- [x] Cached startup content
-- [x] Recently Played
-- [x] Latest Story
-- [x] Pull-to-refresh
+When making changes:
 
-## Live Video
+1. Preserve existing service contracts unless an integration is intentionally being changed.
+2. Update dependency patches when their target dependency changes.
+3. Keep secrets and release credentials outside source control.
+4. Test media playback and notifications after native or dependency changes.
+5. Update this document when the architecture or major integrations change.
 
-- [x] Firestore-controlled availability
-- [x] WATCH LIVE lifecycle
-- [x] Radio pause/resume lifecycle
-- [x] YouTube launch
-- [x] Empty-link/unavailable state
+## Ownership
 
-## Stories
+Radio Africana Mobile is proprietary software developed for Radio Africana.
 
-- [x] Stories feed
-- [x] Story Detail
-- [x] Content rendering
-- [x] External reading/sharing
-
-## More
-
-- [x] Subscribe to Shows
-- [x] Programme artwork
-- [x] Topic subscription
-- [x] Contact Us
-- [x] Meet the Team
-- [x] Privacy Policy
-- [x] Website/share actions
-
-## Release
-
-- [x] Android standalone build tested without Metro
-- [x] iOS release build tested without Metro
-- [x] iOS white splash verified
-- [x] Android startup caching verified
-- [x] iOS startup caching verified
-- [x] TypeScript passed
-- [x] ESLint passed
-- [x] Jest passed
-
-The remaining work is production-store preparation rather than unresolved application functionality.
-
----
-
-# 33. Release Milestone — 6.0.0 RC
-
-The 6.0.0 release represents the transition from feature development into release preparation.
-
-Major completed work includes:
-
-- global radio playback;
-- Now Playing;
-- Android dynamic media notification metadata;
-- Firestore-controlled Live Video;
-- platform-specific iOS Live Video access;
-- Stories;
-- Subscribe to Shows;
-- programme artwork;
-- promotional banners;
-- startup caching;
-- cached Now Playing/Live Hero state;
-- iOS white splash background;
-- standalone Android release validation;
-- iOS Codemagic/TestFlight validation.
-
-The current RC has been verified on both platforms.
-
----
-
-# 34. Documentation Maintenance
-
-Update this document when:
-
-- architecture changes;
-- service endpoints change;
-- Firestore structure changes;
-- playback behaviour changes;
-- notification architecture changes;
-- platform configuration changes;
-- version/build changes;
-- supported features change;
-- production release procedures change.
-
-Do not preserve obsolete development states as current configuration.
-
-When a functional area is proven and frozen, document the verified behaviour and move to the next release criterion.
+Copyright © Radio Africana. All rights reserved.
