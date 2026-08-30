@@ -32,6 +32,13 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+
+        release {
+            storeFile file('radioafricana-upload-key-2026.jks')
+            storePassword System.getenv("RADIO_AFRICANA_KEYSTORE_PASSWORD")
+            keyAlias 'radioafricana-upload'
+            keyPassword System.getenv("RADIO_AFRICANA_KEY_PASSWORD")
+        }
     }
 
     buildTypes {
@@ -40,7 +47,7 @@ android {
         }
 
         release {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
