@@ -21,7 +21,7 @@ android {
         applicationId "com.radioafricana.radio.africana"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 600
+        versionCode 601
         versionName "6.0.0"
     }
 
