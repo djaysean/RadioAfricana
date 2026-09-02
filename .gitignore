@@ -79,3 +79,6 @@ yarn-error.log
 
 # Android signing keys
 *.jks
+
+# Amazon A3L Messaging API key
+/android/app/src/main/assets/api_key.txt
