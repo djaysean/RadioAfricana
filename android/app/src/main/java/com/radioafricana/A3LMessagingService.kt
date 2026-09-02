@@ -12,7 +12,7 @@ class A3LMessagingService : A3LMessagingService() {
     }
 
     override fun onNewToken(context: Context, token: String) {
-        Log.i(TAG, "A3L device token received: $token")
+        Log.i(TAG, "A3L device token received")
     }
 
     override fun onMessageReceived(

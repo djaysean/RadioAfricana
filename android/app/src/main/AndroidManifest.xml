@@ -61,6 +61,10 @@
 
         </receiver>
 
+        <provider
+    android:name="com.amazon.A3L.messaging.util.A3LMessagingInitProvider"
+    tools:node="remove" />
+
     </application>
 
 </manifest>
